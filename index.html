@@ -1,92 +1,3063 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Investment IRR Tracker</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- WealthPath IRR Tracker - Block 1 (Lines 1–500) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthPath IRR Tracker</title>
+
+    <!-- Basic Reset -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: #020617; /* Midnight black */
+            color: #E5E7EB; /* Light gray */
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Layout */
+        .app-root {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed Navigation Bar with Vertical Gradient Header */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(to bottom, #0F172A, #3B82F6);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-block {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            font-size: 1.4rem;
+        }
+
+        .brand-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #F9FAFB;
+        }
+
+        .brand-tagline {
+            font-size: 0.85rem;
+            color: #E5E7EB;
+            opacity: 0.9;
+        }
+
+        /* Navigation with Text + Icons */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.95rem;
+        }
+		
+		/* --- FIXED NAVIGATION BUTTON VISIBILITY --- */
+		.nav-link {
+			background-color: #0F172A;      /* dark slate background */
+			color: #E5E7EB;                 /* light text */
+			border: 1px solid #1E293B;      /* subtle border */
+			padding: 6px 12px;
+			border-radius: 999px;
+			transition: background-color 0.2s ease, transform 0.1s ease;
+		}
+
+		.nav-link:hover {
+			background-color: #1E293B;      /* slightly lighter on hover */
+			transform: translateY(-1px);
+		}
+
+		.nav-link.active {
+			background-color: #3B82F6;      /* bright blue for active page */
+			color: white;
+			border-color: #3B82F6;
+		}
+
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #E5E7EB;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 999px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .nav-link-icon {
+            font-size: 1rem;
+        }
+
+        .nav-link-label {
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(15, 23, 42, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background-color: rgba(15, 23, 42, 0.6);
+        }
+
+        /* Main Content Wrapper (accounts for fixed header height) */
+        .app-main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 90px 20px 24px; /* top padding to clear fixed header */
+        }
+
+        /* Simple utility classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .page-section {
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background-color: #0F172A;
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #F9FAFB;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            background-color: #1F2937;
+            color: #D1D5DB;
+        }
+
+        .pill-icon {
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #3B82F6;
+            color: #F9FAFB;
+            box-shadow: 0 1px 6px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-primary:hover {
+            background-color: #2563EB;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #111827;
+            color: #E5E7EB;
+        }
+
+        .btn-secondary:hover {
+            background-color: #1F2937;
+            transform: translateY(-1px);
+        }
+
+        .btn-icon {
+            font-size: 1rem;
+        }
+
+        /* Form basics */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            color: #D1D5DB;
+        }
+
+        .form-input, .form-select {
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #1F2937;
+            background-color: #020617;
+            color: #E5E7EB;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #F9FAFB;
+        }
+
+        .section-description {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-bottom: 14px;
+        }
+
+        /* Investment type pills with icons */
+        .investment-type-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .investment-type-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            background-color: #111827;
+            color: #E5E7EB;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .investment-type-pill-icon {
+            font-size: 1rem;
+        }
+
+        .investment-type-pill:hover {
+            background-color: #1F2937;
+            transform: translateY(-1px);
+        }
+
+        .investment-type-pill.active {
+            background-color: #3B82F6;
+            border-color: #93C5FD;
+            color: #F9FAFB;
+        }
+
+        /* Summary page container (placeholder for now) */
+        #summaryPage {
+            margin-top: 10px;
+        }
+
+        /* Wizard page container (placeholder for now) */
+        #wizardPage {
+            margin-top: 10px;
+        }
+
+        /* Home page container (placeholder for now) */
+        #homePage {
+            margin-top: 10px;
+        }
+
+        /* Simple responsive tweak */
+        @media (max-width: 640px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="app">
-    <!-- Home -->
-    <section id="homePage" class="page">
-      <header class="page-header">
-        <h1>Investment IRR Tracker</h1>
-        <p>Track properties, term deposits, gold, gold bonds, shares, and crypto with real cashflows.</p>
-      </header>
-      <div class="home-actions">
-        <button id="newSessionBtn">New session</button>
-        <button id="loadSessionBtn">Load session</button>
-        <input id="payloadInput" type="file" accept=".json" hidden />
-      </div>
-    </section>
+    <div class="app-root">
+        <!-- Fixed Gradient Header with Navigation -->
+        <header class="app-header">
+            <div class="header-inner">
+                <!-- Branding Block -->
+                <div class="brand-block">
+                    <div class="brand-title-row">
+                        <span class="brand-icon">📊</span>
+                        <span class="brand-title">WealthPath IRR Tracker</span>
+                    </div>
+                    <span class="brand-tagline">Track your wealth. Understand your returns.</span>
+                </div>
 
-    <!-- Wizard -->
-    <section id="wizardPage" class="page hidden">
-      <header class="page-header">
-        <h2>Add / Edit Investment</h2>
-        <p>Choose an investment type and mode. We’ll guide you step by step.</p>
-      </header>
+                <!-- Navigation Links (Text + Icons) -->
+                <nav class="nav-links">
+                    <button class="nav-link active" id="navHome">
+                        <span class="nav-link-icon">🏠</span>
+                        <span class="nav-link-label">Home</span>
+                    </button>
+                    <button class="nav-link" id="navAdd">
+                        <span class="nav-link-icon">➕</span>
+                        <span class="nav-link-label">Add Investment</span>
+                    </button>
+                    <button class="nav-link" id="navSummary">
+                        <span class="nav-link-icon">📊</span>
+                        <span class="nav-link-label">Summary</span>
+                    </button>
+                </nav>
+            </div>
+        </header>
 
-      <div class="card">
-        <label>Investment name</label>
-        <input id="invName" placeholder="e.g. Bridgeman Downs Rental" />
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- HOME PAGE (Intro + Net Worth Overview Placeholder) -->
+            <section id="homePage" class="page-section">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Welcome to WealthPath IRR Tracker</div>
+                            <div class="card-subtitle">
+                                Track your net worth, understand your investment performance, and see your true returns over time.
+                            </div>
+                        </div>
+                        <div class="pill">
+                            <span class="pill-icon">🧮</span>
+                            <span>Cashflow-based net worth • Unrealised gains included</span>
+                        </div>
+                    </div>
+                    <p class="section-description">
+                        Use the navigation above to add investments, review your summary, and explore how your wealth evolves over time.
+                        This dashboard supports property, shares, crypto, gold, gold bonds, term deposits, and liquid cash.
+                    </p>
+                    <button class="btn btn-primary" id="homeStartBtn">
+                        <span class="btn-icon">➕</span>
+                        <span>Add your first investment</span>
+                    </button>
+                </div>
+            </section>
 
-        <label>Investment type</label>
-        <select id="invType">
-          <option value="property">🏠 Property</option>
-          <option value="shares">📈 Shares</option>
-          <option value="crypto">🔗 Crypto</option>
-          <option value="gold">🪙 Gold</option>
-          <option value="goldbonds">📜 Gold Bonds</option>
-          <option value="termdeposit">💵 Term Deposit</option>
-        </select>
+            <!-- WIZARD PAGE (Add / Edit Investment) -->
+            <section id="wizardPage" class="page-section hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Investment Details</div>
+                            <div class="card-subtitle">
+                                Choose an investment type, enter the details, and we’ll calculate performance and net worth impact.
+                            </div>
+                        </div>
+                        <div class="pill">
+                            <span class="pill-icon">✏️</span>
+                            <span>Add or edit investment</span>
+                        </div>
+                    </div>
 
-        <!-- Mode container (simple/detailed, rent/sell, etc.) -->
-        <div id="modeContainer"></div>
+                    <!-- Investment Name + Type -->
+                    <div class="form-grid" style="margin-bottom: 16px;">
+                        <div class="form-field">
+                            <label class="form-label" for="invName">Investment name</label>
+                            <input class="form-input" id="invName" type="text" placeholder="e.g. Brisbane Home, ASX Portfolio, BTC Stack">
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label" for="invType">Investment type</label>
+                            <!-- We’ll sync this select with the pills below in JS -->
+                            <select class="form-select" id="invType">
+                                <option value="">Select type...</option>
+                                <option value="property">Property</option>
+                                <option value="shares">Shares</option>
+                                <option value="crypto">Crypto</option>
+                                <option value="gold">Gold</option>
+                                <option value="goldbonds">Gold Bonds</option>
+                                <option value="termdeposit">Term Deposit</option>
+                                <option value="cash">Cash</option>
+                            </select>
+                        </div>
+                    </div>
 
-        <!-- Dynamic wizard content -->
-        <div id="wizardContent"></div>
+                    <!-- Investment Type Pills with Icons (Property, Shares, Crypto, Gold, Gold Bonds, Term Deposit, Cash) -->
+                    <div class="page-section" style="margin-bottom: 12px;">
+                        <div class="section-title">Choose investment type</div>
+                        <div class="section-description">
+                            Tap a type below to configure its specific details. Cash is tracked as liquid balance only (no IRR).
+                        </div>
+                        <div class="investment-type-list" id="investmentTypePills">
+                            <button class="investment-type-pill" data-type="property">
+                                <span class="investment-type-pill-icon">🏠</span>
+                                <span>Property</span>
+                            </button>
+                            <button class="investment-type-pill" data-type="shares">
+                                <span class="investment-type-pill-icon">📈</span>
+                                <span>Shares</span>
+                            </button>
+                            <button class="investment-type-pill" data-type="crypto">
+                                <span class="investment-type-pill-icon">🪙</span>
+                                <span>Crypto</span>
+                            </button>
+                            <button class="investment-type-pill" data-type="gold">
+                                <span class="investment-type-pill-icon">🥇</span>
+                                <span>Gold</span>
+                            </button>
+                            <button class="investment-type-pill" data-type="goldbonds">
+                                <span class="investment-type-pill-icon">📜</span>
+                                <span>Gold Bonds</span>
+                            </button>
+                            <button class="investment-type-pill" data-type="termdeposit">
+                                <span class="investment-type-pill-icon">🏦</span>
+                                <span>Term Deposit</span>
+                            </button>
+                            <button class="investment-type-pill" data-type="cash">
+                                <span class="investment-type-pill-icon">💵</span>
+                                <span>Cash (Liquid)</span>
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- Results -->
-        <div class="card" id="resultsCard">
-          <h3>Results</h3>
-          <p id="irrResult">IRR: –</p>
-          <p id="npvResult">NPV: –</p>
-          <p id="roiResult">ROI: –</p>
-          <p id="paybackResult">Payback: –</p>
-          <canvas id="cashflowChart"></canvas>
-        </div>
+                    <!-- Dynamic investment-specific content will be rendered here via JS in later blocks -->
+                    <div id="investmentDetailsContainer" class="page-section">
+                        <div class="section-title">Configure investment</div>
+                        <div class="section-description">
+                            Select an investment type above to see its specific fields. Property uses detailed cashflows; other assets
+                            can auto-estimate values; cash is tracked as a simple liquid balance.
+                        </div>
+                        <!-- Placeholder content; will be replaced by JS per type -->
+                        <p style="font-size: 0.85rem; color: #9CA3AF;">
+                            Once you choose an investment type, this area will show the relevant fields and options for that asset.
+                        </p>
+                    </div>
 
-        <div class="actions">
-          <button id="saveInvestmentBtn">Save investment</button>
-          <button id="newInvestmentBtn" class="secondary">Add another investment</button>
-          <button id="goSummaryBtn" class="secondary">Go to summary</button>
-          <button id="backHomeBtn" class="secondary">Back to home</button>
-        </div>
-      </div>
-    </section>
+                    <!-- Wizard Actions -->
+                    <div class="page-section" style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button class="btn btn-secondary" id="wizardCancelBtn">
+                            <span class="btn-icon">↩️</span>
+                            <span>Back to summary</span>
+                        </button>
+                        <button class="btn btn-primary" id="wizardSaveBtn">
+                            <span class="btn-icon">💾</span>
+                            <span>Save investment</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Summary -->
-    <section id="summaryPage" class="page hidden">
-      <header class="page-header">
-        <h2>Summary</h2>
-        <p>See how all your investments are performing.</p>
-      </header>
+            <!-- SUMMARY PAGE (Investments + Charts Placeholder) -->
+            <section id="summaryPage" class="page-section hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Portfolio Summary</div>
+                            <div class="card-subtitle">
+                                Review all investments, edit or delete entries, and see your net worth and allocation charts.
+                            </div>
+                        </div>
+                        <div class="pill">
+                            <span class="pill-icon">📊</span>
+                            <span>Click an investment card to edit details</span>
+                        </div>
+                    </div>
 
-      <div id="summaryList"></div>
+                    <!-- Investments list will be rendered here via JS -->
+                    <div id="summaryInvestmentsContainer" class="page-section">
+                        <p class="section-description">
+                            Once you add investments, they will appear here as cards. Each card will show key metrics, IRR (where
+                            applicable), and options to edit or delete. Cash will show as liquid balance with no IRR.
+                        </p>
+                    </div>
 
-      <div class="actions">
-        <button id="downloadPdfBtn">Download PDF</button>
-        <button id="downloadPayloadBtn" class="secondary">Download payload</button>
-        <button id="addInvestmentFromSummaryBtn" class="secondary">Add investment</button>
-        <button id="backHomeFromSummaryBtn" class="secondary">Home</button>
-      </div>
-    </section>
-  </div>
+                    <!-- Charts placeholders (Net Worth Area + Allocation Doughnut) -->
+                    <div class="page-section">
+                        <div class="section-title">Charts</div>
+                        <div class="section-description">
+                            A smooth area chart will show your net worth over time, including unrealised gains. A doughnut chart
+                            will show your allocation across property, shares, crypto, gold, gold bonds, term deposits, and cash.
+                        </div>
+                        <div class="form-grid">
+                            <div class="card" style="background-color:#020617;">
+                                <div class="card-header">
+                                    <div class="card-title">Net Worth Over Time</div>
+                                    <div class="card-subtitle">Cashflow-based curve with unrealised gains included.</div>
+                                </div>
+                                <canvas id="netWorthChart" style="width:100%; height:260px;"></canvas>
+                            </div>
+                            <div class="card" style="background-color:#020617;">
+                                <div class="card-header">
+                                    <div class="card-title">Portfolio Allocation</div>
+                                    <div class="card-subtitle">Doughnut chart across all investment types, including cash.</div>
+                                </div>
+                                <canvas id="allocationChart" style="width:100%; height:260px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-  <!-- Core scripts -->
-  <script type="module" src="js/app.js"></script>
+    <!-- JS will start in Block 2 (navigation, state, edit/delete, charts, etc.) -->
 </body>
 </html>
+
+<script>
+/* ============================================================
+   BLOCK 2 — CORE APP LOGIC (Lines 501–1000)
+   WealthPath IRR Tracker
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   GLOBAL STATE
+   ------------------------------------------------------------ */
+let investments = [];          // All saved investments
+let editingIndex = null;       // Tracks which investment is being edited (null = new)
+
+/* Cached DOM references */
+const homePage = document.getElementById("homePage");
+const wizardPage = document.getElementById("wizardPage");
+const summaryPage = document.getElementById("summaryPage");
+
+const navHome = document.getElementById("navHome");
+const navAdd = document.getElementById("navAdd");
+const navSummary = document.getElementById("navSummary");
+
+const homeStartBtn = document.getElementById("homeStartBtn");
+const wizardCancelBtn = document.getElementById("wizardCancelBtn");
+const wizardSaveBtn = document.getElementById("wizardSaveBtn");
+
+const invTypeSelect = document.getElementById("invType");
+const invNameInput = document.getElementById("invName");
+const investmentTypePills = document.getElementById("investmentTypePills");
+const investmentDetailsContainer = document.getElementById("investmentDetailsContainer");
+
+/* ------------------------------------------------------------
+   PAGE NAVIGATION
+   ------------------------------------------------------------ */
+function showPage(page) {
+    homePage.classList.add("hidden");
+    wizardPage.classList.add("hidden");
+    summaryPage.classList.add("hidden");
+
+    navHome.classList.remove("active");
+    navAdd.classList.remove("active");
+    navSummary.classList.remove("active");
+
+    if (page === "home") {
+        homePage.classList.remove("hidden");
+        navHome.classList.add("active");
+    }
+    if (page === "wizard") {
+        wizardPage.classList.remove("hidden");
+        navAdd.classList.add("active");
+    }
+    if (page === "summary") {
+        summaryPage.classList.remove("hidden");
+        navSummary.classList.add("active");
+    }
+}
+
+/* Navigation button events */
+navHome.onclick = () => showPage("home");
+navAdd.onclick = () => startNewInvestment();
+navSummary.onclick = () => renderSummary();
+
+/* Home page CTA */
+homeStartBtn.onclick = () => startNewInvestment();
+
+/* ------------------------------------------------------------
+   START NEW INVESTMENT
+   ------------------------------------------------------------ */
+function startNewInvestment() {
+    editingIndex = null; // new investment
+    invNameInput.value = "";
+    invTypeSelect.value = "";
+
+    clearActivePills();
+    renderEmptyWizard();
+
+    showPage("wizard");
+}
+
+/* ------------------------------------------------------------
+   INVESTMENT TYPE PILL LOGIC
+   ------------------------------------------------------------ */
+function clearActivePills() {
+    document.querySelectorAll(".investment-type-pill").forEach(p => {
+        p.classList.remove("active");
+    });
+}
+
+function setActivePill(type) {
+    clearActivePills();
+    const pill = document.querySelector(`.investment-type-pill[data-type="${type}"]`);
+    if (pill) pill.classList.add("active");
+}
+
+/* Clicking a pill selects the investment type */
+investmentTypePills.querySelectorAll(".investment-type-pill").forEach(pill => {
+    pill.onclick = () => {
+        const type = pill.dataset.type;
+        invTypeSelect.value = type;
+        setActivePill(type);
+        renderWizardForType(type);
+    };
+});
+
+/* Dropdown syncs with pills */
+invTypeSelect.onchange = () => {
+    const type = invTypeSelect.value;
+    setActivePill(type);
+    renderWizardForType(type);
+};
+
+/* ------------------------------------------------------------
+   WIZARD RENDERING
+   ------------------------------------------------------------ */
+function renderEmptyWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Configure investment</div>
+        <div class="section-description">
+            Select an investment type above to see its specific fields.
+        </div>
+        <p style="font-size:0.85rem;color:#9CA3AF;">
+            Once you choose an investment type, this area will show the relevant fields.
+        </p>
+    `;
+}
+
+/* Main renderer */
+function renderWizardForType(type) {
+    if (!type) return renderEmptyWizard();
+
+    if (type === "cash") return renderCashWizard();
+    if (type === "property") return renderPropertyWizard();
+    if (type === "shares") return renderSharesWizard();
+    if (type === "crypto") return renderCryptoWizard();
+    if (type === "gold") return renderGoldWizard();
+    if (type === "goldbonds") return renderGoldBondsWizard();
+    if (type === "termdeposit") return renderTermDepositWizard();
+}
+
+/* ------------------------------------------------------------
+   CASH WIZARD (Simple, No IRR)
+   ------------------------------------------------------------ */
+function renderCashWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Cash (💵 Liquid Balance)</div>
+        <div class="section-description">
+            Track liquid cash. No IRR or year-by-year values. This amount is added directly to net worth.
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Cash Amount (AUD)</label>
+                <input id="cashAmount" class="form-input" type="number" placeholder="e.g. 5000">
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   PLACEHOLDER WIZARDS FOR OTHER TYPES
+   (Full logic will be added in Blocks 3–6)
+   ------------------------------------------------------------ */
+function renderPropertyWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Property (🏠)</div>
+        <div class="section-description">
+            Full property cashflow wizard will be implemented in Block 3.
+        </div>
+    `;
+}
+
+function renderSharesWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Shares (📈)</div>
+        <div class="section-description">
+            Shares simple/detailed mode will be implemented in Block 3.
+        </div>
+    `;
+}
+
+function renderCryptoWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Crypto (🪙)</div>
+        <div class="section-description">
+            Crypto simple/staking mode will be implemented in Block 3.
+        </div>
+    `;
+}
+
+function renderGoldWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Gold (🥇)</div>
+        <div class="section-description">
+            Gold buy/sell wizard will be implemented in Block 3.
+        </div>
+    `;
+}
+
+function renderGoldBondsWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Gold Bonds (📜)</div>
+        <div class="section-description">
+            Gold bond wizard will be implemented in Block 3.
+        </div>
+    `;
+}
+
+function renderTermDepositWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Term Deposit (🏦)</div>
+        <div class="section-description">
+            Term deposit wizard will be implemented in Block 3.
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   SAVE INVESTMENT (Cash only for now)
+   ------------------------------------------------------------ */
+wizardSaveBtn.onclick = () => {
+    const type = invTypeSelect.value;
+    const name = invNameInput.value.trim();
+
+    if (!type) {
+        alert("Please select an investment type.");
+        return;
+    }
+    if (!name) {
+        alert("Please enter an investment name.");
+        return;
+    }
+
+    let newInvestment = { type, name };
+
+    /* Handle Cash investment */
+    if (type === "cash") {
+        const amount = Number(document.getElementById("cashAmount").value || 0);
+        newInvestment.amount = amount;
+    }
+
+    /* Save or update */
+    if (editingIndex === null) {
+        investments.push(newInvestment);
+    } else {
+        investments[editingIndex] = newInvestment;
+        editingIndex = null;
+    }
+
+    renderSummary();
+};
+
+/* ------------------------------------------------------------
+   CANCEL BUTTON
+   ------------------------------------------------------------ */
+wizardCancelBtn.onclick = () => {
+    renderSummary();
+};
+
+/* ------------------------------------------------------------
+   SUMMARY RENDERER (placeholder)
+   Full cards + edit/delete come in Block 3
+   ------------------------------------------------------------ */
+function renderSummary() {
+    showPage("summary");
+
+    const container = document.getElementById("summaryInvestmentsContainer");
+
+    if (investments.length === 0) {
+        container.innerHTML = `
+            <p class="section-description">
+                No investments added yet. Use the navigation above to add your first investment.
+            </p>
+        `;
+        return;
+    }
+
+    container.innerHTML = investments.map((inv, i) => `
+        <div class="card" style="margin-bottom:12px; cursor:pointer;">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">${inv.name}</div>
+                    <div class="card-subtitle">${inv.type.toUpperCase()}</div>
+                </div>
+            </div>
+            <p style="font-size:0.85rem;color:#9CA3AF;">
+                Click to edit. Full metrics will appear in Block 3.
+            </p>
+        </div>
+    `).join("");
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOCK 3 — SUMMARY CARDS, EDIT/DELETE, BASIC CHART SETUP
+   Lines 1001–1500
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   SUMMARY RENDERER — FULL CARDS WITH EDIT/DELETE
+   ------------------------------------------------------------ */
+function renderSummary() {
+    showPage("summary");
+
+    const container = document.getElementById("summaryInvestmentsContainer");
+
+    if (investments.length === 0) {
+        container.innerHTML = `
+            <p class="section-description">
+                No investments added yet. Use the navigation above to add your first investment.
+            </p>
+        `;
+        return;
+    }
+
+    container.innerHTML = investments.map((inv, i) => {
+        const isCash = inv.type === "cash";
+        const typeLabel = formatTypeLabel(inv.type);
+        const irrLabel = isCash ? "— (Not applicable)" : "IRR: (to be calculated)";
+        const amountLine = isCash
+            ? `<div style="font-size:0.85rem;color:#D1D5DB;">Amount: $${formatNumber(inv.amount || 0)}</div>`
+            : "";
+
+        return `
+        <div class="card investment-card" data-index="${i}" style="margin-bottom:12px; cursor:pointer;">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">${inv.name}</div>
+                    <div class="card-subtitle">${typeLabel}</div>
+                    ${amountLine}
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-secondary summary-edit-btn" data-index="${i}">
+                        <span class="btn-icon">✏️</span>
+                        <span>Edit</span>
+                    </button>
+                    <button class="btn btn-secondary summary-delete-btn" data-index="${i}">
+                        <span class="btn-icon">🗑️</span>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+            <p style="font-size:0.8rem;color:#9CA3AF;margin-top:6px;">
+                ${irrLabel}
+            </p>
+        </div>
+        `;
+    }).join("");
+
+    wireSummaryCardEvents();
+}
+
+/* Format type label with icon */
+function formatTypeLabel(type) {
+    switch (type) {
+        case "property": return "🏠 Property";
+        case "shares": return "📈 Shares";
+        case "crypto": return "🪙 Crypto";
+        case "gold": return "🥇 Gold";
+        case "goldbonds": return "📜 Gold Bonds";
+        case "termdeposit": return "🏦 Term Deposit";
+        case "cash": return "💵 Cash (Liquid)";
+        default: return type;
+    }
+}
+
+/* Simple number formatter */
+function formatNumber(n) {
+    return (n || 0).toLocaleString("en-AU", { maximumFractionDigits: 2 });
+}
+
+/* ------------------------------------------------------------
+   WIRE SUMMARY CARD EVENTS (CARD CLICK = EDIT)
+   ------------------------------------------------------------ */
+function wireSummaryCardEvents() {
+    /* Card click = Edit */
+    document.querySelectorAll(".investment-card").forEach(card => {
+        const index = Number(card.dataset.index);
+        card.onclick = () => loadInvestmentForEditing(index);
+    });
+
+    /* Edit button */
+    document.querySelectorAll(".summary-edit-btn").forEach(btn => {
+        const index = Number(btn.dataset.index);
+        btn.onclick = (e) => {
+        e.stopPropagation();   // ← prevents card click
+        loadInvestmentForEditing(Number(btn.dataset.index));
+		};
+    });
+
+    /* Delete button */
+    document.querySelectorAll(".summary-delete-btn").forEach(btn => {
+        const index = Number(btn.dataset.index);
+		btn.onclick = (e) => {
+        e.stopPropagation();   // ← prevents card click
+        deleteInvestment(Number(btn.dataset.index));
+		};
+    });
+}
+
+/* ------------------------------------------------------------
+   DELETE INVESTMENT
+   ------------------------------------------------------------ */
+function deleteInvestment(index) {
+    if (!confirm("Delete this investment? You can re-enter it later if needed.")) return;
+    investments.splice(index, 1);
+    renderSummary();
+    updateCharts();
+}
+
+/* ------------------------------------------------------------
+   LOAD INVESTMENT FOR EDITING (Cash only for now)
+   Full per-type prefill will be expanded in later blocks.
+   ------------------------------------------------------------ */
+function loadInvestmentForEditing(index) {
+    editingIndex = index;
+    const inv = investments[index];
+
+    showPage("wizard");
+
+    /* Set name + type */
+    invNameInput.value = inv.name || "";
+    invTypeSelect.value = inv.type || "";
+    setActivePill(inv.type || "");
+    renderWizardForType(inv.type || "");
+
+    /* Prefill per type (Cash implemented now) */
+    if (inv.type === "cash") {
+        const cashInput = document.getElementById("cashAmount");
+        if (cashInput) cashInput.value = inv.amount || 0;
+    }
+}
+
+/* ------------------------------------------------------------
+   BASIC CHART SETUP (Net Worth + Allocation)
+   ------------------------------------------------------------ */
+let netWorthChartInstance = null;
+let allocationChartInstance = null;
+
+/* Load Chart.js from CDN (simple inline loader) */
+(function loadChartJs() {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+    script.onload = () => {
+        initCharts();
+    };
+    document.head.appendChild(script);
+})();
+
+/* Initialize empty charts */
+function initCharts() {
+    const netCtx = document.getElementById("netWorthChart").getContext("2d");
+    const allocCtx = document.getElementById("allocationChart").getContext("2d");
+
+    netWorthChartInstance = new Chart(netCtx, {
+        type: "line",
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Net Worth",
+                data: [],
+                borderColor: "#3B82F6",
+                backgroundColor: "rgba(59, 130, 246, 0.25)",
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            plugins: { legend: { labels: { color: "#E5E7EB" } } },
+            scales: {
+                x: { ticks: { color: "#9CA3AF" }, grid: { color: "#111827" } },
+                y: { ticks: { color: "#9CA3AF" }, grid: { color: "#111827" } }
+            }
+        }
+    });
+
+    allocationChartInstance = new Chart(allocCtx, {
+        type: "doughnut",
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    "#3B82F6", // Property
+                    "#22C55E", // Shares
+                    "#A855F7", // Crypto
+                    "#FACC15", // Gold
+                    "#FB923C", // Gold Bonds
+                    "#14B8A6", // Term Deposit
+                    "#38BDF8"  // Cash
+                ]
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: { color: "#E5E7EB" }
+                }
+            }
+        }
+    });
+
+    updateCharts();
+}
+
+/* ------------------------------------------------------------
+   UPDATE CHARTS (Simple version: sum by type, no timeline yet)
+   Full cashflow-based net worth curve comes in later blocks.
+   ------------------------------------------------------------ */
+function updateCharts() {
+    if (!netWorthChartInstance || !allocationChartInstance) return;
+
+    /* Allocation: sum by type */
+    const totals = {
+        property: 0,
+        shares: 0,
+        crypto: 0,
+        gold: 0,
+        goldbonds: 0,
+        termdeposit: 0,
+        cash: 0
+    };
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totals.cash += inv.amount || 0;
+        }
+        /* Other types will add estimated values later */
+    });
+
+    allocationChartInstance.data.labels = [
+        "Property",
+        "Shares",
+        "Crypto",
+        "Gold",
+        "Gold Bonds",
+        "Term Deposit",
+        "Cash"
+    ];
+    allocationChartInstance.data.datasets[0].data = [
+        totals.property,
+        totals.shares,
+        totals.crypto,
+        totals.gold,
+        totals.goldbonds,
+        totals.termdeposit,
+        totals.cash
+    ];
+    allocationChartInstance.update();
+
+    /* Net worth (simple placeholder: sum of all totals as a single point) */
+    const totalNetWorth =
+        totals.property +
+        totals.shares +
+        totals.crypto +
+        totals.gold +
+        totals.goldbonds +
+        totals.termdeposit +
+        totals.cash;
+
+    netWorthChartInstance.data.labels = ["Now"];
+    netWorthChartInstance.data.datasets[0].data = [totalNetWorth];
+    netWorthChartInstance.update();
+}
+
+/* ------------------------------------------------------------
+   INITIAL SUMMARY + CHART UPDATE ON LOAD
+   ------------------------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+    showPage("home");
+    updateCharts();
+});
+</script>
+
+<script>
+/* ============================================================
+   BLOCK 4 — EDIT FLOW FOUNDATION, PERSISTENCE, NET WORTH ENGINE
+   Lines 1501–2000
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   LOCAL STORAGE PERSISTENCE
+   ------------------------------------------------------------ */
+const STORAGE_KEY = "wealthpath_investments_v1";
+
+function saveState() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(investments));
+    } catch (e) {
+        console.warn("Unable to save state:", e);
+    }
+}
+
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+            investments = parsed;
+        }
+    } catch (e) {
+        console.warn("Unable to load state:", e);
+    }
+}
+
+/* Hook persistence into existing flows */
+function persistAndRenderSummary() {
+    saveState();
+    renderSummary();
+    updateCharts();
+}
+
+/* Override save/delete flows to use persistence */
+wizardSaveBtn.onclick = () => {
+    const type = invTypeSelect.value;
+    const name = invNameInput.value.trim();
+
+    if (!type) {
+        alert("Please select an investment type.");
+        return;
+    }
+    if (!name) {
+        alert("Please enter an investment name.");
+        return;
+    }
+
+    let newInvestment = { type, name };
+
+    /* Cash investment */
+    if (type === "cash") {
+        const amount = Number(document.getElementById("cashAmount").value || 0);
+        newInvestment.amount = amount;
+    }
+
+    if (editingIndex === null) {
+        investments.push(newInvestment);
+    } else {
+        investments[editingIndex] = newInvestment;
+        editingIndex = null;
+    }
+
+    persistAndRenderSummary();
+};
+
+function deleteInvestment(index) {
+    if (!confirm("Delete this investment? You can re-enter it later if needed.")) return;
+    investments.splice(index, 1);
+    persistAndRenderSummary();
+}
+
+/* Cancel returns to summary without changing state */
+wizardCancelBtn.onclick = () => {
+    renderSummary();
+    updateCharts();
+};
+
+/* ------------------------------------------------------------
+   EDIT FLOW — FOUNDATION FOR ALL TYPES
+   (Currently fully wired for Cash; other types will plug in later)
+   ------------------------------------------------------------ */
+function loadInvestmentForEditing(index) {
+    editingIndex = index;
+    const inv = investments[index];
+
+    showPage("wizard");
+
+    invNameInput.value = inv.name || "";
+    invTypeSelect.value = inv.type || "";
+    setActivePill(inv.type || "");
+    renderWizardForType(inv.type || "");
+
+    if (inv.type === "cash") {
+        const cashInput = document.getElementById("cashAmount");
+        if (cashInput) cashInput.value = inv.amount || 0;
+    }
+
+    /* When other types are implemented, this function will:
+       - Detect inv.type and any mode flags
+       - Rebuild the correct wizard UI
+       - Pre-fill all fields (purchase price, costs, year cards, etc.)
+       - Allow user to edit and save, replacing investments[editingIndex]
+    */
+}
+
+/* ------------------------------------------------------------
+   NET WORTH ENGINE — SIMPLE CASH-ONLY VERSION
+   (Will expand to full cashflow-based curve later)
+   ------------------------------------------------------------ */
+function computeNetWorthTimeline() {
+    /* For now, we only have cash; we treat it as a single point in time. */
+    let totalCash = 0;
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totalCash += inv.amount || 0;
+        }
+    });
+
+    return {
+        labels: ["Now"],
+        values: [totalCash]
+    };
+}
+
+/* Update charts using the engine */
+function updateCharts() {
+    if (!netWorthChartInstance || !allocationChartInstance) return;
+
+    const totals = {
+        property: 0,
+        shares: 0,
+        crypto: 0,
+        gold: 0,
+        goldbonds: 0,
+        termdeposit: 0,
+        cash: 0
+    };
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totals.cash += inv.amount || 0;
+        }
+        /* Other types will contribute estimated values later */
+    });
+
+    allocationChartInstance.data.labels = [
+        "Property",
+        "Shares",
+        "Crypto",
+        "Gold",
+        "Gold Bonds",
+        "Term Deposit",
+        "Cash"
+    ];
+    allocationChartInstance.data.datasets[0].data = [
+        totals.property,
+        totals.shares,
+        totals.crypto,
+        totals.gold,
+        totals.goldbonds,
+        totals.termdeposit,
+        totals.cash
+    ];
+    allocationChartInstance.update();
+
+    const timeline = computeNetWorthTimeline();
+    netWorthChartInstance.data.labels = timeline.labels;
+    netWorthChartInstance.data.datasets[0].data = timeline.values;
+    netWorthChartInstance.update();
+}
+
+/* ------------------------------------------------------------
+   INITIAL LOAD — RESTORE STATE, SHOW HOME, UPDATE SUMMARY/CHARTS
+   ------------------------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+    loadState();
+    showPage("home");
+    updateCharts();
+});
+</script>
+
+<script>
+/* ============================================================
+   BLOCK 5 — TYPE-SAFE INVESTMENT MODEL & IRR STUBS
+   Lines 2001–2500
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   INVESTMENT MODEL HELPERS
+   ------------------------------------------------------------ */
+
+/* Create a base investment object */
+function createBaseInvestment(type, name) {
+    return {
+        type,
+        name,
+        meta: {
+            createdAt: new Date().toISOString()
+        }
+    };
+}
+
+/* Extend save logic to use base model (Cash still primary) */
+function buildInvestmentFromWizard() {
+    const type = invTypeSelect.value;
+    const name = invNameInput.value.trim();
+
+    if (!type) {
+        alert("Please select an investment type.");
+        return null;
+    }
+    if (!name) {
+        alert("Please enter an investment name.");
+        return null;
+    }
+
+    let inv = createBaseInvestment(type, name);
+
+    if (type === "cash") {
+        const amount = Number(document.getElementById("cashAmount").value || 0);
+        inv.amount = amount;
+    }
+
+    /* Other types will be populated here later:
+       - Property: purchase, sale, yearly cashflows
+       - Shares: transactions, dividends
+       - Crypto: buys, staking rewards
+       - Gold: buys/sells
+       - Gold Bonds: coupons, maturity
+       - Term Deposit: principal, rate, term
+    */
+
+    return inv;
+}
+
+/* Override save handler to use builder */
+wizardSaveBtn.onclick = () => {
+    const newInvestment = buildInvestmentFromWizard();
+    if (!newInvestment) return;
+
+    if (editingIndex === null) {
+        investments.push(newInvestment);
+    } else {
+        investments[editingIndex] = newInvestment;
+        editingIndex = null;
+    }
+
+    persistAndRenderSummary();
+};
+
+/* ------------------------------------------------------------
+   IRR STUBS (PLACEHOLDER FOR FUTURE IMPLEMENTATION)
+   ------------------------------------------------------------ */
+
+/* Generic IRR calculator stub */
+function calculateIRR(cashflows) {
+    /* In a later block, we will implement:
+       - Newton-Raphson or bisection method
+       - Handling irregular cashflow timing
+       - Annualised IRR
+    */
+    return null; // placeholder
+}
+
+/* Get IRR label for summary card */
+function getIrrLabelForInvestment(inv) {
+    if (inv.type === "cash") {
+        return "IRR: — (Not applicable for cash)";
+    }
+
+    /* Once cashflows are implemented per type, we will:
+       - Build cashflow array for inv
+       - Call calculateIRR(cashflows)
+       - Format as percentage
+    */
+
+    return "IRR: (to be calculated)";
+}
+
+/* Update summary renderer to use IRR helper */
+function renderSummary() {
+    showPage("summary");
+
+    const container = document.getElementById("summaryInvestmentsContainer");
+
+    if (investments.length === 0) {
+        container.innerHTML = `
+            <p class="section-description">
+                No investments added yet. Use the navigation above to add your first investment.
+            </p>
+        `;
+        return;
+    }
+
+    container.innerHTML = investments.map((inv, i) => {
+        const isCash = inv.type === "cash";
+        const typeLabel = formatTypeLabel(inv.type);
+        const irrLabel = getIrrLabelForInvestment(inv);
+        const amountLine = isCash
+            ? `<div style="font-size:0.85rem;color:#D1D5DB;">Amount: $${formatNumber(inv.amount || 0)}</div>`
+            : "";
+
+        return `
+        <div class="card investment-card" data-index="${i}" style="margin-bottom:12px; cursor:pointer;">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">${inv.name}</div>
+                    <div class="card-subtitle">${typeLabel}</div>
+                    ${amountLine}
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-secondary summary-edit-btn" data-index="${i}">
+                        <span class="btn-icon">✏️</span>
+                        <span>Edit</span>
+                    </button>
+                    <button class="btn btn-secondary summary-delete-btn" data-index="${i}">
+                        <span class="btn-icon">🗑️</span>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+            <p style="font-size:0.8rem;color:#9CA3AF;margin-top:6px;">
+                ${irrLabel}
+            </p>
+        </div>
+        `;
+    }).join("");
+
+    wireSummaryCardEvents();
+}
+
+/* ------------------------------------------------------------
+   EDIT FLOW HOOK (still cash-only for prefill)
+   ------------------------------------------------------------ */
+function loadInvestmentForEditing(index) {
+    editingIndex = index;
+    const inv = investments[index];
+
+    showPage("wizard");
+
+    invNameInput.value = inv.name || "";
+    invTypeSelect.value = inv.type || "";
+    setActivePill(inv.type || "");
+    renderWizardForType(inv.type || "");
+
+    if (inv.type === "cash") {
+        const cashInput = document.getElementById("cashAmount");
+        if (cashInput) cashInput.value = inv.amount || 0;
+    }
+}
+
+/* ------------------------------------------------------------
+   NET WORTH ENGINE HOOK (still cash-only)
+   ------------------------------------------------------------ */
+function computeNetWorthTimeline() {
+    let totalCash = 0;
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totalCash += inv.amount || 0;
+        }
+    });
+
+    return {
+        labels: ["Now"],
+        values: [totalCash]
+    };
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOCK 6 — PROPERTY WIZARD (BUY → RENT → SELL) + EDIT PREFILL
+   Lines 2501–3000
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   PROPERTY WIZARD UI
+   ------------------------------------------------------------ */
+function renderPropertyWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Property (🏠)</div>
+        <div class="section-description">
+            Enter purchase, rent, expenses, and sale details. We’ll later use these to build cashflows and IRR.
+        </div>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+            <div class="form-field">
+                <label class="form-label">Purchase price (AUD)</label>
+                <input id="propPurchasePrice" class="form-input" type="number" placeholder="e.g. 650000">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Stamp duty & legal (AUD)</label>
+                <input id="propCosts" class="form-input" type="number" placeholder="e.g. 25000">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Renovation / upfront improvements (AUD)</label>
+                <input id="propRenovation" class="form-input" type="number" placeholder="e.g. 15000">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Loan amount (AUD)</label>
+                <input id="propLoanAmount" class="form-input" type="number" placeholder="e.g. 500000">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Interest rate (%)</label>
+                <input id="propLoanRate" class="form-input" type="number" placeholder="e.g. 5.5">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Loan tenure (years)</label>
+                <input id="propLoanTenure" class="form-input" type="number" placeholder="e.g. 30">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Monthly EMI (auto)</label>
+                <input id="propLoanEmi" class="form-input" type="number">
+            </div>
+        </div>
+
+        <div class="section-title">Annual rent & expenses</div>
+        <div class="section-description">
+            Enter typical annual rent and expenses. In a later block, we’ll support year-by-year cards.
+        </div>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+            <div class="form-field">
+                <label class="form-label">Annual rent (AUD)</label>
+                <input id="propAnnualRent" class="form-input" type="number" placeholder="e.g. 30000">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Rental appraisal (% per year)</label>
+                <input id="propRentAppraisal" class="form-input" type="number" placeholder="e.g. 3">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Annual expenses (rates, insurance, maintenance) (AUD)</label>
+                <input id="propAnnualExpenses" class="form-input" type="number" placeholder="e.g. 8000">
+            </div>
+        </div>
+
+        <div class="section-title">Sale details</div>
+        <div class="section-description">
+            If you plan to sell, enter an expected sale price. Otherwise, leave blank for “hold” scenario.
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Expected sale price (AUD)</label>
+                <input id="propSalePrice" class="form-input" type="number" placeholder="e.g. 850000">
+            </div>
+
+            <div class="form-field">
+                <label class="form-label">Holding period (years)</label>
+                <input id="propYears" class="form-input" type="number" placeholder="e.g. 10">
+            </div>
+        </div>
+    `;
+
+    /* ------------------------------------------------------------
+       AUTO‑CALCULATE EMI WHEN LOAN FIELDS CHANGE
+       ------------------------------------------------------------ */
+    ["propLoanAmount","propLoanRate","propLoanTenure"].forEach(id=>{
+		
+		// Allow user to override EMI manually
+		const emiField = document.getElementById("propLoanEmi");
+		if (emiField) {
+			emiField.addEventListener("input", () => {
+				// User override — do nothing, keep manual value
+			});
+		}
+		
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("input", () => {
+                const p = Number(document.getElementById("propLoanAmount").value || 0);
+                const r = Number(document.getElementById("propLoanRate").value || 0);
+                const y = Number(document.getElementById("propLoanTenure").value || 0);
+
+                if (p > 0 && r > 0 && y > 0) {
+                    const emi = calculateEMI(p, r, y);
+                    const emiField = document.getElementById("propLoanEmi");
+                    if (emiField) emiField.value = emi.toFixed(2);
+                }
+            });
+        }
+    });
+}
+
+/* ------------------------------------------------------------
+   BUILD INVESTMENT FROM WIZARD — ADD PROPERTY SUPPORT
+   ------------------------------------------------------------ */
+function buildInvestmentFromWizard() {
+    const type = invTypeSelect.value;
+    const name = invNameInput.value.trim();
+
+    if (!type) { alert("Please select an investment type."); return null; }
+    if (!name) { alert("Please enter an investment name."); return null; }
+
+    let inv = createBaseInvestment(type, name);
+
+    if (type === "cash") {
+        inv.amount = Number(document.getElementById("cashAmount").value || 0);
+    }
+
+    if (type === "property") {
+        inv.purchasePrice   = Number(document.getElementById("propPurchasePrice").value || 0);
+        inv.costs           = Number(document.getElementById("propCosts").value || 0);
+        inv.renovation      = Number(document.getElementById("propRenovation").value || 0);
+        inv.loanAmount      = Number(document.getElementById("propLoanAmount").value || 0);
+
+        inv.loanRate        = Number(document.getElementById("propLoanRate").value || 0);
+        inv.loanTenure      = Number(document.getElementById("propLoanTenure").value || 0);
+        inv.loanEmi         = Number(document.getElementById("propLoanEmi").value || 0);
+
+        inv.annualRent      = Number(document.getElementById("propAnnualRent").value || 0);
+        inv.rentAppraisal   = Number(document.getElementById("propRentAppraisal").value || 0);
+        inv.annualExpenses  = Number(document.getElementById("propAnnualExpenses").value || 0);
+
+        inv.salePrice       = Number(document.getElementById("propSalePrice").value || 0);
+        inv.years           = Number(document.getElementById("propYears").value || 0);
+    }
+
+    return inv;
+}
+
+/* ------------------------------------------------------------
+   EDIT FLOW — PREFILL PROPERTY FIELDS
+   ------------------------------------------------------------ */
+function loadInvestmentForEditing(index) {
+    editingIndex = index;
+    const inv = investments[index];
+
+    showPage("wizard");
+
+    invNameInput.value = inv.name || "";
+    invTypeSelect.value = inv.type || "";
+    setActivePill(inv.type || "");
+    renderWizardForType(inv.type || "");
+
+    if (inv.type === "cash") {
+        const cashInput = document.getElementById("cashAmount");
+        if (cashInput) cashInput.value = inv.amount || 0;
+    }
+
+    if (inv.type === "property") {
+        const p = (id) => document.getElementById(id);
+
+        if (p("propPurchasePrice"))   p("propPurchasePrice").value   = inv.purchasePrice   || 0;
+        if (p("propCosts"))           p("propCosts").value           = inv.costs           || 0;
+        if (p("propRenovation"))      p("propRenovation").value      = inv.renovation      || 0;
+
+        if (p("propLoanAmount"))      p("propLoanAmount").value      = inv.loanAmount      || 0;
+        if (p("propLoanRate"))        p("propLoanRate").value        = inv.loanRate        || 0;
+        if (p("propLoanTenure"))      p("propLoanTenure").value      = inv.loanTenure      || 0;
+        if (p("propLoanEmi"))         p("propLoanEmi").value         = inv.loanEmi         || 0;
+
+        if (p("propAnnualRent"))      p("propAnnualRent").value      = inv.annualRent      || 0;
+        if (p("propRentAppraisal"))   p("propRentAppraisal").value   = inv.rentAppraisal   || 0;
+        if (p("propAnnualExpenses"))  p("propAnnualExpenses").value  = inv.annualExpenses  || 0;
+
+        if (p("propSalePrice"))       p("propSalePrice").value       = inv.salePrice       || 0;
+        if (p("propYears"))           p("propYears").value           = inv.years           || 0;
+    }
+}
+
+/* ============================================================
+   BLOCK 7 — SHARES, CRYPTO, GOLD, GOLD BONDS, TERM DEPOSIT
+   Simple wizards + edit prefill + allocation hooks
+   Lines 3001–3500
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   SHARES WIZARD (SIMPLE VALUE-BASED)
+   ------------------------------------------------------------ */
+function renderSharesWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Shares (📈)</div>
+        <div class="section-description">
+            Track your share portfolio using a simple current value and optional cost basis.
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Current value (AUD)</label>
+                <input id="sharesCurrentValue" class="form-input" type="number" placeholder="e.g. 25000">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Total cost basis (AUD)</label>
+                <input id="sharesCostBasis" class="form-input" type="number" placeholder="e.g. 18000">
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   CRYPTO WIZARD (SIMPLE VALUE-BASED)
+   ------------------------------------------------------------ */
+function renderCryptoWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Crypto (🪙)</div>
+        <div class="section-description">
+            Track your crypto holdings using a simple current value and optional cost basis.
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Current value (AUD)</label>
+                <input id="cryptoCurrentValue" class="form-input" type="number" placeholder="e.g. 12000">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Total cost basis (AUD)</label>
+                <input id="cryptoCostBasis" class="form-input" type="number" placeholder="e.g. 9000">
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   GOLD WIZARD (SIMPLE VALUE-BASED)
+   ------------------------------------------------------------ */
+function renderGoldWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Gold (🥇)</div>
+        <div class="section-description">
+            Track physical gold or ETFs using a simple current value and optional cost basis.
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Current value (AUD)</label>
+                <input id="goldCurrentValue" class="form-input" type="number" placeholder="e.g. 8000">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Total cost basis (AUD)</label>
+                <input id="goldCostBasis" class="form-input" type="number" placeholder="e.g. 6000">
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   GOLD BONDS WIZARD (SIMPLE VALUE-BASED)
+   ------------------------------------------------------------ */
+function renderGoldBondsWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Gold Bonds (📜)</div>
+        <div class="section-description">
+            Track sovereign gold bonds or similar instruments using a simple current value.
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Current value (AUD)</label>
+                <input id="goldBondsCurrentValue" class="form-input" type="number" placeholder="e.g. 5000">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Total cost basis (AUD)</label>
+                <input id="goldBondsCostBasis" class="form-input" type="number" placeholder="e.g. 4000">
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   TERM DEPOSIT WIZARD (SIMPLE PRINCIPAL + RATE)
+   ------------------------------------------------------------ */
+function renderTermDepositWizard() {
+    investmentDetailsContainer.innerHTML = `
+        <div class="section-title">Term Deposit (🏦)</div>
+        <div class="section-description">
+            Track a term deposit using principal, interest rate, and term. For now, we treat
+            the current value as principal (later we can add accrued interest).
+        </div>
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label class="form-label">Principal (AUD)</label>
+                <input id="tdPrincipal" class="form-input" type="number" placeholder="e.g. 20000">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Annual interest rate (%)</label>
+                <input id="tdRate" class="form-input" type="number" placeholder="e.g. 4.5">
+            </div>
+            <div class="form-field">
+                <label class="form-label">Term (years)</label>
+                <input id="tdYears" class="form-input" type="number" placeholder="e.g. 3">
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   BUILD INVESTMENT FROM WIZARD — ADD OTHER TYPES
+   ------------------------------------------------------------ */
+function buildInvestmentFromWizard() {
+    const type = invTypeSelect.value;
+    const name = invNameInput.value.trim();
+
+    if (!type) {
+        alert("Please select an investment type.");
+        return null;
+    }
+    if (!name) {
+        alert("Please enter an investment name.");
+        return null;
+    }
+
+    let inv = createBaseInvestment(type, name);
+
+    if (type === "cash") {
+        inv.amount = Number(document.getElementById("cashAmount").value || 0);
+    }
+
+    if (type === "property") {
+        inv.purchasePrice   = Number(document.getElementById("propPurchasePrice").value || 0);
+        inv.costs           = Number(document.getElementById("propCosts").value || 0);
+        inv.renovation      = Number(document.getElementById("propRenovation").value || 0);
+        inv.loanAmount      = Number(document.getElementById("propLoanAmount").value || 0);
+        inv.annualRent      = Number(document.getElementById("propAnnualRent").value || 0);
+        inv.annualExpenses  = Number(document.getElementById("propAnnualExpenses").value || 0);
+        inv.salePrice       = Number(document.getElementById("propSalePrice").value || 0);
+        inv.years           = Number(document.getElementById("propYears").value || 0);
+    }
+
+    if (type === "shares") {
+        inv.currentValue = Number(document.getElementById("sharesCurrentValue").value || 0);
+        inv.costBasis    = Number(document.getElementById("sharesCostBasis").value || 0);
+    }
+
+    if (type === "crypto") {
+        inv.currentValue = Number(document.getElementById("cryptoCurrentValue").value || 0);
+        inv.costBasis    = Number(document.getElementById("cryptoCostBasis").value || 0);
+    }
+
+    if (type === "gold") {
+        inv.currentValue = Number(document.getElementById("goldCurrentValue").value || 0);
+        inv.costBasis    = Number(document.getElementById("goldCostBasis").value || 0);
+    }
+
+    if (type === "goldbonds") {
+        inv.currentValue = Number(document.getElementById("goldBondsCurrentValue").value || 0);
+        inv.costBasis    = Number(document.getElementById("goldBondsCostBasis").value || 0);
+    }
+
+    if (type === "termdeposit") {
+        inv.principal = Number(document.getElementById("tdPrincipal").value || 0);
+        inv.rate      = Number(document.getElementById("tdRate").value || 0);
+        inv.years     = Number(document.getElementById("tdYears").value || 0);
+    }
+
+    return inv;
+}
+
+/* ------------------------------------------------------------
+   EDIT PREFILL FOR OTHER TYPES
+   ------------------------------------------------------------ */
+function loadInvestmentForEditing(index) {
+    editingIndex = index;
+    const inv = investments[index];
+
+    showPage("wizard");
+
+    invNameInput.value = inv.name || "";
+    invTypeSelect.value = inv.type || "";
+    setActivePill(inv.type || "");
+    renderWizardForType(inv.type || "");
+
+    if (inv.type === "cash") {
+        const cashInput = document.getElementById("cashAmount");
+        if (cashInput) cashInput.value = inv.amount || 0;
+    }
+
+    if (inv.type === "property") {
+        const p = (id) => document.getElementById(id);
+        if (p("propPurchasePrice"))   p("propPurchasePrice").value   = inv.purchasePrice   || 0;
+        if (p("propCosts"))           p("propCosts").value           = inv.costs           || 0;
+        if (p("propRenovation"))      p("propRenovation").value      = inv.renovation      || 0;
+        if (p("propLoanAmount"))      p("propLoanAmount").value      = inv.loanAmount      || 0;
+        if (p("propAnnualRent"))      p("propAnnualRent").value      = inv.annualRent      || 0;
+        if (p("propAnnualExpenses"))  p("propAnnualExpenses").value  = inv.annualExpenses  || 0;
+        if (p("propSalePrice"))       p("propSalePrice").value       = inv.salePrice       || 0;
+        if (p("propYears"))           p("propYears").value           = inv.years           || 0;
+    }
+
+    if (inv.type === "shares") {
+        const s = (id) => document.getElementById(id);
+        if (s("sharesCurrentValue")) s("sharesCurrentValue").value = inv.currentValue || 0;
+        if (s("sharesCostBasis"))    s("sharesCostBasis").value    = inv.costBasis    || 0;
+    }
+
+    if (inv.type === "crypto") {
+        const c = (id) => document.getElementById(id);
+        if (c("cryptoCurrentValue")) c("cryptoCurrentValue").value = inv.currentValue || 0;
+        if (c("cryptoCostBasis"))    c("cryptoCostBasis").value    = inv.costBasis    || 0;
+    }
+
+    if (inv.type === "gold") {
+        const g = (id) => document.getElementById(id);
+        if (g("goldCurrentValue")) g("goldCurrentValue").value = inv.currentValue || 0;
+        if (g("goldCostBasis"))    g("goldCostBasis").value    = inv.costBasis    || 0;
+    }
+
+    if (inv.type === "goldbonds") {
+        const gb = (id) => document.getElementById(id);
+        if (gb("goldBondsCurrentValue")) gb("goldBondsCurrentValue").value = inv.currentValue || 0;
+        if (gb("goldBondsCostBasis"))    gb("goldBondsCostBasis").value    = inv.costBasis    || 0;
+    }
+
+    if (inv.type === "termdeposit") {
+        const td = (id) => document.getElementById(id);
+        if (td("tdPrincipal")) td("tdPrincipal").value = inv.principal || 0;
+        if (td("tdRate"))      td("tdRate").value      = inv.rate      || 0;
+        if (td("tdYears"))     td("tdYears").value     = inv.years     || 0;
+    }
+}
+
+/* ------------------------------------------------------------
+   NET WORTH ENGINE — INCLUDE OTHER TYPES (SIMPLE VALUES)
+   ------------------------------------------------------------ */
+function computeNetWorthTimeline() {
+    let totalCash       = 0;
+    let totalProperty   = 0;
+    let totalShares     = 0;
+    let totalCrypto     = 0;
+    let totalGold       = 0;
+    let totalGoldBonds  = 0;
+    let totalTermDep    = 0;
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totalCash += inv.amount || 0;
+        }
+        if (inv.type === "property") {
+            const baseCost = (inv.purchasePrice || 0) +
+                             (inv.costs || 0) +
+                             (inv.renovation || 0);
+            const sale = inv.salePrice || 0;
+            const currentValue = sale > 0 ? sale : baseCost;
+            totalProperty += currentValue;
+        }
+        if (inv.type === "shares") {
+            totalShares += inv.currentValue || 0;
+        }
+        if (inv.type === "crypto") {
+            totalCrypto += inv.currentValue || 0;
+        }
+        if (inv.type === "gold") {
+            totalGold += inv.currentValue || 0;
+        }
+        if (inv.type === "goldbonds") {
+            totalGoldBonds += inv.currentValue || 0;
+        }
+        if (inv.type === "termdeposit") {
+            totalTermDep += inv.principal || 0;
+        }
+    });
+
+    const totalNow =
+        totalCash +
+        totalProperty +
+        totalShares +
+        totalCrypto +
+        totalGold +
+        totalGoldBonds +
+        totalTermDep;
+
+    return {
+        labels: ["Now"],
+        values: [totalNow]
+    };
+}
+
+/* ------------------------------------------------------------
+   ALLOCATION CHART — INCLUDE OTHER TYPES
+   ------------------------------------------------------------ */
+function updateCharts() {
+    if (!netWorthChartInstance || !allocationChartInstance) return;
+
+    const totals = {
+        property: 0,
+        shares: 0,
+        crypto: 0,
+        gold: 0,
+        goldbonds: 0,
+        termdeposit: 0,
+        cash: 0
+    };
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totals.cash += inv.amount || 0;
+        }
+        if (inv.type === "property") {
+            const baseCost = (inv.purchasePrice || 0) +
+                             (inv.costs || 0) +
+                             (inv.renovation || 0);
+            const sale = inv.salePrice || 0;
+            const currentValue = sale > 0 ? sale : baseCost;
+            totals.property += currentValue;
+        }
+        if (inv.type === "shares") {
+            totals.shares += inv.currentValue || 0;
+        }
+        if (inv.type === "crypto") {
+            totals.crypto += inv.currentValue || 0;
+        }
+        if (inv.type === "gold") {
+            totals.gold += inv.currentValue || 0;
+        }
+        if (inv.type === "goldbonds") {
+            totals.goldbonds += inv.currentValue || 0;
+        }
+        if (inv.type === "termdeposit") {
+            totals.termdeposit += inv.principal || 0;
+        }
+    });
+
+    allocationChartInstance.data.labels = [
+        "Property",
+        "Shares",
+        "Crypto",
+        "Gold",
+        "Gold Bonds",
+        "Term Deposit",
+        "Cash"
+    ];
+    allocationChartInstance.data.datasets[0].data = [
+        totals.property,
+        totals.shares,
+        totals.crypto,
+        totals.gold,
+        totals.goldbonds,
+        totals.termdeposit,
+        totals.cash
+    ];
+    allocationChartInstance.update();
+
+    const timeline = computeNetWorthTimeline();
+    netWorthChartInstance.data.labels = timeline.labels;
+    netWorthChartInstance.data.datasets[0].data = timeline.values;
+    netWorthChartInstance.update();
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOCK 8 — CASHFLOW ENGINE + IRR + MULTI-YEAR NET WORTH
+   Lines 3501–4000
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CASHFLOW OBJECT MODEL
+   ------------------------------------------------------------ */
+/*
+   Cashflow object:
+   {
+     t: number,        // time in years from start (0 = now)
+     amount: number    // net cashflow (positive = inflow, negative = outflow)
+   }
+*/
+
+/* ------------------------------------------------------------
+   PROPERTY CASHFLOW BUILDER (SIMPLE VERSION)
+   ------------------------------------------------------------ */
+function buildPropertyCashflows(inv) {
+    const flows = [];
+
+    const purchaseOut =
+        (inv.purchasePrice || 0) +
+        (inv.costs || 0) +
+        (inv.renovation || 0);
+
+    // t = 0: purchase (outflow)
+    if (purchaseOut > 0) {
+        flows.push({ t: 0, amount: -purchaseOut });
+    }
+
+    const years = inv.years || 0;
+    const annualRent = inv.annualRent || 0;
+    const annualExpenses = inv.annualExpenses || 0;
+
+    // t = 1..years: net rent (inflow - outflow)
+    for (let y = 1; y <= years; y++) {
+        const net = annualRent - annualExpenses;
+        if (net !== 0) {
+            flows.push({ t: y, amount: net });
+        }
+    }
+
+    // t = years: sale (inflow)
+    if (inv.salePrice && inv.salePrice > 0 && years > 0) {
+        flows.push({ t: years, amount: inv.salePrice });
+    }
+
+    return flows;
+}
+
+/* ------------------------------------------------------------
+   SIMPLE CASHFLOW BUILDERS FOR OTHER TYPES
+   (Value-based approximation for now)
+   ------------------------------------------------------------ */
+function buildSharesCashflows(inv) {
+    const flows = [];
+    const cost = inv.costBasis || 0;
+    const value = inv.currentValue || 0;
+
+    if (cost > 0) flows.push({ t: 0, amount: -cost });
+    if (value > 0) flows.push({ t: 1, amount: value });
+
+    return flows;
+}
+
+function buildCryptoCashflows(inv) {
+    const flows = [];
+    const cost = inv.costBasis || 0;
+    const value = inv.currentValue || 0;
+
+    if (cost > 0) flows.push({ t: 0, amount: -cost });
+    if (value > 0) flows.push({ t: 1, amount: value });
+
+    return flows;
+}
+
+function buildGoldCashflows(inv) {
+    const flows = [];
+    const cost = inv.costBasis || 0;
+    const value = inv.currentValue || 0;
+
+    if (cost > 0) flows.push({ t: 0, amount: -cost });
+    if (value > 0) flows.push({ t: 1, amount: value });
+
+    return flows;
+}
+
+function buildGoldBondsCashflows(inv) {
+    const flows = [];
+    const cost = inv.costBasis || 0;
+    const value = inv.currentValue || 0;
+
+    if (cost > 0) flows.push({ t: 0, amount: -cost });
+    if (value > 0) flows.push({ t: 1, amount: value });
+
+    return flows;
+}
+
+function buildTermDepositCashflows(inv) {
+    const flows = [];
+    const principal = inv.principal || 0;
+    const rate = (inv.rate || 0) / 100;
+    const years = inv.years || 0;
+
+    if (principal > 0) {
+        flows.push({ t: 0, amount: -principal });
+        const maturityValue = principal * Math.pow(1 + rate, years || 1);
+        flows.push({ t: years || 1, amount: maturityValue });
+    }
+
+    return flows;
+}
+
+/* Cash has no IRR; we treat it as static value only. */
+
+/* ------------------------------------------------------------
+   GENERIC IRR CALCULATOR (NEWTON–RAPHSON)
+   ------------------------------------------------------------ */
+function calculateIRRFromFlows(flows) {
+    if (!flows || flows.length === 0) return null;
+
+    // Initial guess: 10% per year
+    let r = 0.10;
+    const maxIter = 50;
+    const tol = 1e-6;
+
+    function npv(rate) {
+        return flows.reduce((sum, f) => {
+            return sum + f.amount / Math.pow(1 + rate, f.t);
+        }, 0);
+    }
+
+    function dNpv(rate) {
+        return flows.reduce((sum, f) => {
+            if (f.t === 0) return sum;
+            return sum - (f.t * f.amount) / Math.pow(1 + rate, f.t + 1);
+        }, 0);
+    }
+
+    for (let i = 0; i < maxIter; i++) {
+        const f = npv(r);
+        const df = dNpv(r);
+        if (Math.abs(df) < 1e-12) break;
+        const newR = r - f / df;
+        if (Math.abs(newR - r) < tol) {
+            r = newR;
+            break;
+        }
+        r = newR;
+    }
+
+    if (!isFinite(r)) return null;
+    return r;
+}
+
+/* ------------------------------------------------------------
+   IRR LABEL PER INVESTMENT
+   ------------------------------------------------------------ */
+function getIrrLabelForInvestment(inv) {
+    if (inv.type === "cash") {
+        return "IRR: — (Not applicable for cash)";
+    }
+
+    let flows = [];
+
+    if (inv.type === "property")   flows = buildPropertyCashflows(inv);
+    if (inv.type === "shares")     flows = buildSharesCashflows(inv);
+    if (inv.type === "crypto")     flows = buildCryptoCashflows(inv);
+    if (inv.type === "gold")       flows = buildGoldCashflows(inv);
+    if (inv.type === "goldbonds")  flows = buildGoldBondsCashflows(inv);
+    if (inv.type === "termdeposit")flows = buildTermDepositCashflows(inv);
+
+    const irr = calculateIRRFromFlows(flows);
+    if (irr === null) return "IRR: (insufficient data)";
+
+    const pct = (irr * 100).toFixed(2);
+    return `IRR: ${pct}% p.a.`;
+}
+
+/* ------------------------------------------------------------
+   SUMMARY RENDERER — USE REAL IRR LABELS
+   ------------------------------------------------------------ */
+function renderSummary() {
+    showPage("summary");
+
+    const container = document.getElementById("summaryInvestmentsContainer");
+
+    if (investments.length === 0) {
+        container.innerHTML = `
+            <p class="section-description">
+                No investments added yet. Use the navigation above to add your first investment.
+            </p>
+        `;
+        return;
+    }
+
+    container.innerHTML = investments.map((inv, i) => {
+        const isCash = inv.type === "cash";
+        const typeLabel = formatTypeLabel(inv.type);
+        const irrLabel = getIrrLabelForInvestment(inv);
+
+        let extraLine = "";
+        if (isCash) {
+            extraLine = `<div style="font-size:0.85rem;color:#D1D5DB;">Amount: $${formatNumber(inv.amount || 0)}</div>`;
+        } else if (inv.type === "shares" || inv.type === "crypto" || inv.type === "gold" || inv.type === "goldbonds") {
+            extraLine = `<div style="font-size:0.85rem;color:#D1D5DB;">Value: $${formatNumber(inv.currentValue || 0)} • Cost: $${formatNumber(inv.costBasis || 0)}</div>`;
+        } else if (inv.type === "termdeposit") {
+            extraLine = `<div style="font-size:0.85rem;color:#D1D5DB;">Principal: $${formatNumber(inv.principal || 0)} • Rate: ${(inv.rate || 0).toFixed(2)}% • Term: ${inv.years || 0} yrs</div>`;
+        } else if (inv.type === "property") {
+            extraLine = `<div style="font-size:0.85rem;color:#D1D5DB;">Purchase: $${formatNumber(inv.purchasePrice || 0)} • Rent: $${formatNumber(inv.annualRent || 0)} /yr</div>`;
+        }
+
+        return `
+        <div class="card investment-card" data-index="${i}" style="margin-bottom:12px; cursor:pointer;">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">${inv.name}</div>
+                    <div class="card-subtitle">${typeLabel}</div>
+                    ${extraLine}
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-secondary summary-edit-btn" data-index="${i}">
+                        <span class="btn-icon">✏️</span>
+                        <span>Edit</span>
+                    </button>
+                    <button class="btn btn-secondary summary-delete-btn" data-index="${i}">
+                        <span class="btn-icon">🗑️</span>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+            <p style="font-size:0.8rem;color:#9CA3AF;margin-top:6px;">
+                ${irrLabel}
+            </p>
+        </div>
+        `;
+    }).join("");
+
+    wireSummaryCardEvents();
+}
+
+/* ------------------------------------------------------------
+   MULTI-YEAR NET WORTH TIMELINE
+   ------------------------------------------------------------ */
+function computeNetWorthTimeline() {
+    // Collect all cashflows from all investments
+    const flowsByYear = new Map(); // year -> net cashflow
+
+    function addFlow(year, amount) {
+        const prev = flowsByYear.get(year) || 0;
+        flowsByYear.set(year, prev + amount);
+    }
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            // Treat cash as present value only
+            addFlow(0, inv.amount || 0);
+            return;
+        }
+
+        let flows = [];
+
+        if (inv.type === "property")   flows = buildPropertyCashflows(inv);
+        if (inv.type === "shares")     flows = buildSharesCashflows(inv);
+        if (inv.type === "crypto")     flows = buildCryptoCashflows(inv);
+        if (inv.type === "gold")       flows = buildGoldCashflows(inv);
+        if (inv.type === "goldbonds")  flows = buildGoldBondsCashflows(inv);
+        if (inv.type === "termdeposit")flows = buildTermDepositCashflows(inv);
+
+        flows.forEach(f => addFlow(f.t, f.amount));
+    });
+
+    // Sort years and build cumulative net worth
+    const years = Array.from(flowsByYear.keys()).sort((a, b) => a - b);
+    if (years.length === 0) {
+        return { labels: ["Now"], values: [0] };
+    }
+
+    let cumulative = 0;
+    const labels = [];
+    const values = [];
+
+    years.forEach(y => {
+        cumulative += flowsByYear.get(y) || 0;
+        labels.push(y === 0 ? "Now" : `Year ${y}`);
+        values.push(cumulative);
+    });
+
+    return { labels, values };
+}
+
+/* ------------------------------------------------------------
+   UPDATE CHARTS — USE CASHFLOW-BASED NET WORTH
+   ------------------------------------------------------------ */
+function updateCharts() {
+    if (!netWorthChartInstance || !allocationChartInstance) return;
+
+    const totals = {
+        property: 0,
+        shares: 0,
+        crypto: 0,
+        gold: 0,
+        goldbonds: 0,
+        termdeposit: 0,
+        cash: 0
+    };
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") {
+            totals.cash += inv.amount || 0;
+        }
+        if (inv.type === "property") {
+            const baseCost = (inv.purchasePrice || 0) +
+                             (inv.costs || 0) +
+                             (inv.renovation || 0);
+            const sale = inv.salePrice || 0;
+            const currentValue = sale > 0 ? sale : baseCost;
+            totals.property += currentValue;
+        }
+        if (inv.type === "shares") {
+            totals.shares += inv.currentValue || 0;
+        }
+        if (inv.type === "crypto") {
+            totals.crypto += inv.currentValue || 0;
+        }
+        if (inv.type === "gold") {
+            totals.gold += inv.currentValue || 0;
+        }
+        if (inv.type === "goldbonds") {
+            totals.goldbonds += inv.currentValue || 0;
+        }
+        if (inv.type === "termdeposit") {
+            totals.termdeposit += inv.principal || 0;
+        }
+    });
+
+    allocationChartInstance.data.labels = [
+        "Property",
+        "Shares",
+        "Crypto",
+        "Gold",
+        "Gold Bonds",
+        "Term Deposit",
+        "Cash"
+    ];
+    allocationChartInstance.data.datasets[0].data = [
+        totals.property,
+        totals.shares,
+        totals.crypto,
+        totals.gold,
+        totals.goldbonds,
+        totals.termdeposit,
+        totals.cash
+    ];
+    allocationChartInstance.update();
+
+    const timeline = computeNetWorthTimeline();
+    netWorthChartInstance.data.labels = timeline.labels;
+    netWorthChartInstance.data.datasets[0].data = timeline.values;
+    netWorthChartInstance.update();
+}
+</script>
+
+<script>
+/* ============================================================
+   BLOCK 9 — NET WORTH UI ENHANCEMENTS + SUMMARY METRICS
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   SUMMARY METRICS (TOP OF SUMMARY PAGE)
+   ------------------------------------------------------------ */
+function renderSummaryMetrics(inv) {
+    const container = document.getElementById("summaryMetrics");
+    if (!container) return;
+
+    const purchase = (inv.purchasePrice || 0) + (inv.costs || 0) + (inv.renovation || 0);
+    const sale = inv.salePrice || 0;
+    const gain = sale > 0 ? sale - purchase : 0;
+
+    container.innerHTML = `
+        <div class="panel">
+            <div class="panel-title">Summary Metrics</div>
+            <div class="panel-subtitle">Key numbers for your property</div>
+
+            <div class="metric-grid">
+                <div class="metric-item">
+                    <div class="metric-label">Total Cost</div>
+                    <div class="metric-value">$${purchase.toLocaleString()}</div>
+                </div>
+
+                <div class="metric-item">
+                    <div class="metric-label">Sale Price</div>
+                    <div class="metric-value">$${sale.toLocaleString()}</div>
+                </div>
+
+                <div class="metric-item">
+                    <div class="metric-label">Unrealised Gain</div>
+                    <div class="metric-value">$${gain.toLocaleString()}</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   NET WORTH CHART — SMOOTH AREA CHART
+   ------------------------------------------------------------ */
+function renderNetWorthChart() {
+    const ctx = document.getElementById("netWorthChart");
+    if (!ctx) return;
+
+    const timeline = computeNetWorthTimeline();
+
+    // GLOBAL INSTANCE (required for Block 12 print fix)
+    window.netWorthChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: timeline.labels,
+            datasets: [{
+                label: "Net Worth",
+                data: timeline.values,
+                fill: true,
+                backgroundColor: "rgba(59,130,246,0.25)",
+                borderColor: "rgba(59,130,246,1)",
+                borderWidth: 2,
+                tension: 0.35
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { labels: { color: "#e2e8f0" } }
+            },
+            scales: {
+                x: { ticks: { color: "#e2e8f0" } },
+                y: { ticks: { color: "#e2e8f0" } }
+            }
+        }
+    });
+}
+
+/* ------------------------------------------------------------
+   ALLOCATION CHART — DOUGHNUT
+   ------------------------------------------------------------ */
+function renderAllocationChart() {
+    const ctx = document.getElementById("allocationChart");
+    if (!ctx) return;
+
+    const totals = {
+        property: 0,
+        shares: 0,
+        crypto: 0,
+        gold: 0,
+        goldbonds: 0,
+        termdeposit: 0,
+        cash: 0
+    };
+
+    investments.forEach(inv => {
+        if (inv.type === "cash") totals.cash += inv.amount || 0;
+        if (inv.type === "property") {
+            const baseCost = (inv.purchasePrice || 0) +
+                             (inv.costs || 0) +
+                             (inv.renovation || 0);
+            const sale = inv.salePrice || 0;
+            totals.property += sale > 0 ? sale : baseCost;
+        }
+    });
+
+    // GLOBAL INSTANCE (required for Block 12 print fix)
+    window.allocationChartInstance = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: ["Property", "Shares", "Crypto", "Gold", "Gold Bonds", "Term Deposit", "Cash"],
+            datasets: [{
+                data: [
+                    totals.property,
+                    totals.shares,
+                    totals.crypto,
+                    totals.gold,
+                    totals.goldbonds,
+                    totals.termdeposit,
+                    totals.cash
+                ],
+                backgroundColor: [
+                    "#3b82f6",
+                    "#22c55e",
+                    "#a855f7",
+                    "#facc15",
+                    "#14b8a6",
+                    "#60a5fa",
+                    "#f97316"
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: { color: "#e2e8f0" }
+                }
+            }
+        }
+    });
+}
+
+/* ------------------------------------------------------------
+   RENDER ALL BLOCK 9 CONTENT
+   ------------------------------------------------------------ */
+function renderBlock9(inv) {
+    renderSummaryMetrics(inv);
+    renderNetWorthChart();
+    renderAllocationChart();
+}
+
+
+
+/* ============================================================
+   BLOCK 10 — LOAN AMORTISATION SCHEDULE
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   BUILD LOAN AMORTISATION SCHEDULE (MONTHLY)
+   ------------------------------------------------------------ */
+function buildLoanSchedule(inv) {
+    const principal = inv.loanAmount || 0;
+    const annualRate = inv.loanRate || 0;
+    const years = inv.loanTenure || 0;
+
+    if (!principal || !annualRate || !years) return [];
+
+    const r = annualRate / 1200;   // monthly interest
+    const n = years * 12;          // total months
+    const emi = calculateEMI(principal, annualRate, years);
+
+    let balance = principal;
+    const rows = [];
+
+    for (let m = 1; m <= n; m++) {
+        const interest = balance * r;
+        const principalPaid = emi - interest;
+        const closing = balance - principalPaid;
+
+        rows.push({
+            month: m,
+            opening: balance,
+            emi,
+            interest,
+            principal: principalPaid,
+            closing: closing < 0 ? 0 : closing
+        });
+
+        balance = closing;
+        if (balance <= 0) break;
+    }
+
+    return rows;
+}
+
+/* ------------------------------------------------------------
+   RENDER LOAN SCHEDULE INTO SUMMARY PAGE
+   ------------------------------------------------------------ */
+function renderLoanScheduleSummary(inv) {
+    const container = document.getElementById("loanScheduleContainer");
+    if (!container) return;
+
+    // If no loan → hide block
+    if (!inv.loanAmount || !inv.loanRate || !inv.loanTenure) {
+        container.innerHTML = "";
+        return;
+    }
+
+    const rows = buildLoanSchedule(inv);
+
+    container.innerHTML = `
+        <div class="panel">
+            <div class="panel-title">Loan Amortisation Schedule</div>
+            <div class="panel-subtitle">Monthly breakdown of principal & interest</div>
+
+            <div style="overflow-x:auto; margin-top:10px;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;padding:6px;border-bottom:1px solid #1f2937;">Month</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Opening</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">EMI</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Interest</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Principal</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Closing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map(r => `
+                            <tr>
+                                <td style="padding:4px 6px;">${r.month}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.opening.toFixed(0)}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.emi.toFixed(0)}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.interest.toFixed(0)}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.principal.toFixed(0)}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.closing.toFixed(0)}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   HOOK INTO SUMMARY PAGE
+   ------------------------------------------------------------ */
+function renderBlock10ForSummary(inv) {
+    // Create container if not present
+    let container = document.getElementById("loanScheduleContainer");
+    if (!container) {
+        const summaryPage = document.getElementById("summaryPage");
+        if (summaryPage) {
+            container = document.createElement("div");
+            container.id = "loanScheduleContainer";
+            summaryPage.appendChild(container);
+        }
+    }
+
+    renderLoanScheduleSummary(inv);
+}
+
+/* ============================================================
+   BLOCK 11 — RENTAL GROWTH CASHFLOWS
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   BUILD YEAR‑BY‑YEAR RENTAL CASHFLOWS
+   ------------------------------------------------------------ */
+function buildRentalCashflows(inv) {
+    const years = inv.years || 0;
+    let rent = inv.annualRent || 0;
+    const appraisal = (inv.rentAppraisal || 0) / 100;
+    const expenses = inv.annualExpenses || 0;
+
+    if (!years || !rent) return [];
+
+    const rows = [];
+
+    for (let y = 1; y <= years; y++) {
+        const gross = rent;
+        const net = gross - expenses;
+
+        rows.push({
+            year: y,
+            gross,
+            expenses,
+            net
+        });
+
+        rent *= (1 + appraisal); // grow rent each year
+    }
+
+    return rows;
+}
+
+/* ------------------------------------------------------------
+   RENDER RENTAL CASHFLOWS INTO SUMMARY PAGE
+   ------------------------------------------------------------ */
+function renderRentalCashflowSummary(inv) {
+    const container = document.getElementById("rentalCashflowContainer");
+    if (!container) return;
+
+    if (!inv.annualRent || !inv.years) {
+        container.innerHTML = "";
+        return;
+    }
+
+    const rows = buildRentalCashflows(inv);
+
+    container.innerHTML = `
+        <div class="panel">
+            <div class="panel-title">Rental Growth Cashflows</div>
+            <div class="panel-subtitle">Year‑by‑year rent minus expenses</div>
+
+            <div style="overflow-x:auto; margin-top:10px;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;padding:6px;border-bottom:1px solid #1f2937;">Year</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Gross Rent</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Expenses</th>
+                            <th style="text-align:right;padding:6px;border-bottom:1px solid #1f2937;">Net Rent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map(r => `
+                            <tr>
+                                <td style="padding:4px 6px;">Year ${r.year}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.gross.toFixed(0)}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.expenses.toFixed(0)}</td>
+                                <td style="padding:4px 6px;text-align:right;">$${r.net.toFixed(0)}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+/* ------------------------------------------------------------
+   HOOK INTO SUMMARY PAGE
+   ------------------------------------------------------------ */
+function renderBlock11ForSummary(inv) {
+    // Create container if not present
+    let container = document.getElementById("rentalCashflowContainer");
+    if (!container) {
+        const summaryPage = document.getElementById("summaryPage");
+        if (summaryPage) {
+            container = document.createElement("div");
+            container.id = "rentalCashflowContainer";
+            summaryPage.appendChild(container);
+        }
+    }
+
+    renderRentalCashflowSummary(inv);
+}
+
+/* ============================================================
+   BLOCK 12 — FULL UI POLISH (ANIMATIONS, TRANSITIONS, ICONS)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   PAGE TRANSITIONS
+   ------------------------------------------------------------ */
+function applyPageTransitions() {
+    document.querySelectorAll(".page").forEach(p => {
+        p.classList.add("page-transition");
+    });
+}
+
+/* Add CSS dynamically */
+(function injectBlock12CSS() {
+    const css = `
+        /* PRINT FIX — shrink charts for A4 */
+        @media print {
+            canvas {
+                width: 600px !important;
+                height: 300px !important;
+                max-width: 600px !important;
+                max-height: 300px !important;
+            }
+            #netWorthChart, #allocationChart {
+                width: 600px !important;
+                height: 300px !important;
+            }
+            .panel {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Smooth fade-slide for pages */
+        .page-transition {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .page-transition.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Button micro-interactions */
+        .btn {
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Panel hover polish */
+        .panel {
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+        }
+        .panel:hover {
+            border-color: #334155;
+            background: #020617;
+        }
+
+        /* Accordion polish */
+        .section-body.open {
+            box-shadow: 0 6px 16px rgba(15,23,42,0.7);
+            border-color: #334155;
+        }
+
+        /* Nav button icons */
+        .nav-btn::before {
+            content: "●";
+            display: inline-block;
+            margin-right: 4px;
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        .nav-btn.active::before {
+            content: "◆";
+            color: #f9fafb;
+        }
+    `;
+    const style = document.createElement("style");
+    style.innerHTML = css;
+    document.head.appendChild(style);
+})();
+
+/* ------------------------------------------------------------
+   CLEAN HOME PAGE — ONLY TWO CUTE BUTTONS
+   ------------------------------------------------------------ */
+function applyCleanHomePage() {
+    const home = document.getElementById("homePage");
+    if (!home) return;
+
+    home.innerHTML = `
+        <div class="panel" style="max-width:500px;margin:auto;text-align:center;">
+            <div class="panel-title">Welcome to WealthPath</div>
+            <div class="panel-subtitle">Track your investments beautifully.</div>
+
+            <button id="btnTrack" class="btn btn-primary" style="margin-top:12px;width:100%;">
+                ➕ Track Investments
+            </button>
+
+            <button id="btnUpload" class="btn btn-secondary" style="margin-top:12px;width:100%;">
+                📁 Existing User (Upload JSON)
+            </button>
+
+            <input type="file" id="jsonUploadInput" accept=".json" style="display:none;">
+        </div>
+    `;
+
+    // JSON upload trigger
+    const uploadBtn = document.getElementById("btnUpload");
+    const uploadInput = document.getElementById("jsonUploadInput");
+
+    if (uploadBtn && uploadInput) {
+        uploadBtn.onclick = () => uploadInput.click();
+    }
+
+    // Track Investments → go to Add Investment page
+    const trackBtn = document.getElementById("btnTrack");
+    if (trackBtn) {
+        trackBtn.onclick = () => {
+            const nav = document.getElementById("navLinks");
+            if (nav) nav.style.display = "flex";
+
+            showPage("wizard");
+            renderWizardForType("property"); // default selection
+        };
+    }
+}
+
+/* ------------------------------------------------------------
+   HIDE NAV UNTIL USER CHOOSES AN OPTION
+   ------------------------------------------------------------ */
+function applyNavVisibilityControl() {
+    const nav = document.getElementById("navLinks");
+    if (nav) nav.style.display = "none";
+
+    const trackBtn = document.getElementById("btnTrack");
+    if (trackBtn) {
+        trackBtn.addEventListener("click", () => {
+            if (nav) nav.style.display = "flex";
+        });
+    }
+}
+
+/* ------------------------------------------------------------
+   SUMMARY PAGE EXPORT POLISH
+   ------------------------------------------------------------ */
+function applySummaryExportEnhancements() {
+    const summary = document.getElementById("summaryPage");
+    if (!summary) return;
+
+    const exportBar = document.createElement("div");
+    exportBar.style = "display:flex;gap:10px;margin-bottom:10px;";
+
+    exportBar.innerHTML = `
+        <button id="btnExportJson" class="btn btn-secondary">⬇ Export JSON</button>
+        <button id="btnExportPdf" class="btn btn-secondary">📄 Save as PDF</button>
+    `;
+
+    summary.prepend(exportBar);
+
+    document.getElementById("btnExportJson").onclick = () => {
+        const blob = new Blob([JSON.stringify(investments, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "portfolio.json";
+        a.click();
+    };
+
+    document.getElementById("btnExportPdf").onclick = () => {
+        window.print();
+    };
+}
+
+/* ------------------------------------------------------------
+   CHART.JS PRINT FIX — force compact charts during PDF export
+   ------------------------------------------------------------ */
+function applyChartPrintFix() {
+    const mq = window.matchMedia("print");
+
+    mq.addListener((evt) => {
+        if (evt.matches) {
+            // Entering print mode
+            if (window.netWorthChartInstance) {
+                window.netWorthChartInstance.options.responsive = false;
+                window.netWorthChartInstance.options.maintainAspectRatio = false;
+                window.netWorthChartInstance.resize(600, 300);
+            }
+            if (window.allocationChartInstance) {
+                window.allocationChartInstance.options.responsive = false;
+                window.allocationChartInstance.options.maintainAspectRatio = false;
+                window.allocationChartInstance.resize(600, 300);
+            }
+        } else {
+            // Leaving print mode — restore responsiveness
+            if (window.netWorthChartInstance) {
+                window.netWorthChartInstance.options.responsive = true;
+                window.netWorthChartInstance.options.maintainAspectRatio = true;
+                window.netWorthChartInstance.resize();
+            }
+            if (window.allocationChartInstance) {
+                window.allocationChartInstance.options.responsive = true;
+                window.allocationChartInstance.options.maintainAspectRatio = true;
+                window.allocationChartInstance.resize();
+            }
+        }
+    });
+}
+
+/* ------------------------------------------------------------
+   INITIALISE BLOCK 12
+   ------------------------------------------------------------ */
+function initBlock12() {
+    applyPageTransitions();
+    applyCleanHomePage();
+    applyNavVisibilityControl();
+    applySummaryExportEnhancements();
+    applyChartPrintFix();
+}
+
+document.addEventListener("DOMContentLoaded", initBlock12);
+
+
+</script>
+
