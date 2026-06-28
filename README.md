@@ -6,14 +6,16 @@ Open `index.html` directly in a browser — no server, no npm, and no build step
 
 ## How it works
 - Start on the Overview page and enter your name and age.
-- Click Track Investments to add holdings such as property, shares, crypto, gold, gold bonds, term deposits, or cash.
-- Use the sidebar to import or export your data as JSON.
-- View the Summary page to review your current allocation and see suggested rebalancing based on your selected desired risk profile.
+- Click `Track Investments` to go to the Investments page and add holdings such as property, shares, crypto, gold, gold bonds, bonds, term deposits, or cash.
+- Use the sidebar to import your data from JSON at any time.
+- Export is available from the Summary page after you have added investments and income.
+- View the Summary page to review your current allocation and see suggested rebalancing based on your selected risk profile.
 
 ## Features
 - Simple Overview flow with name, age, and investment entry
-- Investment tracking for 7 asset types
+- Investment tracking for 8 asset types, including new bond support
 - Property form with auto-calculated EMI and annual tax rebate support
+- Investment forms now support cash flow inputs for non-property holdings
 - Summary page with:
   - current portfolio allocation
   - recommended allocation based on age and selected risk profile
@@ -21,7 +23,7 @@ Open `index.html` directly in a browser — no server, no npm, and no build step
   - key insights and portfolio summary
 - Desired Risk Profile options: Conservative, Balanced, Growth, High Growth
 - LocalStorage persistence for saved data
-- JSON export and import
+- JSON import from the sidebar and JSON export from the Summary page
 - Responsive layout with desktop sidebar and mobile hamburger menu
 - Inline CSS and JavaScript for easy hosting on GitHub Pages or opening directly from disk
 

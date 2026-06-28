@@ -120,6 +120,16 @@ p{color:var(--muted);line-height:1.65}
   backdrop-filter:blur(8px);
   box-shadow:var(--shadow);
 }
+.feedback-card{font-size:0.95rem;color:#cbd5e1;}
+.feedback-card .eyebrow{font-size:10px;letter-spacing:.12em;color:#94a3b8;}
+.feedback-card h3{font-size:1rem;margin-bottom:10px;}
+.feedback-card p{margin-top:0;line-height:1.5;}
+.feedback-card a{font-size:0.95rem;}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.summary-tab{display:none}
+.summary-tab.on{display:block}
+.tab-btn.on{background:linear-gradient(135deg,#6c63ff,#4f8cff);color:#fff;border-color:var(--accent)}
+.tab-btn{border:1px solid var(--border2);color:var(--muted)}
 .card-hero{
   background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(79,140,255,.09));
   border-color:rgba(108,99,255,.3);
@@ -177,6 +187,7 @@ p{color:var(--muted);line-height:1.65}
 .bbl{background:rgba(79,140,255,.22);color:#93c5fd}
 .bgr{background:rgba(34,211,163,.22);color:#6ee7b7}
 .byw{background:rgba(251,191,36,.22);color:#fcd34d}
+.bbn{background:rgba(59,130,246,.18);color:#93c5fd}
 .brd{background:rgba(248,113,113,.22);color:#fca5a5}
 /* chart label */
 .clbl{font-weight:700;font-size:13.5px;margin-bottom:12px;color:var(--text)}
@@ -239,7 +250,6 @@ p{color:var(--muted);line-height:1.65}
       <button class="nbtn"    onclick="showPage('summary')"><span class="nicon">◎</span>Summary</button>
     </nav>
     <div class="sfooter">
-      <button class="btn bo w100" onclick="doExport()">⬇ Export JSON</button>
       <label class="btn bo w100" style="cursor:pointer;margin-top:8px">
         ⬆ Import JSON
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="doImport(event)">
@@ -270,9 +280,6 @@ p{color:var(--muted);line-height:1.65}
           <span class="eyebrow">Welcome</span>
           <h3 style="font-size:1.3rem;margin-bottom:10px">Track your wealth intelligently</h3>
           <p class="mt8">Enter your basic profile details and start building your investment plan. You can import a saved JSON file from the sidebar at any time.</p>
-          <div class="brow mt16">
-            <button class="btn bp" onclick="showPage('investments')">Track Investments</button>
-          </div>
         </div>
         <div class="card">
           <span class="eyebrow">Profile</span>
@@ -282,6 +289,15 @@ p{color:var(--muted);line-height:1.65}
             <div class="field"><span>Age</span><input id="pAge" type="number" min="1" max="100" placeholder="e.g. 35" oninput="saveProfile()"></div>
           </div>
           <p class="note mt12">Age is used to shape the recommended allocation shown in Summary.</p>
+          <div class="brow mt16">
+            <button id="homeTrackBtn" class="btn bp" onclick="trackInvestments()">Track Investments</button>
+          </div>
+          <p class="note mt12" id="homeUnlockNote" style="display:none">Import a JSON file to unlock the investment, income and summary workflow.</p>
+        </div>
+        <div class="card feedback-card">
+          <span class="eyebrow">Feedback</span>
+          <h3>Contact</h3>
+          <p class="mt12">For feedback, please email me at <a href="mailto:moreland1231@gmail.com" style="color:#93c5fd;text-decoration:underline;">moreland1231@gmail.com</a></p>
         </div>
       </div>
     </section>
@@ -308,6 +324,7 @@ p{color:var(--muted);line-height:1.65}
                   <option value="crypto">🪙 Crypto</option>
                   <option value="gold">🥇 Gold</option>
                   <option value="goldbonds">📜 Gold Bonds</option>
+                  <option value="bonds">🔗 Bonds</option>
                   <option value="termdeposit">🏦 Term Deposit</option>
                   <option value="cash">💵 Cash</option>
                 </select>
@@ -325,6 +342,9 @@ p{color:var(--muted);line-height:1.65}
           <h3>Saved investments</h3>
           <div class="ilist mt12" id="invList"></div>
         </div>
+      </div>
+      <div class="brow mt16">
+        <button class="btn bp" onclick="gotoIncomeFromInvestments()">Next: Income</button>
       </div>
     </section>
 
@@ -347,7 +367,7 @@ p{color:var(--muted);line-height:1.65}
                 <select id="incFreq">
                   <option value="monthly">Monthly</option>
                   <option value="annual">Annual (per year)</option>
-                  <option value="oneoff">One-off</option>
+                  <option value="oneoff"> One-off</option>
                 </select>
               </div>
               <div class="field">
@@ -370,6 +390,10 @@ p{color:var(--muted);line-height:1.65}
           <div class="ilist mt12" id="incList"></div>
         </div>
       </div>
+      <div class="brow mt16">
+        <button class="btn bo" onclick="prevToInvestments()">← Back</button>
+        <button class="btn bp" onclick="gotoSummaryFromIncome()">Next: Summary</button>
+      </div>
     </section>
 
     <!-- PAGE: SUMMARY -->
@@ -389,22 +413,35 @@ p{color:var(--muted);line-height:1.65}
           </select>
         </div>
       </div>
-      <div class="srow" id="sumStats"></div>
-      <div class="cgrid">
-        <div class="card"><p class="clbl">Current portfolio allocation</p><div id="chAlloc"></div></div>
-        <div class="card"><p class="clbl">Recommended allocation (age-based)</p><div id="chRecom"></div><div class="note mt12" id="rebalInfo"></div></div>
+      <div class="tabs" style="margin-bottom:16px">
+        <button id="tab-btn-current" class="btn bo tab-btn on" onclick="switchSummaryTab('current')">Current allocation</button>
+        <button id="tab-btn-desired" class="btn bo tab-btn" onclick="switchSummaryTab('desired')">Desired Risk Profile</button>
       </div>
-      <div class="cgrid">
-        <div class="card"><p class="clbl">10-year wealth projection</p><div id="chProj"></div></div>
-        <div class="card"><p class="clbl">IRR per investment (%)</p><div id="chIrr"></div></div>
+      <div id="tab-current" class="summary-tab on">
+        <div class="srow" id="sumStatsCurrent"></div>
+        <div class="cgrid">
+          <div class="card"><p class="clbl">Current portfolio allocation</p><div id="chAlloc"></div></div>
+          <div class="card"><p class="clbl">Asset value by category</p><div id="chAssets"></div></div>
+        </div>
+        <div class="cgrid">
+          <div class="card"><p class="clbl">Annual income vs outflows</p><div id="chCash"></div></div>
+          <div class="card"><p class="clbl">IRR per investment (%)</p><div id="chIrr"></div></div>
+        </div>
       </div>
-      <div class="cgrid">
-        <div class="card"><p class="clbl">Annual income vs outflows</p><div id="chCash"></div></div>
-        <div class="card"><p class="clbl">Asset value by category</p><div id="chAssets"></div></div>
+      <div id="tab-desired" class="summary-tab">
+        <div class="srow" id="sumStatsDesired"></div>
+        <div class="cgrid">
+          <div class="card"><p class="clbl">Recommended allocation for target profile</p><div id="chRecom"></div><div class="note mt12" id="rebalInfo"></div></div>
+          <div class="card"><p class="clbl">10-year wealth projection</p><div id="chProj"></div></div>
+        </div>
       </div>
-      <div class="cgrid">
-        <div class="card" id="cConclusion"></div>
-        <div class="card" id="cInsights"></div>
+      <div class="card" id="summaryInsightsCard" style="margin-top:16px"></div>
+      <div class="card mt16" style="margin-top:16px">
+        <div class="field" style="margin-bottom:14px"><span>Export</span><p class="note" style="margin-top:8px">Save your investment and income details to your device. This allows you to import your information and continue editing later, without having to start over.</p></div>
+        <button class="btn bp" onclick="doExport()">⬇ Export JSON</button>
+      </div>
+      <div class="brow mt16">
+        <button class="btn bo" onclick="prevToIncome()">← Back to Income</button>
       </div>
       <div class="disclaimer mt16">
         <strong>Disclaimer:</strong> This app provides general financial insights only and is not personal financial advice. Consider obtaining advice from a qualified and licensed financial adviser or certified wealth planner before acting on any information shown here.
@@ -430,10 +467,11 @@ var ST = (function(){
       r.profile.targetType = r.profile.targetType || 'Balanced';
       r.investments = Array.isArray(r.investments) ? r.investments : [];
       r.income      = Array.isArray(r.income)      ? r.income      : [];
+      r.meta       = r.meta       || {importedFromJson:false,investPopupShown:false,incomePopupShown:false};
       return r;
     }
   } catch(e) {}
-  return {profile:{name:'',age:'',targetType:'Balanced'},investments:[],income:[]};
+  return {profile:{name:'',age:'',targetType:'Balanced'},investments:[],income:[],meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false}};
 })();
 
 function persist() {
@@ -442,7 +480,7 @@ function persist() {
 
 function clearStoredState() {
   try { localStorage.removeItem(SK); } catch(e) {}
-  ST = {profile:{name:'',age:'',targetType:'Balanced'},investments:[],income:[]};
+  ST = {profile:{name:'',age:'',targetType:'Balanced'},investments:[],income:[],meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false}};
 }
 
 function normalizeRiskProfile(value) {
@@ -478,6 +516,68 @@ function resetAppState() {
   renderHomeStats();
   renderInvList();
   renderIncList();
+  renderNavButtons();
+}
+
+function renderNavButtons() {
+  var enabled = !!ST.meta.importedFromJson;
+  document.querySelectorAll('.nav .nbtn').forEach(function(btn){
+    var text = btn.textContent.trim();
+    if(text==='Overview') return;
+    btn.style.display = enabled ? 'flex' : 'none';
+  });
+  var note = document.getElementById('homeUnlockNote');
+  if(note) note.style.display = enabled ? 'none' : 'block';
+}
+
+function trackInvestments() {
+  showPage('investments');
+}
+
+function gotoIncomeFromInvestments() {
+  if(!ST.investments.length){
+    alert('Please add at least one investment before proceeding to Income.');
+    return;
+  }
+  if(!ST.meta.investPopupShown){
+    var ok = confirm('Have you finished entering all your investments? If not, you can return at any time to add more information.');
+    ST.meta.investPopupShown = true;
+    persist();
+    if(!ok) return;
+  }
+  showPage('income');
+}
+
+function gotoSummaryFromIncome() {
+  if(!ST.income.length){
+    alert('Please add at least one income source before proceeding to Summary.');
+    return;
+  }
+  if(!ST.meta.incomePopupShown){
+    var ok = confirm('Have you finished entering all your income details? If not, you can return at any time to add more information.');
+    ST.meta.incomePopupShown = true;
+    persist();
+    if(!ok) return;
+  }
+  showPage('summary');
+}
+
+function prevToInvestments() {
+  showPage('investments');
+}
+
+function prevToIncome() {
+  showPage('income');
+}
+
+function switchSummaryTab(tab) {
+  _summaryActiveTab = tab;
+  document.querySelectorAll('.summary-tab').forEach(function(el){el.classList.remove('on');});
+  document.querySelectorAll('.tab-btn').forEach(function(btn){btn.classList.remove('on');});
+  var target = document.getElementById('tab-'+tab);
+  if(target) target.classList.add('on');
+  var btn = document.getElementById('tab-btn-'+tab);
+  if(btn) btn.classList.add('on');
 }
 
 // ── UTILS ────────────────────────────────────────────────────
@@ -529,8 +629,8 @@ function invValue(iv) {
   switch(iv.type){
     case 'cash':       return Number(iv.cash)||0;
     case 'property':   return Number(iv.marketValue)||Number(iv.purchasePrice)||0;
-    case 'shares': case 'crypto': case 'gold': case 'goldbonds':
-                       return Number(iv.currentValue)||0;
+    case 'shares': case 'crypto': case 'gold': case 'goldbonds': case 'bonds':
+                       return Number(iv.currentValue)||Number(iv.costBasis)||0;
     case 'termdeposit':{
       var p=Number(iv.principal)||0,r=(Number(iv.rate)||0)/100,y=Number(iv.years)||1;
       return p*Math.pow(1+r,y);
@@ -539,13 +639,20 @@ function invValue(iv) {
   }
 }
 
+function calcPropertyAnnualExpenses(iv){
+  var monthly = (Number(iv.monthlyInsurance)||0) + (Number(iv.monthlyPest)||0) + (Number(iv.monthlyAgentFees)||0) + (Number(iv.monthlyOtherExpenses)||0);
+  var quarterly = (Number(iv.quarterlyRates)||0) + (Number(iv.quarterlyWater)||0) + (Number(iv.quarterlyStrata)||0);
+  var annual = Number(iv.annualExpenses)||0;
+  return monthly*12 + quarterly*4 + annual;
+}
+
 function buildFlows(iv) {
   if(iv.type==='cash') return [];
   if(iv.type==='property'){
     var dep=(Number(iv.purchasePrice)||0)+(Number(iv.costs)||0)+(Number(iv.reno)||0)-(Number(iv.loanAmount)||0);
     var yr=Number(iv.years)||0;
-    var rent=Number(iv.annualRent)||0;
-    var exp=Number(iv.annualExpenses)||0;
+    var rent=(Number(iv.monthlyRent)||0)*12;
+    var exp=calcPropertyAnnualExpenses(iv);
     var rebate=Number(iv.annualTaxRebate)||0;
     var rg=(Number(iv.rentGrowth)||0)/100;
     var e=Number(iv.loanEmi)||emi(iv.loanAmount,iv.loanRate,iv.loanTenure);
@@ -553,8 +660,9 @@ function buildFlows(iv) {
     if(dep) fl.push({t:0,a:-dep});
     var n=Math.max(1,yr);
     for(var y=1;y<=n;y++){
-      var annualNet=rent*Math.pow(1+rg,y-1)-exp-e*12;
-      var isNegativeGeared=(e*12 > rent*Math.pow(1+rg,y-1));
+      var annualRent = rent * Math.pow(1+rg,y-1);
+      var annualNet = annualRent - exp - e*12;
+      var isNegativeGeared = (e*12 > annualRent);
       if(isNegativeGeared) annualNet += rebate;
       fl.push({t:y,a:annualNet});
     }
@@ -566,9 +674,33 @@ function buildFlows(iv) {
   }
   if(['shares','crypto','gold','goldbonds'].indexOf(iv.type)>-1){
     var cost=Number(iv.costBasis)||0,val=Number(iv.currentValue)||0;
+    var dist=Number(iv.annualDistributions)||0;
+    var costs=Number(iv.annualCosts)||0;
+    var yrs=Number(iv.years)||1;
     var fl=[];
     if(cost) fl.push({t:0,a:-cost});
-    if(val)  fl.push({t:1,a:val});
+    for(var y=1;y<=yrs;y++){
+      var cf = dist - costs;
+      if(y===yrs) cf += val;
+      fl.push({t:y,a:cf});
+    }
+    return fl;
+  }
+  if(iv.type==='bonds'){
+    var cost=Number(iv.costBasis)||0;
+    var redemption=Number(iv.redemptionValue)||Number(iv.currentValue)||0;
+    var couponRate=Number(iv.couponRate)||0;
+    var dist=Number(iv.annualDistributions)||0;
+    if(!dist && redemption && couponRate) dist = redemption * couponRate / 100;
+    var costs=Number(iv.annualCosts)||0;
+    var yrs=Number(iv.years)||1;
+    var fl=[];
+    if(cost) fl.push({t:0,a:-cost});
+    for(var y=1;y<=yrs;y++){
+      var cf = dist - costs;
+      if(y===yrs) cf += redemption;
+      fl.push({t:y,a:cf});
+    }
     return fl;
   }
   if(iv.type==='termdeposit'){
@@ -584,7 +716,7 @@ function getIRR(iv) {
 }
 
 function allocs() {
-  var t={property:0,shares:0,crypto:0,gold:0,goldbonds:0,termdeposit:0,cash:0};
+  var t={property:0,shares:0,crypto:0,gold:0,goldbonds:0,bonds:0,termdeposit:0,cash:0};
   ST.investments.forEach(function(iv){ if(t[iv.type]!=null) t[iv.type]+=invValue(iv); });
   return t;
 }
@@ -622,7 +754,7 @@ function recAlloc(age, targetType) {
   var growthPercent=Math.round(baseGrowth*growthRatio);
   var defensivePercent=100-growthPercent;
   var growthWeights = targetType==='Conservative' ? {Property:0.20,Shares:0.25,Crypto:0.10,Gold:0.20,'Gold Bonds':0.25} : targetType==='Balanced' ? {Property:0.25,Shares:0.35,Crypto:0.15,Gold:0.15,'Gold Bonds':0.10} : targetType==='Growth' ? {Property:0.25,Shares:0.45,Crypto:0.15,Gold:0.10,'Gold Bonds':0.05} : {Property:0.20,Shares:0.50,Crypto:0.20,Gold:0.05,'Gold Bonds':0.05};
-  var defensiveWeights = {'Term Deposit':0.55,Cash:0.45};
+  var defensiveWeights = {'Term Deposit':0.50,Cash:0.35,Bonds:0.15};
   var gtotal=Object.keys(growthWeights).reduce(function(sum,k){return sum+growthWeights[k];},0);
   var dtotal=Object.keys(defensiveWeights).reduce(function(sum,k){return sum+defensiveWeights[k];},0);
   var result = {
@@ -631,6 +763,7 @@ function recAlloc(age, targetType) {
     Crypto:Math.round(growthPercent*growthWeights.Crypto/gtotal),
     Gold:Math.round(growthPercent*growthWeights.Gold/gtotal),
     'Gold Bonds':Math.round(growthPercent*growthWeights['Gold Bonds']/gtotal),
+    Bonds:Math.round(defensivePercent*defensiveWeights.Bonds/dtotal),
     'Term Deposit':Math.round(defensivePercent*defensiveWeights['Term Deposit']/dtotal),
     Cash:Math.round(defensivePercent*defensiveWeights.Cash/dtotal)
   };
@@ -659,9 +792,9 @@ function totalOutflow() {
   return ST.investments.reduce(function(s,iv){
     if(iv.type==='property'){
       var e=Number(iv.loanEmi)||emi(iv.loanAmount,iv.loanRate,iv.loanTenure);
-      return s+e*12+(Number(iv.annualExpenses)||0);
+      return s + e*12 + calcPropertyAnnualExpenses(iv);
     }
-    return s+(Number(iv.costBasis)||Number(iv.principal)||0);
+    return s;
   },0);
 }
 
@@ -708,8 +841,11 @@ function sc(lbl,val,sub,col){
 }
 
 function renderHomeStats(){
-  var el=document.getElementById('homeStats');
-  if(el) el.innerHTML='';
+  var note=document.getElementById('homeUnlockNote');
+  if(note) note.style.display = ST.meta.importedFromJson ? 'none' : 'block';
+  var trackBtn=document.getElementById('homeTrackBtn');
+  if(trackBtn) trackBtn.style.display = 'inline-flex';
+  renderNavButtons();
 }
 
 function totalAnnualIncomeDisplay(){ return totalIncome(); }
@@ -731,8 +867,14 @@ function renderInvFields(data) {
       fldX('Interest rate (%)','loanRate','number','e.g. 5.75',d.loanRate,'step="0.01" id="fLR"')+
       fldX('Loan tenure (years)','loanTenure','number','e.g. 30',d.loanTenure,'id="fLT"')+
       fldX('Monthly EMI (auto)','loanEmi','number','Auto-calculated',d.loanEmi,'id="fLE" readonly')+
-      fld('Annual rent','annualRent','number','e.g. 26000',d.annualRent)+
-      fld('Annual expenses','annualExpenses','number','e.g. 8000',d.annualExpenses)+
+      fld('Monthly rent','monthlyRent','number','e.g. 2200',d.monthlyRent)+
+      fld('House Insurance (monthly)','monthlyInsurance','number','e.g. 120',d.monthlyInsurance)+
+      fld('Pest (monthly)','monthlyPest','number','e.g. 25',d.monthlyPest)+
+      fld('Rates (quarterly)','quarterlyRates','number','e.g. 650',d.quarterlyRates)+
+      fld('Water Bill (quarterly)','quarterlyWater','number','e.g. 180',d.quarterlyWater)+
+      fld('Agent Fees (monthly)','monthlyAgentFees','number','e.g. 300',d.monthlyAgentFees)+
+      fld('Strata (quarterly)','quarterlyStrata','number','e.g. 500',d.quarterlyStrata)+
+      fld('Other expenses (monthly)','monthlyOtherExpenses','number','e.g. 120',d.monthlyOtherExpenses)+
       fld('Annual tax rebate','annualTaxRebate','number','e.g. 12000',d.annualTaxRebate)+
       fldX('Rent growth %','rentGrowth','number','e.g. 3.5',d.rentGrowth,'step="0.1"')+
       fld('Holding period (years)','years','number','e.g. 10',d.years)+
@@ -740,7 +882,22 @@ function renderInvFields(data) {
     '</div>';
     setTimeout(wireEMI, 50);
   } else if(type==='shares'||type==='crypto'||type==='gold'||type==='goldbonds'){
-    html='<div class="fgrid">'+fld('Current value (AUD)','currentValue','number','e.g. 25000',d.currentValue)+fld('Cost basis (AUD)','costBasis','number','e.g. 18000',d.costBasis)+'</div>';
+    html='<div class="fgrid">'+
+      fld('Current value (AUD)','currentValue','number','e.g. 25000',d.currentValue)+
+      fld('Cost basis (AUD)','costBasis','number','e.g. 18000',d.costBasis)+
+      fld('Annual distributions / yield (AUD)','annualDistributions','number','e.g. 1200',d.annualDistributions)+
+      fld('Holding period (years)','years','number','e.g. 5',d.years)+
+      fld('Annual fees / storage cost (AUD)','annualCosts','number','e.g. 150',d.annualCosts)+
+    '</div>';
+  } else if(type==='bonds'){
+    html='<div class="fgrid">'+
+      fld('Current market value (AUD)','currentValue','number','e.g. 10500',d.currentValue)+
+      fld('Cost basis (AUD)','costBasis','number','e.g. 10000',d.costBasis)+
+      fld('Coupon rate (%)','couponRate','number','e.g. 4.5',d.couponRate)+
+      fld('Redemption / face value (AUD)','redemptionValue','number','e.g. 10000',d.redemptionValue)+
+      fld('Holding period (years)','years','number','e.g. 5',d.years)+
+      fld('Annual fees / charges (AUD)','annualCosts','number','e.g. 50',d.annualCosts)+
+    '</div>';
   } else if(type==='termdeposit'){
     html='<div class="fgrid">'+fld('Principal (AUD)','principal','number','e.g. 20000',d.principal)+fldX('Rate (%)','rate','number','e.g. 4.5',d.rate,'step="0.01"')+fld('Term (years)','years','number','e.g. 2',d.years)+'</div>';
   } else if(type==='cash'){
@@ -827,7 +984,7 @@ function renderInvList() {
   if(!ST.investments.length){
     el.innerHTML='<div class="empty">No investments yet. Use the form to add one.</div>'; return;
   }
-  var bmap={property:'bpu',shares:'bbl',crypto:'byw',gold:'byw',goldbonds:'bgr',termdeposit:'bgr',cash:'bbl'};
+  var bmap={property:'bpu',shares:'bbl',crypto:'byw',gold:'byw',goldbonds:'bgr',bonds:'bbn',termdeposit:'bgr',cash:'bbl'};
   el.innerHTML = ST.investments.map(function(iv){
     var val=invValue(iv),irr=getIRR(iv),irrs=irr==null?'N/A':pct(irr);
     return `
@@ -982,14 +1139,20 @@ function renderSummary(){
   var proj=projection(),out=totalOutflow();
   var col={Conservative:'#22d3a3',Balanced:'#fbbf24',Growth:'#4f8cff','High Growth':'#f87171'};
 
-  document.getElementById('sumStats').innerHTML=
+  document.getElementById('sumStatsCurrent').innerHTML=
     sc('Portfolio value',money(total),'All assets combined')+
     sc('Annual income',money(inc),'Total income streams')+
     sc('Avg IRR',pct(irr),'Weighted average',avgIRR()>10?'#22d3a3':avgIRR()>5?'#fbbf24':'#f87171')+
-    sc('Desired Risk Profile',preferred,'Selected target profile',col[preferred]||'var(--text)');
+    sc('Current risk profile',type,'Based on asset mix',col[type]||'var(--text)');
 
-  var lbs=['Property','Shares','Crypto','Gold','Gold Bonds','Term Deposit','Cash'];
-  var avs=[t.property,t.shares,t.crypto,t.gold,t.goldbonds,t.termdeposit,t.cash];
+  document.getElementById('sumStatsDesired').innerHTML=
+    sc('Portfolio value',money(total),'All assets combined')+
+    sc('Desired Risk Profile',preferred,'Selected target profile',col[preferred]||'var(--text)')+
+    sc('Growth allocation',pct((rec.Property||0)+(rec.Shares||0)+(rec.Crypto||0)+(rec.Gold||0)+(rec['Gold Bonds']||0)),'Target growth assets')+
+    sc('Defensive allocation',pct((rec['Term Deposit']||0)+(rec.Cash||0)+(rec.Bonds||0)),'Target defensive assets');
+
+  var lbs=['Property','Shares','Crypto','Gold','Gold Bonds','Bonds','Term Deposit','Cash'];
+  var avs=[t.property,t.shares,t.crypto,t.gold,t.goldbonds,t.bonds,t.termdeposit,t.cash];
 
   donut('chAlloc',lbs,avs);
   barV('chRecom',Object.keys(rec),Object.values(rec),'Recommended %','#4f8cff',true);
@@ -1010,54 +1173,27 @@ function renderSummary(){
   grouped('chCash',['Current year'],[inc],[out],'Annual income','Annual outflows');
   barV('chAssets',lbs,avs,'Asset value','#6c63ff',false);
 
-  // conclusion
-  function mc(m){return 'mbox '+(m==='Aggressive'?'agg':m==='Balanced'?'bal':'con');}
-  document.getElementById('cConclusion').innerHTML=
-    '<span class="eyebrow">Portfolio conclusion</span>'+
-    '<h3 class="mt8" style="font-size:1.1rem">How your portfolio stacks up</h3>'+
-    '<div class="mixrow">'+
-      '<div class="'+mc(type)+'"><div class="mlbl">Current mix</div><div class="mval" style="color:'+col[type]+'">'+type+'</div></div>'+
-      '<div class="'+mc(expType)+'"><div class="mlbl">Recommended (age '+age+')</div><div class="mval" style="color:'+col[expType]+'">'+expType+'</div></div>'+
-    '</div>'+
-    '<p class="note">'+
-      (ST.profile.name?'Investor: <strong>'+ST.profile.name+'</strong>. ':'')+
-      'Current mix is <strong>'+type+'</strong>. For age '+age+', the <strong>'+preferred+'</strong> target suggests <strong>'+(rec.Shares+rec.Property+rec.Crypto)+'%</strong> in growth assets.'+
-    '</p>';
-
   var topIdx=avs.indexOf(Math.max.apply(null,avs));
   var topCat=lbs[topIdx]||'None';
   var topPct=total>0?avs[topIdx]/total*100:0;
-  var divCount=avs.filter(function(v){return v>0;}).length;
   var proj10=proj.vs[proj.vs.length-1];
-  var riskyActions = '';
-  var topAsset = lbs[topIdx]||'None';
-  var topAssetPct = total>0?avs[topIdx]/total*100:0;
-  if (preferred === 'High Growth' || preferred === 'Growth') {
-    riskyActions =
-      '<div class="iitem">Immediate action: trim a portion of <strong>high-volatility growth</strong> exposure and move it to <strong>Gold Bonds</strong> or <strong>Term Deposit</strong> for stability.</div>'+
-      '<div class="iitem">Immediate action: add a small <strong>cash reserve</strong> so you can withstand 6–12 months of volatility without selling at a loss.</div>';
-  } else {
-    var diversificationTarget = topAsset==='Property' ? 'Shares' : topAsset==='Shares' ? 'Gold Bonds' : topAsset==='Cash' ? 'Shares' : 'Property';
-    var diversificationText = topAssetPct > 70 ? 'reduce concentration in <strong>'+topAsset+'</strong> and add some <strong>'+diversificationTarget+'</strong> for balance.' : 'increase diversification by adding a small allocation to <strong>'+diversificationTarget+'</strong> for moderate growth.';
-    riskyActions =
-      '<div class="iitem">Immediate action: '+diversificationText+'</div>'+
-      '<div class="iitem">Immediate action: review your cash buffer and keep at least <strong>6 months</strong> of expenses available in defensive assets.</div>';
-  }
-  document.getElementById('cInsights').innerHTML=
-    '<span class="eyebrow">Key insights</span>'+
-    '<h3 class="mt8" style="font-size:1.1rem">What the data says</h3>'+
+  var actionText = preferred === 'High Growth' || preferred === 'Growth'
+    ? 'Trim a portion of high-volatility growth exposure and keep a cash buffer for 6–12 months of expenses.'
+    : 'Review portfolio diversification and consider moving a portion of current assets into defensive holdings for stability.';
+  document.getElementById('summaryInsightsCard').innerHTML=
+    '<span class="eyebrow">Key insights</span>'+ 
+    '<h3 class="mt8" style="font-size:1.1rem">What the data says</h3>'+ 
     '<div class="iblock mt12">'+
-      '<div class="iitem">Largest allocation: <strong>'+topCat+'</strong> at <strong>'+pct(topPct)+'</strong> of portfolio.</div>'+
-      '<div class="iitem">Avg IRR: <strong>'+pct(irr)+'</strong>. '+(irr>10?'Strong returns — above typical benchmarks.':irr>5?'Moderate performance.':'Consider higher-yield assets.')+'</div>'+
-      '<div class="iitem">Income <strong>'+(inc>=out?'covers':'does not cover')+'</strong> outflows — Income: <strong>'+money(inc)+'</strong> vs Outflows: <strong>'+money(out)+'</strong>.</div>'+
-      (divCount<3?'<div class="iitem">Only <strong>'+divCount+'</strong> asset class'+(divCount===1?'':'es')+'. Consider diversifying across 3+ categories.</div>':'')+
-      '<div class="iitem">10-year projection at current IRR: <strong>'+money(proj10)+'</strong>.</div>'+
-      riskyActions+
-      '<div class="iitem">Consider rebalancing toward your selected <strong>'+preferred+'</strong> profile to keep growth and defensive assets aligned.</div>'+
+      '<div class="iitem">Largest allocation: <strong>'+topCat+'</strong> at <strong>'+pct(topPct)+'</strong> of your current portfolio.</div>'+ 
+      '<div class="iitem">Avg IRR: <strong>'+pct(irr)+'</strong>. '+(irr>10?'Strong returns relative to typical benchmarks.':irr>5?'Moderate performance.':'Consider reviewing your return assumptions.')+'</div>'+ 
+      '<div class="iitem">Income <strong>'+(inc>=out?'covers':'does not cover')+'</strong> outflows — Income: <strong>'+money(inc)+'</strong> vs Outflows: <strong>'+money(out)+'</strong>.</div>'+ 
+      '<div class="iitem">10-year projection at current return: <strong>'+money(proj10)+'</strong>.</div>'+ 
+      '<div class="iitem">Desired profile: <strong>'+preferred+'</strong>. Current allocation is <strong>'+type+'</strong>.</div>'+ 
+      '<div class="iitem">'+actionText+'</div>'+ 
     '</div>';
+  switchSummaryTab(_summaryActiveTab || 'current');
 }
 
-// ── EXPORT / IMPORT ───────────────────────────────────────────
 function doExport(){
   var blob=new Blob([JSON.stringify(ST,null,2)],{type:'application/json'});
   var a=document.createElement('a');
@@ -1079,10 +1215,13 @@ function doImport(event){
       ST.profile.targetType = ST.profile.targetType || 'Balanced';
       ST.investments=Array.isArray(d.investments)?d.investments:[];
       ST.income=Array.isArray(d.income)?d.income:[];
+      ST.meta.importedFromJson = true;
+      ST.meta.investPopupShown = ST.meta.investPopupShown || false;
+      ST.meta.incomePopupShown = ST.meta.incomePopupShown || false;
       persist();
       document.getElementById('pName').value=ST.profile.name||'';
       document.getElementById('pAge').value=ST.profile.age||'';
-      renderHomeStats(); renderInvList(); renderIncList();
+      renderHomeStats(); renderInvList(); renderIncList(); renderNavButtons();
       alert('Imported: '+ST.investments.length+' investments, '+ST.income.length+' income sources.');
     }catch(err){alert('Invalid JSON file.');}
   };
