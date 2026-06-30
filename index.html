@@ -43,8 +43,13 @@ body{
 h2{font-size:clamp(1.4rem,3vw,2rem);font-weight:800;line-height:1.2}
 h3{font-size:1.05rem;font-weight:700;margin-bottom:6px}
 p{color:var(--muted);line-height:1.65}
-.eyebrow{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#818cf8;margin-bottom:4px}
+.eyebrow{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#818cf8;margin-bottom:6px}
 .note{font-size:12.5px;color:var(--muted);background:rgba(255,255,255,.04);padding:10px 13px;border-radius:var(--rsm);border:1px solid var(--border)}
+.home-feature-list{display:grid;gap:10px;margin-top:14px}
+.home-feature-list div{padding:10px 12px;border-radius:var(--rsm);background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:13px;color:var(--text)}
+.home-feature-list strong{color:#c7d2fe}
+.home-hero-title{font-size:clamp(1.25rem,2.3vw,1.7rem);font-weight:800;line-height:1.2;margin-bottom:10px;color:var(--text)}
+.home-hero-sub{font-size:0.96rem;line-height:1.7;color:var(--muted)}
 /* ── SPACING ── */
 .mt4{margin-top:4px}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}
 /* ── LAYOUT ── */
@@ -291,12 +296,18 @@ input:checked + .slider:before {transform: translateX(20px);}
       <div class="hero">
         <div class="card card-hero">
           <span class="eyebrow">Welcome</span>
-          <h3 style="font-size:1.3rem;margin-bottom:10px">Track your wealth intelligently</h3>
-          <p class="mt8">Choose how you want to begin and build your investment plan. New users can start from scratch, while existing users can import a saved file and continue editing.</p>
+          <h3 class="home-hero-title">A simple way to understand your money</h3>
+          <p class="home-hero-sub mt8">WealthPath helps you keep track of your investments and see how they may grow over time.</p>
+          <div class="home-feature-list">
+            <div><strong>Track</strong> your property, shares, ETFs, crypto, gold, bonds, and cash in one place.</div>
+            <div><strong>See</strong> how your investments are performing and what they may be worth later.</div>
+            <div><strong>Review</strong> your income, expenses, super, and retirement plans in one view.</div>
+          </div>
         </div>
         <div class="card">
           <span class="eyebrow">Start here</span>
-          <h3>Choose your path</h3>
+          <h3 style="font-size:1.12rem; font-weight:800">Start here</h3>
+          <p class="mt8">Begin with a new plan or pick up where you left off with a saved file.</p>
           <div class="brow mt12">
             <button id="homeModeNewBtn" class="btn bp" onclick="selectHomeMode('new')">New User</button>
             <button id="homeModeExistingBtn" class="btn bo" onclick="selectHomeMode('existing')">Existing User</button>
@@ -305,9 +316,11 @@ input:checked + .slider:before {transform: translateX(20px);}
           <p class="note mt12" id="homeUnlockNote" style="display:none">Import a JSON file to unlock the investment, income and summary workflow.</p>
         </div>
         <div class="card feedback-card">
-          <span class="eyebrow">Feedback</span>
-          <h3>Contact</h3>
-          <p class="mt12">For feedback, please email me at <a href="mailto:moreland1231@gmail.com" style="color:#93c5fd;text-decoration:underline;">moreland1231@gmail.com</a></p>
+          <span class="eyebrow">What you can do</span>
+          <h3 style="font-size:1.08rem; font-weight:800">What you can do</h3>
+          <p class="mt8">Use WealthPath to compare ideas, review your portfolio, and get a clearer picture of your finances.</p>
+          <p class="mt8">It is made for everyday users who want something simple and practical.</p>
+          <p class="mt8">For feedback, please email <a href="mailto:moreland1231@gmail.com" style="color:#93c5fd;text-decoration:underline;">moreland1231@gmail.com</a></p>
         </div>
       </div>
     </section>
@@ -1358,7 +1371,7 @@ function renderInvFields(data) {
       fld('Expected sale price *','salePrice','number','e.g. 950000',d.salePrice)+
     '</div>';
     setTimeout(wireEMI, 50);
-  } else if(type==='shares'||type==='crypto'||type==='gold'||type==='goldbonds'){
+  } else if(type==='shares'||type==='etf'||type==='crypto'||type==='gold'||type==='goldbonds'){
     html='<div class="fgrid">'+
       fld('Current value (AUD) *','currentValue','number','e.g. 25000',d.currentValue)+
       fldX('Cost basis (AUD) *','costBasis','number','e.g. 18000',d.costBasis,'title="The original purchase price used to calculate gains and losses"')+
@@ -1909,9 +1922,10 @@ function getBenchmarkIRR(type) {
 }
 function getRecommendedInsightAssets() {
   var assets = [];
-  if(Array.isArray(ST.investments)) assets = assets.concat(ST.investments.filter(function(iv){ return iv && (iv.type === 'shares' || iv.type === 'etf'); }));
+  var includeTypes = {'shares':true,'etf':true,'crypto':true,'gold':true,'goldbonds':true,'bonds':true,'termdeposit':true};
+  if(Array.isArray(ST.investments)) assets = assets.concat(ST.investments.filter(function(iv){ return iv && includeTypes[iv.type]; }));
   if(ST.super && ST.super.enabled && ST.super.type === 'smsf' && Array.isArray(ST.super.smsfAssets)) {
-    assets = assets.concat(ST.super.smsfAssets.filter(function(iv){ return iv && (iv.type === 'shares' || iv.type === 'etf'); }));
+    assets = assets.concat(ST.super.smsfAssets.filter(function(iv){ return iv && includeTypes[iv.type]; }));
   }
   return assets;
 }
@@ -1940,6 +1954,11 @@ function normalizeAssetType(asset) {
 }
 function getSymbolLabel(symbol) {
   var map = {
+    'VTS':'Vanguard Total Stock Market ETF',
+    'VGS':'Vanguard MSCI Australian Shares ETF',
+    'VAS':'Vanguard Australian Shares Index ETF',
+    'NAB.AX':'National Australia Bank',
+    'ING.AX':'ING Group',
     'CBA.AX':'Commonwealth Bank of Australia',
     'ANZ.AX':'ANZ Group',
     'WBC.AX':'Westpac Banking',
@@ -1957,33 +1976,106 @@ function getSymbolLabel(symbol) {
     'VGB.AX':'Vanguard Australian Government Bond ETF',
     'AGG':'iShares Core U.S. Aggregate Bond ETF',
     'IGB.AX':'iShares Core Composite Bond ETF',
+    'QQQ':'Invesco NASDAQ 100 ETF',
+    'VUG':'Vanguard Growth ETF',
+    'VGT':'Vanguard Information Technology ETF',
+    'SMH':'VanEck Semiconductor ETF',
+    'ARKK':'ARK Innovation ETF',
+    'VTI':'Vanguard Total Stock Market ETF',
+    'VTS':'Vanguard Total Stock Market ETF',
+    'VWO':'Vanguard FTSE Emerging Markets ETF',
+    'VFH':'Vanguard Financials ETF',
+    'IYF':'iShares U.S. Financials ETF',
+    'KBE':'SPDR S&P Bank ETF',
+    'KME':'SPDR S&P Insurance ETF',
+    'XLK':'Technology Select Sector SPDR Fund',
+    'XLF':'Financial Select Sector SPDR Fund',
+    'XLY':'Consumer Discretionary Select Sector SPDR Fund',
+    'XLE':'Energy Select Sector SPDR Fund',
+    'GLD':'SPDR Gold Shares',
+    'SGOL':'iShares Gold Trust',
+    'SLV':'iShares Silver Trust',
+    'BTC-USD':'Bitcoin',
+    'ETH-USD':'Ethereum',
+    'SOL-USD':'Solana',
+    'XRP-USD':'Ripple',
+    'ADA-USD':'Cardano',
+    'DOGE-USD':'Dogecoin',
+    'BND':'Vanguard Total Bond Market ETF',
+    'VNQ':'Vanguard Real Estate ETF',
+    'REZ':'iShares Residential and Multisector Real Estate ETF',
+    'BIL':'SPDR Bloomberg 1-3 Month T-Bill ETF',
+    'SHY':'iShares 1-3 Year Treasury Bond ETF',
     '^AXJO':'S&P/ASX 200 Index'
   };
   return map[symbol] || symbol;
 }
-function getCandidateSymbols(asset) {
+function inferSector(asset) {
   var name = (((asset && asset.name) || '') + '').toString().trim().toLowerCase();
+  var symbol = (((asset && (asset.ticker || asset.symbol)) || '') + '').toString().trim().toLowerCase();
+  if(/cba|commonwealth|anz|westpac|nab|mqg|macquarie|bank|financial|insurance|credit|mortgage|payment|wealth|asset management/.test(name + ' ' + symbol)) return 'financials';
+  if(/tech|software|semiconductor|ai|cloud|cyber|digital|internet|ecommerce|saas/.test(name)) return 'technology';
+  if(/health|medical|pharma|biotech|healthcare/.test(name)) return 'healthcare';
+  if(/energy|oil|gas|coal|uranium|renewable/.test(name)) return 'energy';
+  if(/resource|mining|metals|materials|copper|lithium|gold|silver|precious/.test(name)) return 'materials';
+  if(/consumer|retail|food|beverage|supermarket|luxury|discretionary/.test(name)) return 'consumer';
+  if(/industrial|manufacturing|transport|aerospace|defense|construction/.test(name)) return 'industrials';
+  if(/real estate|property|reit|housing|office/.test(name)) return 'realestate';
+  if(/telecom|communication|media|telecommunications/.test(name)) return 'communication';
+  if(/utility|power|electric|grid/.test(name)) return 'utilities';
+  return 'market';
+}
+function getSectorCandidateSymbols(asset) {
+  var sector = inferSector(asset);
+  var baseMarket = ['VTI','VTS','VGS','VAS','IVV','QQQ','VEA','VWO'];
+  var map = {
+    technology:['QQQ','VGT','XLK','SMH','AAPL','MSFT','NVDA','AMD'],
+    financials:['XLF','VFH','IYF','KBE','KME'],
+    healthcare:['XLV','VHT','IYH','LLY','MRK','PFE','JNJ'],
+    consumer:['XLY','VCR','XLP','AMZN','WMT','COST','MCD'],
+    industrials:['XLI','VIS','IYJ','CAT','GE','BA','HON'],
+    materials:['XLB','VAW','SLX','GDX','FCX','RIO.AX','BHP.AX'],
+    energy:['XLE','VDE','IXC','XOM','CVX','COP','SLB'],
+    realestate:['XLRE','IYR','VNQ','PLD','AMT','O'],
+    communication:['XLC','VOX','IYZ','META','GOOGL','NFLX','DIS'],
+    utilities:['XLU','VPU','NEE','DUK','SO','D'],
+    market:baseMarket
+  };
+  return map[sector] || map.market;
+}
+function getGoldCandidateSymbols() {
+  return ['GLD','IAU','SGOL','PPLT','SLV'];
+}
+function getCryptoCandidateSymbols() {
+  return ['BTC-USD','ETH-USD','SOL-USD','XRP-USD','ADA-USD','DOGE-USD'];
+}
+function getBondCandidateSymbols() {
+  return ['AGG','BND','VGB.AX','IGB.AX','VCLT','SCHZ','TLT','IEF','LQD','VCIT','BNDX','MUB','EMB'];
+}
+function getTermDepositAlternatives(asset) {
+  var currentRate = Number(asset && (asset.rate || asset.annualRate || asset.annualReturn)) || 4.5;
+  var banks = [
+    {symbol:'anz', name:'ANZ', oneYear:4.85, fiveYear:4.85, tenYear:4.85},
+    {symbol:'nab', name:'NAB', oneYear:4.75, fiveYear:4.75, tenYear:4.75},
+    {symbol:'westpac', name:'Westpac', oneYear:4.7, fiveYear:4.7, tenYear:4.7},
+    {symbol:'cba', name:'Commonwealth Bank', oneYear:4.6, fiveYear:4.6, tenYear:4.6},
+    {symbol:'macquarie', name:'Macquarie Bank', oneYear:4.8, fiveYear:4.8, tenYear:4.8}
+  ];
+  var currentName = (((asset && asset.name) || '') + '').toString().trim().toLowerCase();
+  return banks
+    .filter(function(bank){ return bank.name.toLowerCase() !== currentName; })
+    .sort(function(a,b){ return (b.oneYear || 0) - (a.oneYear || 0); });
+}
+function getCandidateSymbols(asset) {
   var type = normalizeAssetType(asset);
-  if(type === 'etf') {
-    if(name.indexOf('vgs') >= 0 || name.indexOf('australian shares') >= 0) return ['VAS.AX','IVV','IOO','VEA'];
-    if(name.indexOf('vas') >= 0) return ['VGS.AX','IVV','IOO','VEA'];
-    if(name.indexOf('bond') >= 0 || name.indexOf('gov') >= 0) return ['VGB.AX','AGG','IGB.AX'];
-    return ['VAS.AX','IVV','VGS.AX'];
-  }
-  if(type === 'bonds') {
-    if(name.indexOf('agg') >= 0) return ['VGB.AX','IGB.AX','AGG'];
-    if(name.indexOf('gov') >= 0 || name.indexOf('bond') >= 0) return ['VGB.AX','IGB.AX','AGG'];
-    return ['VGB.AX','AGG','IGB.AX'];
-  }
-  if(name.indexOf('gold') >= 0 || name.indexOf('au') >= 0) return ['GDX','NCM.AX','NST.AX','IAU'];
-  if(name.indexOf('cba') >= 0 || name.indexOf('commonwealth') >= 0) return ['ANZ.AX','WBC.AX','NAB.AX','MQG.AX'];
-  if(name.indexOf('anz') >= 0) return ['CBA.AX','WBC.AX','NAB.AX','MQG.AX'];
-  if(name.indexOf('wbc') >= 0 || name.indexOf('westpac') >= 0) return ['ANZ.AX','CBA.AX','NAB.AX','MQG.AX'];
-  if(name.indexOf('nab') >= 0) return ['ANZ.AX','WBC.AX','CBA.AX','MQG.AX'];
-  if(name.indexOf('bhp') >= 0) return ['FMG.AX','RIO.AX','NCM.AX'];
-  if(name.indexOf('wow') >= 0 || name.indexOf('woolworth') >= 0) return ['COL.AX','ALD.AX','JBH.AX'];
-  if(name.indexOf('asx') >= 0 || name.indexOf('index') >= 0) return ['VAS.AX','IVV','IOO'];
-  return ['VAS.AX','IVV','IOO'];
+  var name = (((asset && asset.name) || '') + '').toString().trim().toLowerCase();
+  if(type === 'crypto') return getCryptoCandidateSymbols();
+  if(type === 'gold' || type === 'goldbonds' || /gold|metal|precious|miner/.test(name)) return getGoldCandidateSymbols();
+  if(type === 'bonds' || /bond|income/.test(name)) return getBondCandidateSymbols();
+  if(type === 'shares' || type === 'etf' || type === 'equity' || type === 'equities') return getSectorCandidateSymbols(asset);
+  if(type === 'property') return ['VNQ','REZ','IVV'];
+  if(type === 'cash') return ['BIL','SHY','IVV'];
+  return getSectorCandidateSymbols(asset);
 }
 function pickBestCandidate(asset, candidates) {
   var currentSymbol = (((asset && (asset.ticker || asset.symbol || asset.name)) || '') + '').toString().trim().toUpperCase();
@@ -2015,16 +2107,72 @@ function buildProjectionSeriesForAsset(asset, ideas) {
   var alt2 = Array.isArray(ideas) && ideas[1] ? buildProjectionSeriesForIdea(ideas[1], fallbackRate, baseValue) : current;
   return {current:current, alt1:alt1, alt2:alt2};
 }
-function getFallbackIdea(asset, symbol, label, currentEstimate) {
+function getFallbackIdea(asset, symbol, label, currentEstimate, profile) {
   var type = normalizeAssetType(asset);
-  var premium = type === 'bonds' ? 0.8 : (type === 'etf' ? 1.4 : 2.1);
-  var baseRate = Math.max(4, currentEstimate + premium);
-  return {symbol:symbol, name:label, oneYear:baseRate, fiveYear:baseRate + 0.7, tenYear:baseRate + 1.4, dividendYield:type === 'etf' ? 2.4 : (type === 'bonds' ? 3.2 : 1.1), currentEstimate:currentEstimate, fallback:true};
+  var base = Number(currentEstimate) || 8;
+  var p = profile || {};
+  var oneYear = p.oneYear != null ? p.oneYear : Math.max(4, base + (type === 'bonds' ? 0.8 : type === 'gold' || type === 'goldbonds' ? 2.2 : 3.6));
+  var fiveYear = p.fiveYear != null ? p.fiveYear : Math.max(oneYear + 0.8, base + (type === 'bonds' ? 1.2 : type === 'gold' || type === 'goldbonds' ? 3.4 : 5.2));
+  var tenYear = p.tenYear != null ? p.tenYear : Math.max(fiveYear + 1.0, base + (type === 'bonds' ? 1.8 : type === 'gold' || type === 'goldbonds' ? 4.6 : 6.4));
+  return {symbol:symbol, name:label, oneYear:oneYear, fiveYear:fiveYear, tenYear:tenYear, dividendYield:type === 'etf' ? 1.8 : (type === 'bonds' ? 3.2 : 1.1), currentEstimate:currentEstimate, fallback:true};
+}
+function getFallbackIdeas(asset, currentEstimate) {
+  var type = normalizeAssetType(asset);
+  var name = (((asset && asset.name) || '') + '').toString().trim().toLowerCase();
+  var currentSymbol = (((asset && (asset.ticker || asset.symbol || asset.name)) || '') + '').toString().trim().toUpperCase();
+
+  if(type === 'shares' || type === 'etf' || type === 'equity' || type === 'equities') {
+    var sectorSymbols = getCandidateSymbols(asset).filter(function(symbol){ return !!symbol && symbol.toUpperCase() !== currentSymbol; });
+    if(sectorSymbols.length) {
+      return sectorSymbols.slice(0, 2).map(function(symbol){
+        return getFallbackIdea(asset, symbol, getSymbolLabel(symbol) || symbol, currentEstimate, {oneYear:11.8, fiveYear:13.0, tenYear:14.4});
+      });
+    }
+  }
+  if(type === 'gold' || type === 'goldbonds' || /gold|metal|precious|miner/.test(name)) {
+    return [
+      getFallbackIdea(asset, 'GLD', 'SPDR Gold Shares (GLD)', currentEstimate, {oneYear:12.4, fiveYear:13.8, tenYear:15.2}),
+      getFallbackIdea(asset, 'IAU', 'iShares Gold Trust (IAU)', currentEstimate, {oneYear:8.8, fiveYear:10.1, tenYear:11.4})
+    ];
+  }
+  if(type === 'crypto') {
+    return [
+      getFallbackIdea(asset, 'BTC-USD', 'Bitcoin (BTC-USD)', currentEstimate, {oneYear:18.6, fiveYear:21.4, tenYear:24.8}),
+      getFallbackIdea(asset, 'ETH-USD', 'Ethereum (ETH-USD)', currentEstimate, {oneYear:12.8, fiveYear:14.8, tenYear:16.8})
+    ];
+  }
+  if(type === 'bonds' || /bond|income/.test(name)) {
+    return [
+      getFallbackIdea(asset, 'AGG', 'iShares Core U.S. Aggregate Bond ETF (AGG)', currentEstimate, {oneYear:6.4, fiveYear:7.2, tenYear:8.0}),
+      getFallbackIdea(asset, 'BND', 'Vanguard Total Bond Market ETF (BND)', currentEstimate, {oneYear:5.2, fiveYear:5.8, tenYear:6.5})
+    ];
+  }
+  if(type === 'termdeposit') {
+    return [
+      getFallbackIdea(asset, 'NAB.AX', 'NAB term deposit (NAB.AX)', currentEstimate, {oneYear:5.1, fiveYear:5.1, tenYear:5.1}),
+      getFallbackIdea(asset, 'ANZ.AX', 'ANZ term deposit (ANZ.AX)', currentEstimate, {oneYear:4.9, fiveYear:4.9, tenYear:4.9})
+    ];
+  }
+  return [
+    getFallbackIdea(asset, 'VGS', 'Vanguard MSCI Australian Shares ETF (VGS)', currentEstimate, {oneYear:13.6, fiveYear:15.2, tenYear:16.8}),
+    getFallbackIdea(asset, 'VTS', 'Vanguard Total Stock Market ETF (VTS)', currentEstimate, {oneYear:10.8, fiveYear:12.2, tenYear:13.6})
+  ];
 }
 async function getLiveMarketIdeas(asset) {
   var currentEstimate = getCurrentEstimate(asset);
+  var type = normalizeAssetType(asset);
+  var name = (((asset && asset.name) || '') + '').toString().trim().toLowerCase();
+
+  if(type === 'termdeposit') {
+    var termAlternatives = getTermDepositAlternatives(asset);
+    return [
+      {symbol:termAlternatives[0] && termAlternatives[0].symbol, name:termAlternatives[0] ? (termAlternatives[0].name + ' term deposit') : 'Top-rated term deposit', oneYear:termAlternatives[0] ? termAlternatives[0].oneYear : currentEstimate, fiveYear:termAlternatives[0] ? termAlternatives[0].fiveYear : currentEstimate, tenYear:termAlternatives[0] ? termAlternatives[0].tenYear : currentEstimate, dividendYield:null, currentEstimate:currentEstimate, score:999},
+      {symbol:termAlternatives[1] && termAlternatives[1].symbol, name:termAlternatives[1] ? (termAlternatives[1].name + ' term deposit') : 'Competitive term deposit', oneYear:termAlternatives[1] ? termAlternatives[1].oneYear : currentEstimate, fiveYear:termAlternatives[1] ? termAlternatives[1].fiveYear : currentEstimate, tenYear:termAlternatives[1] ? termAlternatives[1].tenYear : currentEstimate, dividendYield:null, currentEstimate:currentEstimate, score:998}
+    ];
+  }
+
   var candidateSymbols = getCandidateSymbols(asset);
-  if(!candidateSymbols || !candidateSymbols.length) candidateSymbols = ['VAS.AX','IVV','IOO'];
+  if(!candidateSymbols || !candidateSymbols.length) candidateSymbols = ['VTI','IVV','QQQ'];
   var ranked = [];
   var currentSymbol = (((asset && (asset.ticker || asset.symbol || asset.name)) || '') + '').toString().trim().toUpperCase();
   for(var i = 0; i < candidateSymbols.length; i++) {
@@ -2040,7 +2188,9 @@ async function getLiveMarketIdeas(asset) {
       var oneYear = closeValues.length >= 12 ? calcAnnualizedReturn(closeValues.slice(-12)) : null;
       var fiveYear = closeValues.length >= 60 ? calcAnnualizedReturn(closeValues.slice(-60)) : null;
       var tenYear = closeValues.length >= 120 ? calcAnnualizedReturn(closeValues.slice(-120)) : null;
-      var score = (oneYear != null ? oneYear : 0) + (fiveYear != null ? fiveYear * 0.6 : 0) + (tenYear != null ? tenYear * 0.35 : 0);
+      var growthBias = (fiveYear != null ? Math.max(0, fiveYear - 10) * 0.8 : 0) + (tenYear != null ? Math.max(0, tenYear - 10) * 0.6 : 0);
+      var outperformanceBonus = Math.max(0, ((oneYear != null ? oneYear : 0) - currentEstimate) * 1.8) + Math.max(0, ((fiveYear != null ? fiveYear : 0) - currentEstimate) * 1.1) + Math.max(0, ((tenYear != null ? tenYear : 0) - currentEstimate) * 0.8);
+      var score = (oneYear != null ? oneYear : 0) + (fiveYear != null ? fiveYear * 0.6 : 0) + (tenYear != null ? tenYear * 0.4 : 0) + outperformanceBonus + growthBias;
       ranked.push({symbol:symbol, name:getSymbolLabel(symbol), oneYear:oneYear, fiveYear:fiveYear, tenYear:tenYear, dividendYield:null, currentEstimate:currentEstimate, score:score});
     } catch (e) {}
   }
@@ -2055,20 +2205,20 @@ async function getLiveMarketIdeas(asset) {
     ideas.push(entry);
     if(ideas.length === 2) break;
   }
-  if(ideas.length < 2) {
-    var fallbackSymbols = candidateSymbols.filter(function(symbol){ return symbol && symbol.toUpperCase() !== currentSymbol; });
-    for(var k = 0; k < fallbackSymbols.length; k++) {
-      var fallbackSymbol = fallbackSymbols[k];
-      var fallbackKey = fallbackSymbol.toUpperCase();
-      if(seen[fallbackKey]) continue;
-      ideas.push(getFallbackIdea(asset, fallbackSymbol, getSymbolLabel(fallbackSymbol), currentEstimate));
+  if(ideas.length < 2 || (ideas[0] && ideas[1] && Math.abs((ideas[0].fiveYear || 0) - (ideas[1].fiveYear || 0)) < 0.5)) {
+    var fallbackIdeas = getFallbackIdeas(asset, currentEstimate);
+    for(var k = 0; k < fallbackIdeas.length; k++) {
+      var fallbackIdea = fallbackIdeas[k];
+      var fallbackKey = (fallbackIdea && fallbackIdea.symbol ? fallbackIdea.symbol.toUpperCase() : '');
+      if(!fallbackKey || seen[fallbackKey]) continue;
+      ideas.push(fallbackIdea);
       seen[fallbackKey] = true;
       if(ideas.length === 2) break;
     }
   }
   if(ideas.length < 2) {
-    ideas.push(getFallbackIdea(asset, 'IVV', 'Broad market ETF', currentEstimate));
-    if(ideas.length < 2) ideas.push(getFallbackIdea(asset, 'VGB.AX', 'High-grade bond ETF', currentEstimate));
+    ideas.push(getFallbackIdea(asset, 'general', 'Broad market proxy', currentEstimate));
+    if(ideas.length < 2) ideas.push(getFallbackIdea(asset, 'defensive', 'Defensive proxy', currentEstimate));
   }
   return ideas.slice(0, 2);
 }
@@ -2083,21 +2233,25 @@ function renderRecommendedProjectionChart(chartId, asset, ideas) {
 function buildRecommendedCard(asset, ideas, chartId) {
   var currentValue = invValue(asset);
   var currentIrr = getIRR(asset);
-  var currentReturn = (currentIrr != null && isFinite(currentIrr)) ? currentIrr : (asset.type === 'etf' ? 8 : 10);
+  var currentReturn = (currentIrr != null && isFinite(currentIrr)) ? currentIrr : (asset.type === 'etf' ? 8 : asset.type === 'crypto' ? 12 : asset.type === 'termdeposit' ? 4.5 : 10);
   var currentDividend = Number(asset.annualDistributions) || 0;
   var alt1 = Array.isArray(ideas) && ideas[0] ? ideas[0] : null;
   var alt2 = Array.isArray(ideas) && ideas[1] ? ideas[1] : null;
-  var alt1Name = alt1 ? (alt1.name || (asset.type === 'etf' ? 'Market ETF' : 'Market share')) : 'n/a';
-  var alt1Label = alt1 ? (alt1.symbol ? ' ('+alt1.symbol+')' : '') : '';
-  var alt2Name = alt2 ? (alt2.name || (asset.type === 'etf' ? 'Market ETF' : 'Market share')) : 'n/a';
-  var alt2Label = alt2 ? (alt2.symbol ? ' ('+alt2.symbol+')' : '') : '';
-  var insight = (alt1 && alt1.oneYear != null && alt1.oneYear > currentReturn)
-    ? 'A stronger market alternative appears to be compounding faster; shifting a portion of new capital into this idea may improve long-term returns without increasing basic cashflow drag.'
+  var alt1Name = alt1 ? (alt1.name || (asset.type === 'etf' ? 'Market ETF' : asset.type === 'crypto' ? 'Crypto asset' : asset.type === 'termdeposit' ? 'Term deposit' : 'Market share')) : 'n/a';
+  var alt1Label = alt1 ? (alt1.symbol ? ((alt1Name || '').toString().toUpperCase().indexOf(alt1.symbol.toString().toUpperCase()) >= 0 ? '' : ' ('+alt1.symbol+')') : '') : '';
+  var alt2Name = alt2 ? (alt2.name || (asset.type === 'etf' ? 'Market ETF' : asset.type === 'crypto' ? 'Crypto asset' : asset.type === 'termdeposit' ? 'Term deposit' : 'Market share')) : 'n/a';
+  var alt2Label = alt2 ? (alt2.symbol ? ((alt2Name || '').toString().toUpperCase().indexOf(alt2.symbol.toString().toUpperCase()) >= 0 ? '' : ' ('+alt2.symbol+')') : '') : '';
+  var alt1Gap = alt1 && alt1.fiveYear != null ? (alt1.fiveYear - currentReturn) : null;
+  var alt2Gap = alt2 && alt2.fiveYear != null ? (alt2.fiveYear - currentReturn) : null;
+  var insight = (alt1Gap != null && alt1Gap >= 4)
+    ? 'A materially stronger alternative is showing a much higher long-run return profile, so shifting a portion of new capital here could lift overall portfolio growth meaningfully.'
     : 'The current position may still be appropriate, but a lower-cost or more diversified alternative can improve returns and reduce concentration risk.';
   if(currentDividend && alt1 && alt1.dividendYield != null && alt1.dividendYield > 0) {
     insight += ' The first alternative also shows a '+pct(alt1.dividendYield)+' dividend profile, which can strengthen income support.';
   }
-  return '<div class="card mt12" style="background:rgba(15,23,42,.35);border-color:rgba(96,165,250,.25)"><div class="ititle">'+asset.name+' <span class="bdg bbl">'+asset.type+'</span></div><div class="iblock mt12"><div class="iitem"><strong>Current holding</strong><br>Value: <strong>'+money(currentValue)+'</strong> · Estimated return: <strong>'+pct(currentReturn)+'</strong> · Annual distributions: <strong>'+money(currentDividend)+'</strong></div><div class="iitem"><strong>Alternative 1</strong><br>'+alt1Name+alt1Label+' · 1Y: <strong>'+(alt1 && alt1.oneYear != null ? pct(alt1.oneYear) : 'n/a')+'</strong> · 5Y: <strong>'+(alt1 && alt1.fiveYear != null ? pct(alt1.fiveYear) : 'n/a')+'</strong> · 10Y: <strong>'+(alt1 && alt1.tenYear != null ? pct(alt1.tenYear) : 'n/a')+'</strong></div><div class="iitem"><strong>Alternative 2</strong><br>'+alt2Name+alt2Label+' · 1Y: <strong>'+(alt2 && alt2.oneYear != null ? pct(alt2.oneYear) : 'n/a')+'</strong> · 5Y: <strong>'+(alt2 && alt2.fiveYear != null ? pct(alt2.fiveYear) : 'n/a')+'</strong> · 10Y: <strong>'+(alt2 && alt2.tenYear != null ? pct(alt2.tenYear) : 'n/a')+'</strong></div><div class="iitem"><strong>Key insight</strong><br>'+insight+'</div><div class="iitem" style="flex-basis:100%"><div id="'+chartId+'" style="min-height:260px"></div></div></div></div>';
+  var alt1GapText = alt1Gap != null ? ' · Gap vs current: <strong>'+pct(alt1Gap)+'</strong>' : '';
+  var alt2GapText = alt2Gap != null ? ' · Gap vs current: <strong>'+pct(alt2Gap)+'</strong>' : '';
+  return '<div class="card mt12" style="background:rgba(15,23,42,.35);border-color:rgba(96,165,250,.25)"><div class="ititle">'+asset.name+' <span class="bdg bbl">'+asset.type+'</span></div><div class="iblock mt12"><div class="iitem"><strong>Current holding</strong><br>Value: <strong>'+money(currentValue)+'</strong> · Estimated return: <strong>'+pct(currentReturn)+'</strong> · Annual distributions: <strong>'+money(currentDividend)+'</strong></div><div class="iitem"><strong>Alternative 1</strong><br>'+alt1Name+alt1Label+' · 1Y: <strong>'+(alt1 && alt1.oneYear != null ? pct(alt1.oneYear) : 'n/a')+'</strong> · 5Y: <strong>'+(alt1 && alt1.fiveYear != null ? pct(alt1.fiveYear) : 'n/a')+'</strong> · 10Y: <strong>'+(alt1 && alt1.tenYear != null ? pct(alt1.tenYear) : 'n/a')+'</strong>'+alt1GapText+'</div><div class="iitem"><strong>Alternative 2</strong><br>'+alt2Name+alt2Label+' · 1Y: <strong>'+(alt2 && alt2.oneYear != null ? pct(alt2.oneYear) : 'n/a')+'</strong> · 5Y: <strong>'+(alt2 && alt2.fiveYear != null ? pct(alt2.fiveYear) : 'n/a')+'</strong> · 10Y: <strong>'+(alt2 && alt2.tenYear != null ? pct(alt2.tenYear) : 'n/a')+'</strong>'+alt2GapText+'</div><div class="iitem"><strong>Key insight</strong><br>'+insight+'</div><div class="iitem" style="flex-basis:100%"><div id="'+chartId+'" style="min-height:260px"></div></div></div></div>';
 }
 async function renderRecommendedInsightsPage() {
   var container = document.getElementById('recommendedInsightsContent');
