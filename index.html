@@ -462,20 +462,51 @@ input:checked + .slider:before {transform: translateX(20px);}
           </label>
         </div>
         <div id="superForm" class="fstack mt16" style="display:none; padding-top:16px; border-top:1px solid var(--border)">
-          <div class="fgrid">
-            <div class="field">
-              <span>Account Type</span>
-              <select id="superType" onchange="renderSuperFields()">
-                <option value="standard">Standard (Retail/Industry Fund)</option>
-                <option value="smsf">Self-Managed Super Fund (SMSF)</option>
-              </select>
+          <div class="field">
+            <span>Super vehicle</span>
+            <div class="rgroup">
+              <label><input type="radio" name="superVehicle" id="superTypeStandard" value="standard" onchange="renderSuperFields()"> Standard super</label>
+              <label><input type="radio" name="superVehicle" id="superTypeSmsf" value="smsf" onchange="renderSuperFields()"> SMSF trust</label>
             </div>
+          </div>
+          <div id="superStandardFields" class="fgrid" style="display:none;">
             <div class="field"><span>Current Balance (AUD)</span><input id="superBalance" type="number" placeholder="e.g. 150000" oninput="saveSuper()"></div>
             <div class="field"><span>Annual Contributions (AUD)</span><input id="superContrib" type="number" placeholder="Employer + Personal (e.g. 15000)" oninput="saveSuper()"></div>
+            <div class="field"><span>Current Balance (Spouse)</span><input id="superSpouseBalance" type="number" placeholder="e.g. 90000" oninput="saveSuper()"></div>
+            <div class="field"><span>Annual Contributions (Spouse)</span><input id="superSpouseContrib" type="number" placeholder="e.g. 8000" oninput="saveSuper()"></div>
           </div>
-          <div id="smsfFields" class="fgrid mt12" style="display:none;">
-            <div class="field"><span>SMSF Property Value (AUD)</span><input id="superSmsfProp" type="number" placeholder="e.g. 780000" oninput="saveSuper()"></div>
-            <div class="field"><span>SMSF Loan Balance (AUD)</span><input id="superSmsfLoan" type="number" placeholder="e.g. 400000" oninput="saveSuper()"></div>
+          <div id="superSmsfFields" class="fstack" style="display:none; gap:16px;">
+            <div class="fgrid">
+              <div class="field"><span>Current SMSF Balance (AUD)</span><input id="superSmsfBalance" type="number" placeholder="e.g. 120000" oninput="saveSuper()"></div>
+              <div class="field"><span>Annual Contributions (AUD)</span><input id="superSmsfContrib" type="number" placeholder="e.g. 15000" oninput="saveSuper()"></div>
+              <div class="field"><span>Annual Contributions (Spouse, AUD)</span><input id="superSmsfSpouseContrib" type="number" placeholder="e.g. 8000" oninput="saveSuper()"></div>
+            </div>
+            <div id="smsfInvestmentsPanel" style="display:none; border-top:1px solid var(--border); padding-top:16px;">
+              <div class="fgrid">
+                <div class="field"><span>SMSF asset name</span><input id="smsfInvName" type="text" placeholder="e.g. SMSF Property"></div>
+                <div class="field">
+                  <span>SMSF asset type</span>
+                  <select id="smsfInvType" onchange="renderSmsfInvFields()">
+                    <option value="">Select type…</option>
+                    <option value="property">🏠 Property</option>
+                    <option value="shares">📈 Shares</option>
+                    <option value="etf">📊 ETF</option>
+                    <option value="gold">🥇 Gold</option>
+                    <option value="bonds">🔗 Bonds</option>
+                  </select>
+                </div>
+              </div>
+              <div id="smsfInvFields"></div>
+              <div class="brow">
+                <button class="btn bo" onclick="cancelSmsfInv()">Cancel</button>
+                <button class="btn bp" onclick="saveSmsfInv()">Save SMSF asset</button>
+              </div>
+              <div class="card mt16">
+                <span class="eyebrow">SMSF holdings</span>
+                <h3>Saved SMSF assets</h3>
+                <div class="ilist mt12" id="smsfInvList"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -500,6 +531,7 @@ input:checked + .slider:before {transform: translateX(20px);}
         <p class="clbl">Investment-by-investment insights</p>
         <div id="projectionInsights" class="iblock"></div>
       </div>
+      <div class="card mt16" id="smsfProjectionSummary" style="display:none;"></div>
       <div class="brow mt16">
         <button class="btn bo" onclick="showPage('superannuation')">← Back</button>
         <button class="btn bp" onclick="gotoSummaryFromProjection()">Next: Summary</button>
@@ -543,6 +575,7 @@ input:checked + .slider:before {transform: translateX(20px);}
           <div id="chProjCurrent"></div>
         </div>
         <div class="card mt16" id="summaryInsightsCardCurrent"></div>
+        <div class="card mt16" id="smsfSummaryCardCurrent" style="display:none;"></div>
       </div>
       <div id="tab-desired" class="summary-tab">
         <div class="srow" id="sumStatsDesired"></div>
@@ -551,6 +584,7 @@ input:checked + .slider:before {transform: translateX(20px);}
           <div class="card"><p class="clbl">10-year wealth projection</p><div id="chProj"></div></div>
         </div>
         <div class="card mt16" id="summaryInsightsCardDesired"></div>
+        <div class="card mt16" id="smsfSummaryCardDesired" style="display:none;"></div>
       </div>
       <div class="brow mt16">
         <button class="btn bo" onclick="showPage('projection')">← Back to Projection</button>
@@ -586,6 +620,11 @@ input:checked + .slider:before {transform: translateX(20px);}
         <span class="eyebrow">Actual path</span>
         <h3>Based on your real data</h3>
         <div id="retirementActualPath" class="mt12"></div>
+      </div>
+      <div class="card mt16">
+        <span class="eyebrow">Projection assumptions</span>
+        <h3>What this retirement pathway assumes</h3>
+        <div id="retirementAssumptionDetails" class="mt12"></div>
       </div>
       <div class="card mt16">
         <div class="field" style="margin-bottom:14px"><span>Export</span><p class="note" style="margin-top:8px">Save your investment and income details to your device so you can import them later or start a fresh plan from the home page.</p></div>
@@ -637,12 +676,22 @@ var ST = (function(){
       r.investments = Array.isArray(r.investments) ? r.investments : [];
       r.income      = Array.isArray(r.income)      ? r.income      : [];
       r.expenses    = Array.isArray(r.expenses)    ? r.expenses    : [];
-      r.super       = r.super       || {enabled:false, type:'standard', balance:'', contrib:'', smsfProp:'', smsfLoan:''};
+      r.super       = r.super       || {};
+      r.super.enabled = r.super.enabled || false;
+      r.super.type = r.super.type || 'standard';
+      r.super.balance = r.super.balance || '';
+      r.super.contrib = r.super.contrib || '';
+      r.super.spouseBalance = r.super.spouseBalance || '';
+      r.super.spouseContrib = r.super.spouseContrib || '';
+      r.super.smsfBalance = r.super.smsfBalance || '';
+      r.super.smsfContrib = r.super.smsfContrib || '';
+      r.super.smsfSpouseContrib = r.super.smsfSpouseContrib || '';
+      r.super.smsfAssets = Array.isArray(r.super.smsfAssets) ? r.super.smsfAssets : [];
       r.meta       = r.meta       || {importedFromJson:false,investPopupShown:false,incomePopupShown:false};
       return r;
     }
   } catch(e) {}
-  return {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'},investments:[],income:[],expenses:[],super:{enabled:false, type:'standard', balance:'', contrib:'', smsfProp:'', smsfLoan:''},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false}};
+  return {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'},investments:[],income:[],expenses:[],super:{enabled:false, type:'standard', balance:'', contrib:'', spouseBalance:'', spouseContrib:'', smsfBalance:'', smsfContrib:'', smsfSpouseContrib:'', smsfAssets:[]},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false}};
 })();
 
 function persist() {
@@ -662,7 +711,7 @@ var DB = {
 
 function clearStoredState() {
   try { localStorage.removeItem(SK); } catch(e) {}
-  ST = {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'},investments:[],income:[],expenses:[],super:{enabled:false, type:'standard', balance:'', contrib:'', smsfProp:'', smsfLoan:''},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false}};
+  ST = {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'},investments:[],income:[],expenses:[],super:{enabled:false, type:'standard', balance:'', contrib:'', spouseBalance:'', spouseContrib:'', smsfBalance:'', smsfContrib:'', smsfSpouseContrib:'', smsfAssets:[]},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false}};
 }
 
 function normalizeRiskProfile(value) {
@@ -880,7 +929,7 @@ function invValue(iv) {
   switch(iv.type){
     case 'cash':       return Number(iv.cash)||0;
     case 'property':   return Number(iv.marketValue)||Number(iv.purchasePrice)||0;
-    case 'shares': case 'crypto': case 'gold': case 'goldbonds': case 'bonds':
+    case 'shares': case 'etf': case 'crypto': case 'gold': case 'goldbonds': case 'bonds':
                        return Number(iv.currentValue)||Number(iv.costBasis)||0;
     case 'termdeposit':{
       var p=Number(iv.principal)||0,r=(Number(iv.rate)||0)/100,y=Number(iv.years)||1;
@@ -921,7 +970,7 @@ function buildFlows(iv) {
     if(yr&&saleNet) fl.push({t:yr,a:saleNet});
     return fl;
   }
-  if(['shares','crypto','gold','goldbonds'].indexOf(iv.type)>-1){
+  if(['shares','etf','crypto','gold','goldbonds'].indexOf(iv.type)>-1){
     var cost=Number(iv.costBasis)||0,val=Number(iv.currentValue)||0;
     var dist=Number(iv.annualDistributions)||0;
     var costs=Number(iv.annualCosts)||0;
@@ -963,8 +1012,8 @@ function getIRR(iv) {
   return r==null?null:r*100;
 }
 function allocs() {
-  var t={property:0,shares:0,crypto:0,gold:0,goldbonds:0,bonds:0,termdeposit:0,cash:0};
-  ST.investments.forEach(function(iv){ if(t[iv.type]!=null) t[iv.type]+=invValue(iv); });
+  var t={property:0,shares:0,etf:0,crypto:0,gold:0,goldbonds:0,bonds:0,termdeposit:0,cash:0};
+  allAssets().forEach(function(iv){ if(t[iv.type]!=null) t[iv.type]+=invValue(iv); });
   return t;
 }
 function totalPf() {
@@ -990,7 +1039,7 @@ function totalLivingExpenses() {
   },0);
 }
 function avgIRR() {
-  var vs=ST.investments.map(getIRR).filter(function(v){return v!=null&&isFinite(v);});
+  var vs=allAssets().map(getIRR).filter(function(v){return v!=null&&isFinite(v);});
   return vs.length?vs.reduce(function(a,b){return a+b;},0)/vs.length:0;
 }
 function classify(t) {
@@ -1047,7 +1096,7 @@ function projection(rate) {
   return {lbs:lbs,vs:vs};
 }
 function totalOutflow() {
-  var invOut = ST.investments.reduce(function(s,iv){
+  var invOut = allAssets().reduce(function(s,iv){
     if(iv.type==='property'){
       var e=Number(iv.loanEmi)||emi(iv.loanAmount,iv.loanRate,iv.loanTenure);
       return s + e*12 + calcPropertyAnnualExpenses(iv);
@@ -1169,10 +1218,6 @@ function switchSummaryTab(tab) {
 }
 
 function showPage(name) {
-  var activePage = document.querySelector('.pg.on');
-  if (name === 'home' && activePage && activePage.id === 'pg-summary') {
-    resetAppState();
-  }
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.nbtn').forEach(function(b){b.classList.remove('on');});
   var pg=document.getElementById('pg-'+name);
@@ -1287,7 +1332,7 @@ function renderInvFields(data) {
       fld('Annual tax rebate','annualTaxRebate','number','e.g. 12000',d.annualTaxRebate)+
       fldX('Rent growth %','rentGrowth','number','e.g. 3.5',d.rentGrowth,'step="0.1"')+
       fld('Holding period (years) *','years','number','e.g. 10',d.years)+
-      fld('Expected sale price','salePrice','number','e.g. 950000',d.salePrice)+
+      fld('Expected sale price *','salePrice','number','e.g. 950000',d.salePrice)+
     '</div>';
     setTimeout(wireEMI, 50);
   } else if(type==='shares'||type==='crypto'||type==='gold'||type==='goldbonds'){
@@ -1557,55 +1602,228 @@ function renderSuperFields() {
   if(tog) tog.checked = !!ST.super.enabled;
   form.style.display = ST.super.enabled ? 'block' : 'none';
   if(!ST.super.enabled) return;
-  // hydrate fields and preserve selection
-  var typeEl = document.getElementById('superType');
-  if(typeEl) {
-    ST.super.type = typeEl.value || ST.super.type || 'standard';
-    typeEl.value = ST.super.type;
+
+  var standardRadio = document.getElementById('superTypeStandard');
+  var smsfRadio = document.getElementById('superTypeSmsf');
+  if(standardRadio && smsfRadio) {
+    if(ST.super.type === 'smsf') {
+      smsfRadio.checked = true;
+      standardRadio.checked = false;
+    } else {
+      standardRadio.checked = true;
+      smsfRadio.checked = false;
+    }
   }
+
+  var standardDiv = document.getElementById('superStandardFields');
+  var smsfDiv = document.getElementById('superSmsfFields');
+  if(standardDiv) standardDiv.style.display = (ST.super.type === 'smsf') ? 'none' : 'grid';
+  if(smsfDiv) smsfDiv.style.display = (ST.super.type === 'smsf') ? 'block' : 'none';
+
   persist();
-  var balEl  = document.getElementById('superBalance');
-  var conEl  = document.getElementById('superContrib');
-  if(balEl)  balEl.value  = ST.super.balance || '';
-  if(conEl)  conEl.value  = ST.super.contrib  || '';
-  var smsfDiv = document.getElementById('smsfFields');
-  if(smsfDiv) smsfDiv.style.display = (ST.super.type === 'smsf') ? 'grid' : 'none';
-  var spEl = document.getElementById('superSmsfProp');
-  var slEl = document.getElementById('superSmsfLoan');
-  if(spEl) spEl.value = ST.super.smsfProp || '';
-  if(slEl) slEl.value = ST.super.smsfLoan || '';
+
+  var balEl = document.getElementById('superBalance');
+  var conEl = document.getElementById('superContrib');
+  var spouseBalEl = document.getElementById('superSpouseBalance');
+  var spouseConEl = document.getElementById('superSpouseContrib');
+  if(balEl) balEl.value = ST.super.balance || '';
+  if(conEl) conEl.value = ST.super.contrib || '';
+  if(spouseBalEl) spouseBalEl.value = ST.super.spouseBalance || '';
+  if(spouseConEl) spouseConEl.value = ST.super.spouseContrib || '';
+
+  var smsfBalEl = document.getElementById('superSmsfBalance');
+  var smsfConEl = document.getElementById('superSmsfContrib');
+  var smsfSpouseConEl = document.getElementById('superSmsfSpouseContrib');
+  var smsfPanel = document.getElementById('smsfInvestmentsPanel');
+  if(smsfBalEl) smsfBalEl.value = ST.super.smsfBalance || '';
+  if(smsfConEl) smsfConEl.value = ST.super.smsfContrib || '';
+  if(smsfSpouseConEl) smsfSpouseConEl.value = ST.super.smsfSpouseContrib || '';
+  if(smsfPanel) smsfPanel.style.display = (ST.super.type === 'smsf') ? 'block' : 'none';
+
+  renderSmsfInvList();
 }
 
 function saveSuper() {
-  var typeEl = document.getElementById('superType');
-  var balEl  = document.getElementById('superBalance');
-  var conEl  = document.getElementById('superContrib');
-  var spEl   = document.getElementById('superSmsfProp');
-  var slEl   = document.getElementById('superSmsfLoan');
-  if(typeEl) ST.super.type    = typeEl.value;
-  if(balEl)  ST.super.balance = balEl.value;
-  if(conEl)  ST.super.contrib = conEl.value;
-  if(spEl)   ST.super.smsfProp = spEl.value;
-  if(slEl)   ST.super.smsfLoan = slEl.value;
-  var smsfDiv = document.getElementById('smsfFields');
-  if(smsfDiv) smsfDiv.style.display = (ST.super.type === 'smsf') ? 'grid' : 'none';
+  var standardRadio = document.getElementById('superTypeStandard');
+  var smsfRadio = document.getElementById('superTypeSmsf');
+  var balEl = document.getElementById('superBalance');
+  var conEl = document.getElementById('superContrib');
+  var spouseBalEl = document.getElementById('superSpouseBalance');
+  var spouseConEl = document.getElementById('superSpouseContrib');
+  var smsfBalEl = document.getElementById('superSmsfBalance');
+  var smsfConEl = document.getElementById('superSmsfContrib');
+  var smsfSpouseConEl = document.getElementById('superSmsfSpouseContrib');
+
+  if(standardRadio && smsfRadio) {
+    ST.super.type = smsfRadio.checked ? 'smsf' : 'standard';
+  }
+  if(balEl) ST.super.balance = balEl.value;
+  if(conEl) ST.super.contrib = conEl.value;
+  if(spouseBalEl) ST.super.spouseBalance = spouseBalEl.value;
+  if(spouseConEl) ST.super.spouseContrib = spouseConEl.value;
+  if(smsfBalEl) ST.super.smsfBalance = smsfBalEl.value;
+  if(smsfConEl) ST.super.smsfContrib = smsfConEl.value;
+  if(smsfSpouseConEl) ST.super.smsfSpouseContrib = smsfSpouseConEl.value;
+
+  var standardDiv = document.getElementById('superStandardFields');
+  var smsfDiv = document.getElementById('superSmsfFields');
+  if(standardDiv) standardDiv.style.display = (ST.super.type === 'smsf') ? 'none' : 'grid';
+  if(smsfDiv) smsfDiv.style.display = (ST.super.type === 'smsf') ? 'block' : 'none';
   persist();
+}
+
+function allAssets() {
+  var assets = Array.isArray(ST.investments) ? ST.investments.slice() : [];
+  if(ST.super && ST.super.enabled && ST.super.type === 'smsf' && Array.isArray(ST.super.smsfAssets)) {
+    assets = assets.concat(ST.super.smsfAssets);
+  }
+  return assets;
+}
+
+function renderSmsfInvFields(data) {
+  var type = document.getElementById('smsfInvType').value;
+  var d = data || {};
+  var html = '';
+  if(type === 'property'){
+    html = '<div class="fgrid">' +
+      fld('Purchase Price *','purchasePrice','number','e.g. 650000',d.purchasePrice) +
+      fld('Current market price *','marketValue','number','e.g. 720000',d.marketValue) +
+      fld('Stamp duty and legal','costs','number','e.g. 25000',d.costs) +
+      fldX('Loan amount','loanAmount','number','e.g. 520000',d.loanAmount,'id="fsmsfLA"') +
+      fldX('Interest rate (%)','loanRate','number','e.g. 5.75',d.loanRate,'step="0.01" id="fsmsfLR"') +
+      fldX('Loan tenure (years)','loanTenure','number','e.g. 30',d.loanTenure,'id="fsmsfLT"') +
+      fldX('Monthly EMI (auto calculated)','loanEmi','number','Auto-calculated',d.loanEmi,'id="fsmsfLE" readonly') +
+      fld('Monthly rent','monthlyRent','number','e.g. 2200',d.monthlyRent) +
+      fld('House Insurance (monthly)','monthlyInsurance','number','e.g. 120',d.monthlyInsurance) +
+      fld('Pest (monthly)','monthlyPest','number','e.g. 25',d.monthlyPest) +
+      fld('Rates (quarterly)','quarterlyRates','number','e.g. 650',d.quarterlyRates) +
+      fld('Strata (quarterly)','quarterlyStrata','number','e.g. 500',d.quarterlyStrata) +
+      fld('Other expenses (monthly)','monthlyOtherExpenses','number','e.g. 120',d.monthlyOtherExpenses) +
+      fldX('Rent Growth %','rentGrowth','number','e.g. 3.5',d.rentGrowth,'step="0.1"') +
+      fld('Holding period (years) *','years','number','e.g. 10',d.years) +
+      fld('Expected Sale Price *','salePrice','number','e.g. 950000',d.salePrice) +
+      '</div>';
+    setTimeout(wireSmsfEmi,50);
+  } else if(type === 'shares' || type === 'etf' || type === 'gold') {
+    html = '<div class="fgrid">' +
+      fld('Current value (AUD) *','currentValue','number','e.g. 25000',d.currentValue) +
+      fld('Cost basis (AUD) *','costBasis','number','e.g. 18000',d.costBasis) +
+      fld('Annual distributions (AUD)','annualDistributions','number','e.g. 1200',d.annualDistributions) +
+      fld('Holding period (years) *','years','number','e.g. 5',d.years) +
+      fld('Annual fees/costs (AUD)','annualCosts','number','e.g. 150',d.annualCosts) +
+      '</div>';
+  } else if(type === 'bonds') {
+    html = '<div class="fgrid">' +
+      fld('Current market value (AUD) *','currentValue','number','e.g. 10500',d.currentValue) +
+      fld('Cost basis (AUD) *','costBasis','number','e.g. 10000',d.costBasis) +
+      fld('Coupon rate (%)','couponRate','number','e.g. 4.5',d.couponRate) +
+      fld('Redemption value (AUD)','redemptionValue','number','e.g. 10000',d.redemptionValue) +
+      fld('Holding period (years) *','years','number','e.g. 5',d.years) +
+      fld('Annual fees (AUD)','annualCosts','number','e.g. 50',d.annualCosts) +
+      '</div>';
+  }
+  document.getElementById('smsfInvFields').innerHTML = html;
+}
+
+function wireSmsfEmi() {
+  var la=document.getElementById('fsmsfLA'),lr=document.getElementById('fsmsfLR'),
+      lt=document.getElementById('fsmsfLT'),le=document.getElementById('fsmsfLE');
+  if(!la||!lr||!lt||!le) return;
+  function upd(){ var v=emi(la.value,lr.value,lt.value); le.value=v?v.toFixed(2):''; }
+  la.addEventListener('input',upd); lr.addEventListener('input',upd); lt.addEventListener('input',upd);
+  upd();
+}
+
+function collectSmsfInvData() {
+  var data = {};
+  document.querySelectorAll('#smsfInvFields [name]').forEach(function(el){
+    data[el.name] = el.value===''?'':(isNaN(Number(el.value))?el.value:Number(el.value));
+  });
+  return data;
+}
+
+var _editSmsfInvId = null;
+function newSmsfInv() {
+  _editSmsfInvId = null;
+  document.getElementById('smsfInvName').value = '';
+  document.getElementById('smsfInvType').value = '';
+  document.getElementById('smsfInvFields').innerHTML = '';
+  var panel=document.getElementById('smsfInvestmentsPanel');
+  if(panel) panel.style.display = ST.super && ST.super.type==='smsf' ? 'block' : 'none';
+}
+function cancelSmsfInv() { newSmsfInv(); }
+function saveSmsfInv() {
+  var name = document.getElementById('smsfInvName').value.trim();
+  var type = document.getElementById('smsfInvType').value;
+  if(!name){ alert('Please enter an SMSF asset name.'); return; }
+  if(!type){ alert('Please select an SMSF asset type.'); return; }
+  var data = collectSmsfInvData();
+  data.id = _editSmsfInvId || uid();
+  data.name = name;
+  data.type = type;
+  ST.super.smsfAssets = Array.isArray(ST.super.smsfAssets) ? ST.super.smsfAssets : [];
+  var idx = ST.super.smsfAssets.findIndex(function(x){ return x.id===data.id; });
+  if(idx>=0) ST.super.smsfAssets[idx] = data; else ST.super.smsfAssets.push(data);
+  _editSmsfInvId = null;
+  persist();
+  renderSmsfInvList();
+  newSmsfInv();
+}
+function editSmsfInv(id) {
+  var iv = (ST.super.smsfAssets || []).find(function(x){ return x.id===id; });
+  if(!iv) return;
+  _editSmsfInvId = iv.id;
+  document.getElementById('smsfInvName').value = iv.name;
+  document.getElementById('smsfInvType').value = iv.type;
+  renderSmsfInvFields(iv);
+  document.getElementById('smsfInvestmentsPanel').style.display = 'block';
+  showPage('superannuation');
+}
+function deleteSmsfInv(id) {
+  showConfirmDialog('Delete this SMSF asset?', function(ok){
+    if(!ok) return;
+    ST.super.smsfAssets = (ST.super.smsfAssets || []).filter(function(x){ return x.id!==id; });
+    persist();
+    renderSmsfInvList();
+  });
+}
+function renderSmsfInvList() {
+  var el = document.getElementById('smsfInvList');
+  if(!el) return;
+  var assets = Array.isArray(ST.super.smsfAssets) ? ST.super.smsfAssets : [];
+  if(!assets.length){
+    el.innerHTML = '<div class="empty">No SMSF assets yet. Add one using the form above.</div>';
+    return;
+  }
+  var bmap = {property:'bpu',shares:'bbl',etf:'bbl',gold:'byw',bonds:'bbn'};
+  el.innerHTML = assets.map(function(iv){
+    var val = invValue(iv);
+    var irr = getIRR(iv);
+    var irrs = iv.type === 'cash' ? 'N/A' : (irr==null||isNaN(irr) ? 'N/A' : pct(irr));
+    var invalid = iv.type !== 'cash' && (irr==null||isNaN(irr)||irr===0);
+    var alertIcon = invalid ? ' <span style="color:var(--danger);" title="Invalid IRR. Please check mandatory fields.">⚠</span>' : '';
+    return '<div class="icard"><div class="ititle">'+iv.name+'<span class="bdg '+(bmap[iv.type]||'bbl')+'">'+iv.type+'</span>'+alertIcon+'</div>' +
+      '<div class="imeta">Value: '+money(val)+' &nbsp;·&nbsp; IRR: '+irrs+'</div>' +
+      '<div class="iactions"><button class="btn bo bsm" onclick="editSmsfInv(\''+iv.id+'\')">✎ Edit</button>' +
+      '<button class="btn bdn bsm" onclick="deleteSmsfInv(\''+iv.id+'\')">✕ Delete</button></div></div>';
+  }).join('');
 }
 
 function getSuperBalance() {
   if(!ST.super || !ST.super.enabled) return 0;
   if(ST.super.type === 'smsf') {
-    var prop = Number(ST.super.smsfProp)||0;
-    var loan = Number(ST.super.smsfLoan)||0;
-    var liquid = Number(ST.super.balance)||0;
-    return liquid + Math.max(0, prop - loan);
+    var assetsValue = (Array.isArray(ST.super.smsfAssets) ? ST.super.smsfAssets : []).reduce(function(sum, iv){ return sum + invValue(iv); }, 0);
+    return (Number(ST.super.smsfBalance)||0) + assetsValue;
   }
-  return Number(ST.super.balance)||0;
+  return (Number(ST.super.balance)||0) + (Number(ST.super.spouseBalance)||0);
 }
 
 function getSuperAnnualContrib() {
   if(!ST.super || !ST.super.enabled) return 0;
-  return Number(ST.super.contrib)||0;
+  if(ST.super.type === 'smsf') {
+    return (Number(ST.super.smsfContrib)||0) + (Number(ST.super.smsfSpouseContrib)||0);
+  }
+  return (Number(ST.super.contrib)||0) + (Number(ST.super.spouseContrib)||0);
 }
 
 function mkChart(id, opts){
@@ -1663,7 +1881,7 @@ function getBenchmarkIRR(type) {
   return map[type] || 7;
 }
 function renderProjectionPage() {
-  var items = ST.investments.map(function(iv){
+  var items = allAssets().map(function(iv){
     var irr = getIRR(iv);
     return {name:iv.name,type:iv.type,irr:irr == null ? null : Number(irr.toFixed(2)),benchmark:getBenchmarkIRR(iv.type)};
   }).filter(function(item){ return item.irr != null; });
@@ -1671,6 +1889,7 @@ function renderProjectionPage() {
   if(!items.length){
     document.getElementById('projectionComboChart').innerHTML = '<div class="empty">Add investments with cost and value data to compare them with market benchmarks.</div>';
     document.getElementById('projectionInsights').innerHTML = '<div class="empty">The projection view will appear here once you add one or more investments.</div>';
+    renderSmsfSummaryCards();
     return;
   }
 
@@ -1690,6 +1909,40 @@ function renderProjectionPage() {
     return '<div class="iitem"><strong>'+item.name+' ('+item.type+')</strong><br>Your IRR: <strong>'+pct(item.irr)+'</strong> vs benchmark <strong>'+pct(item.benchmark)+'</strong>. '+advice+'</div>';
   }).join('');
   document.getElementById('projectionInsights').innerHTML = insights;
+  renderSmsfSummaryCards();
+}
+
+function hasSmsfSummary() {
+  return ST.super && ST.super.enabled && ST.super.type === 'smsf' && Array.isArray(ST.super.smsfAssets) && ST.super.smsfAssets.length > 0;
+}
+
+function smsfSummaryDetails() {
+  var assets = Array.isArray(ST.super.smsfAssets) ? ST.super.smsfAssets : [];
+  var assetCount = assets.length;
+  var assetValue = assets.reduce(function(sum, iv){ return sum + invValue(iv); }, 0);
+  var cashBalance = Number(ST.super.smsfBalance) || 0;
+  var totalBalance = cashBalance + assetValue;
+  var totalContrib = (Number(ST.super.smsfContrib) || 0) + (Number(ST.super.smsfSpouseContrib) || 0);
+  var spouseContrib = Number(ST.super.smsfSpouseContrib) || 0;
+  return '<span class="eyebrow">SMSF asset summary</span>' +
+    '<h3 class="mt8" style="font-size:1.1rem">Self-managed super fund snapshot</h3>' +
+    '<div class="iblock mt12">' +
+      '<div class="iitem">SMSF assets: <strong>'+assetCount+'</strong></div>' +
+      '<div class="iitem">Total SMSF asset value: <strong>'+money(assetValue)+'</strong></div>' +
+      '<div class="iitem">SMSF cash/balance: <strong>'+money(cashBalance)+'</strong></div>' +
+      '<div class="iitem">Overall SMSF value: <strong>'+money(totalBalance)+'</strong></div>' +
+      '<div class="iitem">Annual SMSF contributions: <strong>'+money(totalContrib)+'</strong>' + (spouseContrib ? ' (includes spouse contributions)' : '') + '</div>' +
+    '</div>';
+}
+
+function renderSmsfSummaryCards() {
+  var show = hasSmsfSummary();
+  ['smsfProjectionSummary','smsfSummaryCardCurrent','smsfSummaryCardDesired'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.style.display = show ? 'block' : 'none';
+    el.innerHTML = show ? smsfSummaryDetails() : '';
+  });
 }
 
 function classifyRec(age, targetType) {
@@ -1807,6 +2060,7 @@ function renderSummary(){
   barV('chAssets',lbs,avs,'Asset value','#6c63ff',false);
 
   renderSummaryInsights(_summaryActiveTab || 'current');
+  renderSmsfSummaryCards();
   switchSummaryTab(_summaryActiveTab || 'current');
 }
 
@@ -1863,10 +2117,15 @@ function renderRetirementPage() {
   var superBal    = getSuperBalance();
   var superContrib = getSuperAnnualContrib();
   var annualSavings = Math.max(0, totalIncome() - totalOutflow()) * 0.25;
-  var totalNow    = pf + superBal;
+  var totalNow    = pf;
+  var includeSuperBalance = ST.super && ST.super.enabled && ST.super.type !== 'smsf';
+  if (includeSuperBalance) {
+    totalNow += superBal;
+  }
 
   var benchmarkAnnual = getRetirementBenchmark(lifestyle);
   var benchmarkLumpsum = benchmarkAnnual * 20;
+  var inflationRate = 0.04;
 
   // Years from now to each milestone
   var yearsToRetire = Math.max(0, retireAge - age);
@@ -1875,6 +2134,8 @@ function renderRetirementPage() {
   // Projected values
   var projAtRetire = projectWealth(totalNow, annualSavings, superContrib, yearsToRetire, rate);
   var projAt67     = projectWealth(totalNow, annualSavings, superContrib, yearsTo67, rate);
+  var projAt67Real = Math.round(projAt67 / Math.pow(1 + inflationRate, yearsTo67));
+  var implausibleProjection = projAt67Real > Math.max(5000000, totalNow * 12) || projAt67 > 20000000;
 
   // Industry benchmarks at each milestone
   var benchNow     = getIndustryBenchmark(age, lifestyle, true);
@@ -1884,7 +2145,7 @@ function renderRetirementPage() {
   // ── 3 Radial / Bar charts ──
   function pct2(val, target) {
     if(!target) return 0;
-    return Math.min(150, Math.round(val / target * 100));
+    return Math.round(val / target * 100);
   }
 
   function renderGaugeChart(elId, label, yourVal, benchVal, age) {
@@ -1969,11 +2230,18 @@ function renderRetirementPage() {
     var gap = benchRetire - projAtRetire;
     var statusColour = onTrack ? 'var(--success)' : 'var(--danger)';
     var statusText   = onTrack ? '✅ On track' : '⚠️ Gap identified';
+    var superNote = '';
+    if (ST.super && ST.super.enabled) {
+      if (ST.super.type === 'smsf') {
+        superNote = ' (SMSF asset values are already included in the portfolio total)';
+      } else {
+        superNote = ' + Super: <strong>' + money(superBal) + '</strong>';
+      }
+    }
     actDiv.innerHTML =
       '<div class="iblock">' +
         '<div class="iitem">Current portfolio: <strong>' + money(pf) + '</strong>' +
-          (ST.super.enabled ? ' + Super: <strong>' + money(superBal) + '</strong>' : '') +
-          ' = Total: <strong>' + money(totalNow) + '</strong></div>' +
+          (ST.super && ST.super.enabled && ST.super.type !== 'smsf' ? superNote + ' = Total: <strong>' + money(totalNow) + '</strong>' : ' = Total: <strong>' + money(totalNow) + '</strong>') + '</div>' +
         '<div class="iitem">Projected annual growth rate: <strong>' + (rate*100).toFixed(1) + '%</strong> ' +
           '(capped from your portfolio IRR for realistic planning)</div>' +
         '<div class="iitem" style="border-color:' + statusColour + '">' +
@@ -1983,10 +2251,29 @@ function renderRetirementPage() {
             ? 'This exceeds your benchmark of ' + money(benchRetire) + ' by ' + money(projAtRetire - benchRetire) + '.'
             : 'This is <strong>' + money(gap) + '</strong> below your benchmark of ' + money(benchRetire) + '.') +
         '</div>' +
-        (ST.super.enabled
+        (ST.super && ST.super.enabled
           ? '<div class="iitem">Super contributions of <strong>' + money(superContrib) + '/yr</strong> are included in your projection.</div>'
           : '<div class="iitem" style="border-color:var(--warn)">⚠ Superannuation is not enabled. Enable it on the Superannuation page to include it in projections.</div>') +
       '</div>';
+
+  var assumptions = [];
+  assumptions.push('<div class="iitem">Current portfolio value is <strong>' + money(pf) + '</strong>.</div>');
+  if (ST.super && ST.super.enabled) {
+    if (ST.super.type === 'smsf') {
+      assumptions.push('<div class="iitem">SMSF assets are included in your portfolio total, so they are not added again separately.</div>');
+    } else {
+      assumptions.push('<div class="iitem">Standard super balance is included separately as <strong>' + money(superBal) + '</strong>.</div>');
+    }
+  }
+  assumptions.push('<div class="iitem">Annual savings invested is <strong>' + money(annualSavings) + '</strong> (25% of net income after expenses).</div>');
+  assumptions.push('<div class="iitem">Growth rate used is <strong>' + (rate * 100).toFixed(1) + '%</strong> (based on portfolio IRR, capped between 4% and 10%).</div>');
+  assumptions.push('<div class="iitem">Inflation is assumed at <strong>' + (inflationRate * 100).toFixed(0) + '%</strong> per year.</div>');
+  assumptions.push('<div class="iitem">Age 67 projection in today\'s dollars: <strong>' + money(projAt67Real) + '</strong>.</div>');
+  if (implausibleProjection) {
+    assumptions.push('<div class="iitem" style="border-color:var(--warn);color:var(--warn)">⚠ This inflation-adjusted projection is unusually high compared to your current portfolio. High return assumptions or a long horizon may make this result optimistic.</div>');
+  }
+  var assumptionEl = document.getElementById('retirementAssumptionDetails');
+  if (assumptionEl) assumptionEl.innerHTML = assumptions.join('');
   }
 }
 
@@ -2014,7 +2301,19 @@ function doImport(evt) {
       ST.investments = Array.isArray(d.investments) ? d.investments : [];
       ST.income      = Array.isArray(d.income)      ? d.income      : [];
       ST.expenses    = Array.isArray(d.expenses)    ? d.expenses    : [];
-      ST.super       = d.super       || {enabled:false,type:'standard',balance:'',contrib:'',smsfProp:'',smsfLoan:''};
+      var importedSuper = d.super || {};
+      ST.super = {
+        enabled: !!importedSuper.enabled,
+        type: importedSuper.type || ((importedSuper.smsfBalance || importedSuper.smsfContrib || importedSuper.smsfSpouseContrib || (Array.isArray(importedSuper.smsfAssets) && importedSuper.smsfAssets.length > 0)) ? 'smsf' : 'standard'),
+        balance: importedSuper.balance || '',
+        contrib: importedSuper.contrib || '',
+        spouseBalance: importedSuper.spouseBalance || '',
+        spouseContrib: importedSuper.spouseContrib || '',
+        smsfBalance: importedSuper.smsfBalance || '',
+        smsfContrib: importedSuper.smsfContrib || '',
+        smsfSpouseContrib: importedSuper.smsfSpouseContrib || '',
+        smsfAssets: Array.isArray(importedSuper.smsfAssets) ? importedSuper.smsfAssets : []
+      };
       ST.meta        = d.meta        || {importedFromJson:true};
       ST.meta.importedFromJson = true;
       // targetType backwards compat
@@ -2071,7 +2370,17 @@ var initialState = (function(){
     if (r && typeof r === 'object') {
       // Ensure all new keys exist (backward compat)
       r.expenses = Array.isArray(r.expenses) ? r.expenses : [];
-      r.super    = r.super || {enabled:false,type:'standard',balance:'',contrib:'',smsfProp:'',smsfLoan:''};
+      r.super    = r.super || {};
+      r.super.enabled = r.super.enabled || false;
+      r.super.type = r.super.type || 'standard';
+      r.super.balance = r.super.balance || '';
+      r.super.contrib = r.super.contrib || '';
+      r.super.spouseBalance = r.super.spouseBalance || '';
+      r.super.spouseContrib = r.super.spouseContrib || '';
+      r.super.smsfBalance = r.super.smsfBalance || '';
+      r.super.smsfContrib = r.super.smsfContrib || '';
+      r.super.smsfSpouseContrib = r.super.smsfSpouseContrib || '';
+      r.super.smsfAssets = Array.isArray(r.super.smsfAssets) ? r.super.smsfAssets : [];
       r.meta     = r.meta  || {importedFromJson:false};
       r.profile  = r.profile || {name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'};
       r.profile.retireAge  = r.profile.retireAge  || 67;
