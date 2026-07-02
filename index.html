@@ -640,7 +640,7 @@ input:checked + .slider:before {transform: translateX(20px);}
       <div class="card">
         <span class="eyebrow">Visual Projections</span>
         <h3>Your Wealth vs Industry Average</h3>
-        <p class="note mt8">Visualizing your expected trajectory against standard industry milestones for your chosen lifestyle.</p>
+        <p class="note mt8">Visualizing your expected trajectory against standard industry milestones for your chosen lifestyle and desired risk profile.</p>
         <div class="cgrid3" id="retirementCharts">
            <div class="card" style="background:var(--panel2); padding:16px"><p class="clbl" style="margin-bottom:8px" id="lblRetCurrent">Current</p><div id="chRetCurrent"></div></div>
            <div class="card" style="background:var(--panel2); padding:16px"><p class="clbl" style="margin-bottom:8px" id="lblRetPlanned">Planned</p><div id="chRetPlanned"></div></div>
@@ -1110,15 +1110,24 @@ function recAlloc(age, targetType) {
   result.Cash += diff;
   return result;
 }
-function getExpectedProjectionRate(profileType) {
+function getProfileGrowthAssumption(profileType) {
   var type = normalizeRiskProfile(profileType || 'Balanced');
-  if (type === 'Conservative') return 0.04;
-  if (type === 'Stable') return 0.05;
-  if (type === 'Moderate Growth') return 0.06;
-  if (type === 'Balanced') return 0.07;
-  if (type === 'Growth') return 0.08;
-  if (type === 'High Growth') return 0.09;
-  return 0.07;
+  var map = {
+    Conservative: 0.035,
+    Stable: 0.045,
+    'Moderate Growth': 0.055,
+    Balanced: 0.065,
+    Growth: 0.075,
+    'High Growth': 0.085
+  };
+  return map[type] != null ? map[type] : 0.065;
+}
+function getPracticalProjectionRate(profileType) {
+  var baseRate = getProfileGrowthAssumption(profileType);
+  return Math.max(0.03, Math.min(0.09, baseRate));
+}
+function getExpectedProjectionRate(profileType) {
+  return getPracticalProjectionRate(profileType);
 }
 function projection(rate) {
   var bal=totalPf(),annual=totalIncome()*0.25;
@@ -2481,11 +2490,11 @@ function getRetirementBenchmark(lifestyle) {
   return map[lifestyle] || 72000;
 }
 
-function safeProjectionRate() {
-  // Use avg IRR but cap at 10% and floor at 4% - prevents insane projections
-  var raw = avgIRR();
-  if(!raw || !isFinite(raw) || raw <= 0) return 0.07;
-  return Math.min(0.10, Math.max(0.04, raw / 100));
+function safeProjectionRate(profileType) {
+  // Use the selected desired risk profile only, without overriding from portfolio IRR.
+  // This ensures retirement pathway projections match the risk profile assumptions.
+  var baseRate = getPracticalProjectionRate(profileType);
+  return baseRate;
 }
 
 function projectWealth(startBalance, annualContrib, superContrib, years, rate) {
@@ -2515,7 +2524,8 @@ function renderRetirementPage() {
   var age         = Number(ST.profile.age) || 40;
   var retireAge   = Number(ST.profile.retireAge) || 67;
   var lifestyle   = ST.profile.lifestyle || 'Comfortable';
-  var rate        = safeProjectionRate();
+  var desiredProfile = getPreferredPortfolioType();
+  var rate        = safeProjectionRate(desiredProfile);
   var pf          = totalPf();
   var superBal    = getSuperBalance();
   var superContrib = getSuperAnnualContrib();
@@ -2614,10 +2624,10 @@ function renderRetirementPage() {
   var expDiv = document.getElementById('retirementExpectedPath');
   if(expDiv) {
     var suggestedProfile = getSuggestedRiskProfile(age, lifestyle);
+    var profileLabel = desiredProfile || suggestedProfile;
     expDiv.innerHTML =
       '<div class="iblock">' +
-        '<div class="iitem">Based on your age of <strong>' + age + '</strong> and <strong>' + lifestyle + '</strong> lifestyle, ' +
-          'your suggested risk profile is <strong>' + suggestedProfile + '</strong>.</div>' +
+        '<div class="iitem">Your desired risk profile is <strong>' + profileLabel + '</strong>. This projection uses a practical long-term nominal growth assumption of <strong>' + (rate * 100).toFixed(1) + '%</strong>, based on the selected risk profile range.</div>' +
         '<div class="iitem">Industry average: To support a <strong>' + lifestyle + '</strong> retirement lifestyle, ' +
           'you should target approximately <strong>' + money(benchmarkLumpsum) + '</strong> by age 67 ' +
           '(based on the 4% drawdown rule, needing ' + money(benchmarkAnnual) + '/year).</div>' +
@@ -2669,7 +2679,7 @@ function renderRetirementPage() {
     }
   }
   assumptions.push('<div class="iitem">Annual savings invested is <strong>' + money(annualSavings) + '</strong> (25% of net income after expenses).</div>');
-  assumptions.push('<div class="iitem">Growth rate used is <strong>' + (rate * 100).toFixed(1) + '%</strong> (based on portfolio IRR, capped between 4% and 10%).</div>');
+  assumptions.push('<div class="iitem">Growth rate used is <strong>' + (rate * 100).toFixed(1) + '%</strong> (based on your chosen desired risk profile and the practical long-term return range from the reference sheet).</div>');
   assumptions.push('<div class="iitem">Inflation is assumed at <strong>' + (inflationRate * 100).toFixed(0) + '%</strong> per year.</div>');
   assumptions.push('<div class="iitem">Age 67 projection in today\'s dollars: <strong>' + money(projAt67Real) + '</strong>.</div>');
   if (implausibleProjection) {
