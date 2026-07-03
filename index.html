@@ -387,7 +387,7 @@ input:checked + .slider:before {transform: translateX(20px);}
         <div class="card">
           <span class="eyebrow">Form</span>
           <h3 id="incTitle">Add income source</h3>
-          <p class="note mt8" id="incomeRentNote" style="display:none">You have added rent to a property investment. Please enter Rental income on this page so your total cash flow is calculated correctly.</p>
+          <p class="note mt8" id="incomeRentNote" style="display:none">You have entered rental income details in the Investment page. Please add the corresponding Rental income and Annual Tax Rebate on the Income page so your total cash flow is calculated correctly.</p>
           <div class="fstack mt12">
             <div class="fgrid">
               <div class="field"><span>Source name</span><input id="incName" type="text" placeholder="e.g. Salary, Spouse income"></div>
@@ -395,9 +395,11 @@ input:checked + .slider:before {transform: translateX(20px);}
               <div class="field">
                 <span>Frequency</span>
                 <select id="incFreq">
+                  <option value="weekly">Weekly</option>
+                  <option value="fortnightly">Fortnightly</option>
                   <option value="monthly">Monthly</option>
                   <option value="annual">Annual (per year)</option>
-                  <option value="oneoff"> One-off</option>
+                  <option value="oneoff">One-off</option>
                 </select>
               </div>
               <div class="field">
@@ -983,6 +985,15 @@ function calcPropertyAnnualExpenses(iv){
   var annual = Number(iv.annualExpenses)||0;
   return monthly*12 + quarterly*4 + annual;
 }
+function isSmsfPropertyAsset(iv) {
+  return ST.super && ST.super.enabled && ST.super.type === 'smsf' && Array.isArray(ST.super.smsfAssets) && ST.super.smsfAssets.some(function(a){ return a && a.id === iv.id; });
+}
+function smsPropertyAnnualShortfall(iv) {
+  var rent = (Number(iv.monthlyRent)||0) * 12;
+  var emiAnnual = (Number(iv.loanEmi)||emi(iv.loanAmount,iv.loanRate,iv.loanTenure)) * 12;
+  var expenses = calcPropertyAnnualExpenses(iv);
+  return Math.max(0, emiAnnual + expenses - rent);
+}
 function buildFlows(iv) {
   if(iv.type==='cash') return [];
   if(iv.type==='property'){
@@ -1063,6 +1074,8 @@ function totalIncome() {
     var a=Number(ic.amount)||0;
     if(ic.freq==='annual') return s+a;
     if(ic.freq==='monthly') return s+a*12;
+    if(ic.freq==='fortnightly') return s+a*26;
+    if(ic.freq==='weekly') return s+a*52;
     return s+a;
   },0);
 }
@@ -1147,8 +1160,12 @@ function projection(rate) {
 function totalOutflow() {
   var invOut = allAssets().reduce(function(s,iv){
     if(iv.type==='property'){
-      var e=Number(iv.loanEmi)||emi(iv.loanAmount,iv.loanRate,iv.loanTenure);
-      return s + e*12 + calcPropertyAnnualExpenses(iv);
+      var shortfall = smsPropertyAnnualShortfall(iv);
+      if(isSmsfPropertyAsset(iv)){
+        var smsfBalance = Number(ST.super.smsfBalance)||0;
+        return s + (smsfBalance > 0 ? 0 : shortfall);
+      }
+      return s + shortfall;
     }
     return s;
   },0);
@@ -1296,7 +1313,15 @@ function showPage(name) {
   if(name==='recommended') renderRecommendedInsightsPage();
   if(name==='retirement') renderRetirementPage();
   if(name==='home') renderHomeStats();
-  if(name==='income') renderIncomeNote();
+  if(name==='income') {
+    renderIncomeNote();
+    if(hasPropertyRentalIncome()) {
+      alert('You have entered rental income details in the Investment page. Please also add the corresponding Rental income on the Income page so annual cash flow is calculated correctly.');
+    }
+  }
+  if(name==='expenses' && hasPropertyRentalIncome()) {
+    alert('You have entered rental income in the Investment page. Do not enter investment property expenses on the Expenses page because those costs are already captured in the Investment tab.');
+  }
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('ov').classList.remove('show');
 }
@@ -1567,17 +1592,28 @@ function renderIncList() {
   if(!ST.income.length){
     el.innerHTML='<div class="empty">No income added yet.</div>'; return;
   }
-  el.innerHTML=ST.income.map(function(ic){
+  var fmap = {weekly:'Weekly', fortnightly:'Fortnightly', monthly:'Monthly', annual:'Annual', oneoff:'One-off'};
+  var totalAnnual = totalIncome();
+  el.innerHTML = ST.income.map(function(ic){
+    var annAmt = ic.freq==='weekly' ? ic.amount*52
+               : ic.freq==='fortnightly' ? ic.amount*26
+               : ic.freq==='monthly' ? ic.amount*12
+               : ic.freq==='annual' ? ic.amount
+               : ic.amount;
     return `
       <div class="icard">
         <div class="ititle">${ic.name}</div>
-        <div class="imeta">${money(ic.amount)} / ${ic.freq} &nbsp;·&nbsp; ${ic.kind}</div>
+        <div class="imeta">${money(ic.amount)} / ${fmap[ic.freq]||ic.freq} &nbsp;·&nbsp; ${money(annAmt)} p.a. &nbsp;·&nbsp; ${ic.kind}</div>
         <div class="iactions">
           <button class="btn bo bsm" onclick="editInc('${ic.id}')">✎ Edit</button>
           <button class="btn bdn bsm" onclick="deleteInc('${ic.id}')">✕ Delete</button>
         </div>
       </div>`;
-  }).join('');
+  }).join('') +
+  '<div class="icard" style="background:rgba(34,211,163,.06);border-color:rgba(34,211,163,.3)">' +
+    '<div class="ititle" style="color:var(--success)">Total annual income</div>' +
+    '<div class="imeta" style="font-size:1.1rem;font-weight:800;color:var(--text)">' + money(totalAnnual) + '</div>' +
+  '</div>';
 }
 
 
