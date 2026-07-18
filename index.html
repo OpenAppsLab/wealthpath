@@ -201,9 +201,43 @@ p{color:var(--muted);line-height:1.65}
 /* ── ITEM LIST ── */
 .ilist{display:flex;flex-direction:column;gap:9px;min-height:40px}
 .icard{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rsm);padding:13px 15px}
-.ititle{font-weight:700;font-size:13.5px;margin-bottom:3px;color:var(--text)}
-.imeta{font-size:12px;color:var(--muted);line-height:1.5}
+.ititle{font-weight:700;font-size:14px;margin-bottom:3px;color:var(--text)}
+.imeta{font-size:13px;color:var(--muted);line-height:1.5}
 .iactions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.goal-progress{width:100%;height:8px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
+.goal-progress-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#6c63ff,#4f8cff);transition:width .2s ease}
+.goal-card-shell{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;align-items:center;padding:16px 16px;border:1px solid var(--border);border-radius:var(--rsm);background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.03);font-size:13px}
+.goal-visual-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.goal-pie{position:relative;--pie-size:84px;--pie-color:var(--accent);width:var(--pie-size);height:var(--pie-size);border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--pie-color) calc(var(--pct,0) * 1%), rgba(255,255,255,.08) 0);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.goal-pie::before{content:'';position:absolute;inset:12px;border-radius:50%;background:rgba(5,7,22,.95);border:1px solid rgba(255,255,255,.08)}
+.goal-pie-value{position:relative;z-index:1;text-align:center;font-size:.96rem;font-weight:800;line-height:1.08;color:var(--text)}
+.goal-pie-value small{display:block;font-size:0.63rem;color:var(--muted);font-weight:700;margin-top:3px;text-transform:uppercase;letter-spacing:.12em}
+.goal-bullets{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.goal-bullet{display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:13px;color:var(--muted);line-height:1.5}
+.goal-bullet strong{color:var(--text);font-weight:700}
+.goal-bullet-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.goal-bullet-dot.green{background:var(--success)}
+.goal-bullet-dot.warn{background:var(--warn)}
+.goal-bullet-dot.danger{background:var(--danger)}
+.goal-verdict{border-left:4px solid transparent;padding:14px 15px;background:rgba(255,255,255,.04);border-radius:var(--rsm);border:1px solid var(--border);font-size:13px;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.goal-verdict.success{border-left-color:var(--success);background:linear-gradient(135deg,rgba(34,211,163,.14),rgba(255,255,255,.04))}
+.goal-verdict.warn{border-left-color:var(--warn);background:linear-gradient(135deg,rgba(251,191,36,.16),rgba(255,255,255,.04))}
+.goal-verdict.danger{border-left-color:var(--danger);background:linear-gradient(135deg,rgba(248,113,113,.18),rgba(255,255,255,.04))}
+.goal-verdict-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.goal-verdict-title{font-weight:800;font-size:14px;color:var(--text)}
+.goal-verdict-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid var(--border)}
+.goal-verdict-pill.success{color:var(--success);background:rgba(34,211,163,.16)}
+.goal-verdict-pill.warn{color:var(--warn);background:rgba(251,191,36,.16)}
+.goal-verdict-pill.danger{color:var(--danger);background:rgba(248,113,113,.16)}
+.goal-verdict-copy{font-size:13px;color:var(--muted);line-height:1.55;margin-top:8px}
+.goal-status-grid{display:flex;flex-direction:column;gap:8px}
+.goal-status-row{display:grid;grid-template-columns:minmax(0,1fr) 130px minmax(0,1fr);gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--border);border-radius:var(--rsm);background:linear-gradient(135deg,rgba(99,102,241,.11),rgba(255,255,255,.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.03);font-size:13px}
+.goal-status-name{font-weight:800;color:var(--text);font-size:13px}
+.goal-status-pill{display:inline-flex;align-items:center;justify-content:center;padding:5px 9px;border-radius:999px;font-size:10.5px;font-weight:800;border:1px solid transparent}
+.goal-status-pill.success{color:var(--success);background:rgba(34,211,163,.14);border-color:rgba(34,211,163,.28)}
+.goal-status-pill.warn{color:var(--warn);background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.28)}
+.goal-status-pill.danger{color:var(--danger);background:rgba(248,113,113,.14);border-color:rgba(248,113,113,.28)}
+.goal-status-meta{font-size:13px;color:var(--muted);line-height:1.45}
 /* badges */
 .bdg{display:inline-flex;padding:3px 8px;border-radius:999px;font-size:10.5px;font-weight:700;margin-left:5px;vertical-align:middle}
 .bpu{background:rgba(108,99,255,.22);color:#c4b5fd}
@@ -236,10 +270,13 @@ p{color:var(--muted);line-height:1.65}
 .disclaimer strong{color:var(--text)}
 .home-mode-card{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--rsm);background:rgba(255,255,255,.03)}
 .home-mode-card .note{margin-top:0}
-.confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,.72);z-index:260;padding:18px}
-.confirm-modal-card{width:min(92vw,440px);background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:22px 22px 18px;box-shadow:var(--shadow)}
+.confirm-modal{position:fixed;inset:0;display:none;align-items:flex-start;justify-content:center;background:rgba(2,6,23,.72);z-index:260;padding:18px;overflow-y:auto}
+.confirm-modal-card{width:min(92vw,520px);max-width:520px;max-height:min(90vh,760px);overflow-y:auto;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:22px 22px 18px;box-shadow:var(--shadow);-webkit-overflow-scrolling:touch}
 .confirm-modal-card h3{margin-bottom:8px;font-size:1.05rem}
 .confirm-modal-card p{margin-top:8px}
+.goal-household-toggle{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.goal-household-option{display:inline-flex;align-items:center;gap:7px;font-size:0.9rem;line-height:1.2;color:var(--text)}
+.goal-household-option input{margin:0;accent-color:var(--accent)}
 /* toggle switch */
 .switch {position: relative; display: inline-block; width: 44px; height: 24px;}
 .switch input {opacity: 0; width: 0; height: 0;}
@@ -257,9 +294,23 @@ input:checked + .slider:before {transform: translateX(20px);}
   .shell{grid-template-columns:1fr}
   .sidebar{position:fixed;left:-100%;top:0;height:100vh;width:250px;transition:left .25s;z-index:200}
   .sidebar.open{left:0}
-  .mbar{display:flex}
-  .main{padding:14px 14px 56px}
+  .mbar{display:flex;position:fixed;left:0;right:0;top:0;z-index:120}
+  .main{padding:70px 14px 56px}
   .srow{grid-template-columns:1fr 1fr}
+  .btn,.field input,.field select,.switch,.goal-card-shell,.icard,.card,.confirm-modal-card{scroll-margin-top:82px}
+}
+@media(max-width:600px){
+  .goal-card-shell{grid-template-columns:1fr;align-items:stretch;padding:14px}
+  .goal-visual-wrap{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;width:100%}
+  .goal-status-row{grid-template-columns:1fr;gap:8px;padding:12px}
+  .goal-status-row > *{min-width:0}
+  .goal-status-pill{justify-self:start}
+  .goal-verdict-head{flex-direction:column;align-items:flex-start}
+  .goal-verdict-pill{align-self:flex-start}
+  .goal-verdict-copy,.goal-status-meta{overflow-wrap:normal;word-break:normal;hyphens:none}
+  .goal-status-name,.goal-bullet strong{overflow-wrap:normal;word-break:normal;hyphens:none;white-space:normal}
+  .iactions{flex-direction:column}
+  .iactions .btn{width:100%;justify-content:center}
 }
 @media(max-width:480px){
   .srow,.fgrid{grid-template-columns:1fr}
@@ -268,7 +319,68 @@ input:checked + .slider:before {transform: translateX(20px);}
   .mixrow{grid-template-columns:1fr}
   .super-toggle-card{align-items:flex-start}
   .super-toggle-card .switch{margin-left:auto}
+  .goal-pie{--pie-size:74px}
+  .goal-bullet,.imeta,.goal-status-meta,.goal-verdict-copy,.goal-verdict-title,.ititle{word-break:normal;overflow-wrap:normal;hyphens:none}
+  .goal-status-name,.goal-bullet strong{word-break:normal;overflow-wrap:normal;hyphens:none;white-space:normal}
+  .goal-verdict{padding:12px 13px}
+  .goal-visual-wrap{grid-template-columns:1fr;justify-items:center}
 }
+@media(max-width:430px){
+  .goal-card-shell{grid-template-columns:1fr;gap:12px;padding:13px}
+  .goal-visual-wrap{display:flex;flex-direction:row;align-items:center;justify-content:space-between;width:100%;gap:12px}
+  .goal-pie{--pie-size:68px}
+  .goal-verdict-pill{margin-left:auto}
+  .goal-bullets{gap:7px}
+  .goal-bullet{padding:9px 10px}
+}
+
+/* ── SENSITIVITY SLIDER PANEL ── */
+.sens-panel{background:var(--panel2);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-top:18px}
+.sens-panel-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.sens-panel-title{font-size:1.02rem;font-weight:800;color:var(--text)}
+.sens-panel-subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+.sens-reset-btn{font-size:11.5px;padding:5px 11px;border-radius:8px;background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--border2);cursor:pointer;transition:all .15s}
+.sens-reset-btn:hover{background:rgba(255,255,255,.13);color:var(--text)}
+.sens-sliders{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+@media(max-width:768px){.sens-sliders{grid-template-columns:1fr}}
+.sens-slider-row{display:flex;flex-direction:column;gap:6px}
+.sens-slider-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#a5b4fc;letter-spacing:.02em}
+.sens-slider-label .sens-val{font-size:13px;font-weight:800;color:var(--text);min-width:54px;text-align:right}
+.sens-slider-label .sens-val.up{color:var(--success)}
+.sens-slider-label .sens-val.down{color:var(--danger)}
+.sens-range{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:999px;background:rgba(255,255,255,.1);outline:none;cursor:pointer;transition:background .15s}
+.sens-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#4f8cff);cursor:pointer;box-shadow:0 0 6px rgba(108,99,255,.5);border:2px solid rgba(255,255,255,.2)}
+.sens-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#4f8cff);cursor:pointer;box-shadow:0 0 6px rgba(108,99,255,.5);border:2px solid rgba(255,255,255,.2)}
+.sens-range:focus::-webkit-slider-thumb{box-shadow:0 0 0 3px rgba(108,99,255,.3)}
+.sens-hint{font-size:10.5px;color:var(--muted);line-height:1.4}
+
+/* Results grid */
+.sens-results{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:768px){.sens-results{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.sens-results{grid-template-columns:1fr}}
+.sens-kpi{padding:13px 15px;border-radius:var(--rsm);border:1px solid var(--border);background:rgba(255,255,255,.04);text-align:center}
+.sens-kpi .sk-lbl{font-size:10.5px;color:var(--muted);margin-bottom:5px;line-height:1.3}
+.sens-kpi .sk-val{font-size:1.18rem;font-weight:800;line-height:1.1}
+.sens-kpi .sk-delta{font-size:10.5px;margin-top:3px;font-weight:600}
+.sens-kpi.green-kpi{border-color:rgba(34,211,163,.3);background:rgba(34,211,163,.07)}
+.sens-kpi.warn-kpi{border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.07)}
+.sens-kpi.danger-kpi{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.07)}
+
+/* Per-goal scenario rows */
+.sens-goal-rows{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.sens-goal-row{display:grid;grid-template-columns:1fr 110px 110px 90px;gap:10px;align-items:center;padding:11px 14px;border-radius:var(--rsm);border:1px solid var(--border);background:rgba(255,255,255,.03);font-size:12.5px}
+@media(max-width:600px){.sens-goal-row{grid-template-columns:1fr 1fr;gap:7px}}
+@media(max-width:480px){.sens-goal-row{grid-template-columns:1fr;gap:7px}}
+.sens-goal-row .sg-name{font-weight:700;color:var(--text)}
+.sens-goal-row .sg-base{color:var(--muted)}
+.sens-goal-row .sg-new{font-weight:700}
+.sens-goal-row .sg-pill{display:inline-flex;align-items:center;justify-content:center;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:700;border:1px solid transparent}
+.sens-goal-row .sg-pill.success{color:var(--success);background:rgba(34,211,163,.14);border-color:rgba(34,211,163,.28)}
+.sens-goal-row .sg-pill.warn{color:var(--warn);background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.28)}
+.sens-goal-row .sg-pill.danger{color:var(--danger);background:rgba(248,113,113,.14);border-color:rgba(248,113,113,.28)}
+.sens-narrative{margin-top:14px;padding:13px 15px;border-radius:var(--rsm);font-size:12.5px;line-height:1.6;color:var(--text);border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.sens-narrative strong{color:#c7d2fe}
+.sens-divider{height:1px;background:var(--border);margin:16px 0}
 </style>
 </head>
 <body>
@@ -292,6 +404,7 @@ input:checked + .slider:before {transform: translateX(20px);}
       <button class="nbtn"    onclick="showPage('expenses')"><span class="nicon">■</span>Expenses</button>
       <button class="nbtn"    onclick="showPage('superannuation')"><span class="nicon">☂</span>Superannuation</button>
       <button class="nbtn"    onclick="showPage('projection')"><span class="nicon">◌</span>Performance Check</button>
+      <button class="nbtn"    onclick="showPage('goals')"><span class="nicon">★</span>Goals</button>
       <button class="nbtn"    data-page="recommended" onclick="showPage('recommended')"><span class="nicon">◎</span>Recommended Insights</button>
       <button class="nbtn"    onclick="showPage('summary')"><span class="nicon">◍</span>Summary</button>
       <button class="nbtn"    onclick="showPage('retirement')"><span class="nicon">◐</span>Retirement pathway</button>
@@ -354,6 +467,19 @@ input:checked + .slider:before {transform: translateX(20px);}
           <p class="mt8">It is made for everyday users who want something simple and practical.</p>
           <p class="mt8">For feedback, please email <a href="mailto:moreland1231@gmail.com" style="color:#93c5fd;text-decoration:underline;">moreland1231@gmail.com</a></p>
         </div>
+      </div>
+    </section>
+
+    <section class="pg" id="pg-goals">
+      <div class="phead">
+        <div><span class="eyebrow">Goal planning</span><h2>Goals</h2></div>
+        <button id="addGoalBtn" class="btn bp" onclick="openGoalModal()">+ Add goal</button>
+      </div>
+      <div class="card" id="goalsPageContent"></div>
+      <div id="sensPanelRoot" class="mt16"></div>
+      <div class="brow mt16">
+        <button class="btn bo" onclick="showPage('projection')">← Back to Performance Check</button>
+        <button class="btn bp" onclick="showPage('summary')">Next: Summary</button>
       </div>
     </section>
 
@@ -706,6 +832,64 @@ input:checked + .slider:before {transform: translateX(20px);}
   </main>
 </div>
 
+<div class="confirm-modal" id="goalModal" style="display:none">
+  <div class="confirm-modal-card">
+    <span class="eyebrow">Goal setup</span>
+    <h3>Add a future goal</h3>
+    <div class="field mt12">
+      <span>Goal template</span>
+      <select id="goalTemplateSelect" onchange="applyGoalTemplateDefaults()"></select>
+    </div>
+    <div id="goalEarlyRetirementFields" style="display:none">
+    <div class="field mt12">
+      <span>Household type</span>
+      <div class="goal-household-toggle">
+        <label class="goal-household-option"><input type="radio" name="goalHouseholdType" value="single" checked> Single</label>
+        <label class="goal-household-option"><input type="radio" name="goalHouseholdType" value="couple"> Couple</label>
+      </div>
+    </div>
+    <div class="field mt12">
+      <span>Current bank balance (AUD)</span>
+      <input id="goalCurrentBankBalance" type="number" min="0" step="1000">
+    </div>
+    <div class="field mt12">
+      <span>Estimated Age Pension (AUD/year)</span>
+      <input id="goalEstimatedAgePension" type="number" min="0" step="1000">
+    </div>
+    <div class="field mt12">
+      <span>Annual drawdown / income from other sources (AUD)</span>
+      <input id="goalAnnualDrawdown" type="number" min="0" step="1000">
+    </div>
+    <div class="field mt12">
+      <span>Projected super at age 67 (AUD)</span>
+      <input id="goalProjectedSuperAt67" type="number" min="0" step="1000">
+      <div class="note mt6" style="font-size:0.9rem">These numbers are used to test whether your selected lifestyle can be funded from your planned retirement age to age 67 and then beyond.</div>
+    </div>
+  </div>
+    <div class="field mt12">
+      <span id="goalCurrentCostLabel">Current cost (AUD)</span>
+      <input id="goalCurrentCost" type="number" min="0" step="100">
+    </div>
+    <div class="field mt12">
+      <span>Inflation rate (%)</span>
+      <input id="goalInflationRate" type="number" min="0" step="0.1">
+    </div>
+    <div class="field mt12">
+      <span>Years until event</span>
+      <input id="goalYearsUntilEvent" type="number" min="0" step="1">
+      <div class="note mt6" id="goalYearsNote" style="font-size:0.9rem">We use the oldest child’s age to estimate the earliest deadline.</div>
+    </div>
+    <div class="field mt12">
+      <span>Optional recurring cost (AUD)</span>
+      <input id="goalRecurringCost" type="number" min="0" step="100">
+    </div>
+    <div class="brow mt16">
+      <button class="btn bo" onclick="closeGoalModal()">Cancel</button>
+      <button id="saveGoalBtn" class="btn bp" onclick="saveGoalFromModal()">Save goal</button>
+    </div>
+  </div>
+</div>
+
 <div class="confirm-modal" id="confirmModal">
   <div class="confirm-modal-card">
     <span class="eyebrow">Quick check</span>
@@ -732,6 +916,9 @@ input:checked + .slider:before {transform: translateX(20px);}
 
 // ── STATE ────────────────────────────────────────────────────
 var SK = 'wealthpath-v5';
+function getDefaultGoals() {
+  return [];
+}
 var ST = (function(){
   try {
     var r = JSON.parse(localStorage.getItem(SK));
@@ -740,9 +927,14 @@ var ST = (function(){
       r.profile.targetType = r.profile.targetType || 'Balanced';
       r.profile.lifestyle = r.profile.lifestyle || 'Comfortable';
       r.profile.retireAge = r.profile.retireAge || 67;
+      r.profile.childrenCount = Number(r.profile.childrenCount) || 0;
+      r.profile.childrenAges = Array.isArray(r.profile.childrenAges) ? r.profile.childrenAges.slice(0, Math.max(0, Number(r.profile.childrenCount)||0)) : [];
+      r.profile.hasPrivateMedicalInsurance = r.profile.hasPrivateMedicalInsurance === true;
+      r.profile.hasLifeInsurance = r.profile.hasLifeInsurance === true;
       r.investments = Array.isArray(r.investments) ? r.investments : [];
       r.income      = Array.isArray(r.income)      ? r.income      : [];
       r.expenses    = Array.isArray(r.expenses)    ? r.expenses    : [];
+      r.goals       = Array.isArray(r.goals) && r.goals.length ? r.goals : getDefaultGoals();
       r.super       = r.super       || {};
       r.super.enabled = r.super.enabled || false;
       r.super.type = r.super.type || 'standard';
@@ -762,7 +954,7 @@ var ST = (function(){
       return r;
     }
   } catch(e) {}
-  return {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'},investments:[],income:[],expenses:[],super:{enabled:false, type:'standard', balance:'', contrib:'', spouseBalance:'', spouseContrib:'', smsfBalance:'', smsfContrib:'', smsfSpouseContrib:'', smsfAssets:[]},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false,incomeAlertShown:false,expensesAlertShown:false}};
+  return {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced',childrenCount:0,childrenAges:[],hasPrivateMedicalInsurance:false,hasLifeInsurance:false,householdType:'single'},investments:[],income:[],expenses:[],goals:getDefaultGoals(),super:{enabled:false, type:'standard', balance:'', contrib:'', spouseBalance:'', spouseContrib:'', smsfBalance:'', smsfContrib:'', smsfSpouseContrib:'', smsfAssets:[]},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false,incomeAlertShown:false,expensesAlertShown:false}};
 })();
 
 function persist() {
@@ -782,7 +974,7 @@ var DB = {
 
 function clearStoredState() {
   try { localStorage.removeItem(SK); } catch(e) {}
-  ST = {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced'},investments:[],income:[],expenses:[],super:{enabled:false, type:'standard', balance:'', contrib:'', spouseBalance:'', spouseContrib:'', smsfBalance:'', smsfContrib:'', smsfSpouseContrib:'', smsfAssets:[]},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false,incomeAlertShown:false,expensesAlertShown:false,newUserCount:0}};
+  ST = {profile:{name:'',age:'',retireAge:67,lifestyle:'Comfortable',targetType:'Balanced',childrenCount:0,childrenAges:[],hasPrivateMedicalInsurance:false,hasLifeInsurance:false,householdType:'single'},investments:[],income:[],expenses:[],goals:getDefaultGoals(),super:{enabled:false, type:'standard', balance:'', contrib:'', spouseBalance:'', spouseContrib:'', smsfBalance:'', smsfContrib:'', smsfSpouseContrib:'', smsfAssets:[]},meta:{importedFromJson:false,investPopupShown:false,incomePopupShown:false,incomeAlertShown:false,expensesAlertShown:false,newUserCount:0}};
 }
 
 function normalizeRiskProfile(value) {
@@ -1034,6 +1226,29 @@ function smsPropertyAnnualShortfall(iv) {
   var emiAnnual = (Number(iv.loanEmi)||emi(iv.loanAmount,iv.loanRate,iv.loanTenure)) * 12;
   var expenses = calcPropertyAnnualExpenses(iv);
   return Math.max(0, emiAnnual + expenses - rent);
+}
+function getPropertySaleScenarioList() {
+  var saleInMonths = 12;
+  var propertyAssets = allAssets().filter(function(iv){ return iv && iv.type === 'property' && !isSmsfPropertyAsset(iv); });
+  return propertyAssets.map(function(iv){
+    var salePrice = Math.max(0, Number(iv.salePrice)||Number(iv.marketValue)||0);
+    var loanAmount = Math.max(0, Number(iv.loanAmount)||0);
+    var loanRate = Math.max(0, Number(iv.loanRate)||0);
+    var loanTenure = Math.max(0, Number(iv.loanTenure)||0);
+    var remainingLoanBalance = loanBalance(loanAmount, loanRate, loanTenure, saleInMonths);
+    var netSaleProceeds = Math.max(0, salePrice - remainingLoanBalance);
+    var annualHoldingCostSavings = Math.max(0, smsPropertyAnnualShortfall(iv));
+    var monthlySavingsReclaimed = annualHoldingCostSavings / 12;
+    return {
+      name: iv.name || 'Property holding',
+      salePrice: salePrice,
+      remainingLoanBalance: remainingLoanBalance,
+      netSaleProceeds: netSaleProceeds,
+      annualHoldingCostSavings: annualHoldingCostSavings,
+      monthlySavingsReclaimed: monthlySavingsReclaimed,
+      saleInMonths: saleInMonths
+    };
+  });
 }
 function buildFlows(iv) {
   if(iv.type==='cash') return [];
@@ -1294,11 +1509,7 @@ function gotoNextFrom(page) {
   }
 }
 function gotoNextFromPerformanceCheck() {
-  if (hasRecommendedInsightsCandidates()) {
-    showPage('recommended');
-  } else {
-    showPage('summary');
-  }
+  showPage('goals');
 }
 function gotoRetirementFromSummary() {
   showPage('retirement');
@@ -1350,6 +1561,7 @@ function showPage(name) {
     if(b.getAttribute('onclick')==="showPage('"+name+"')") b.classList.add('on');
   });
   if(name==='summary') renderSummary();
+  if(name==='goals') renderGoalsSection();
   if(name==='superannuation') renderSuperFields();
   if(name==='projection') renderProjectionPage();
   if(name==='recommended') renderRecommendedInsightsPage();
@@ -1377,15 +1589,53 @@ function toggleSidebar() {
 }
 document.getElementById('ov').addEventListener('click', toggleSidebar);
 
+function updateInsuranceWarning() {
+  var warnEl = document.getElementById('insuranceWarning');
+  if(!warnEl) return;
+  var hasPrivate = ST.profile.hasPrivateMedicalInsurance === true;
+  var hasLife = ST.profile.hasLifeInsurance === true;
+  var missing = [];
+  if(!hasPrivate) missing.push('private health insurance');
+  if(!hasLife) missing.push('life insurance');
+  if(!missing.length){ warnEl.style.display='none'; return; }
+  var message = 'Consider reviewing ' + missing.join(' and ') + ' because unexpected healthcare or family costs can materially reduce your final retirement value and increase the pressure on your savings.';
+  warnEl.innerHTML = '<strong>Planning note:</strong> ' + message;
+  warnEl.style.display='block';
+}
+function renderChildAgeFields() {
+  var countEl = document.getElementById('pChildrenCount');
+  var container = document.getElementById('pChildAgeFields');
+  if(!container || !countEl) return;
+  var count = Math.max(0, Number(countEl.value) || Number(ST.profile.childrenCount) || 0);
+  ST.profile.childrenCount = count;
+  if(count <= 0){ container.innerHTML=''; container.style.display='none'; return; }
+  container.style.display='block';
+  var ages = Array.isArray(ST.profile.childrenAges) ? ST.profile.childrenAges : [];
+  var html = '<div class="fgrid">';
+  for(var i=0;i<count;i++){
+    var ageValue = ages[i] != null ? ages[i] : '';
+    html += '<div class="field"><span>Child '+(i+1)+' age</span><input type="number" min="0" max="25" step="1" name="childAge'+i+'" value="'+ageValue+'" oninput="saveProfile()" onchange="saveProfile()"></div>';
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
 function hydrateProfileFields() {
   var nameEl = document.getElementById('pName');
   var ageEl = document.getElementById('pAge');
   var retireEl = document.getElementById('pRetireAge');
   var lifestyleEl = document.getElementById('pLifestyle');
+  var countEl = document.getElementById('pChildrenCount');
+  var privateEl = document.getElementById('pPrivateMedicalInsurance');
+  var lifeEl = document.getElementById('pLifeInsurance');
   if(nameEl) nameEl.value = ST.profile.name||'';
   if(ageEl) ageEl.value = ST.profile.age||'';
   if(retireEl) retireEl.value = ST.profile.retireAge || 67;
   if(lifestyleEl) lifestyleEl.value = ST.profile.lifestyle || 'Comfortable';
+  if(countEl) countEl.value = ST.profile.childrenCount || 0;
+  if(privateEl) privateEl.checked = ST.profile.hasPrivateMedicalInsurance === true;
+  if(lifeEl) lifeEl.checked = ST.profile.hasLifeInsurance === true;
+  renderChildAgeFields();
+  updateInsuranceWarning();
 }
 hydrateProfileFields();
 function saveProfile() {
@@ -1393,15 +1643,27 @@ function saveProfile() {
   var ageEl = document.getElementById('pAge');
   var retireEl = document.getElementById('pRetireAge');
   var lifestyleEl = document.getElementById('pLifestyle');
+  var countEl = document.getElementById('pChildrenCount');
+  var privateEl = document.getElementById('pPrivateMedicalInsurance');
+  var lifeEl = document.getElementById('pLifeInsurance');
   if(nameEl) ST.profile.name = nameEl.value;
   if(ageEl) ST.profile.age = ageEl.value;
   if(retireEl) ST.profile.retireAge = retireEl.value;
   if(lifestyleEl) ST.profile.lifestyle = lifestyleEl.value || 'Comfortable';
+  ST.profile.childrenCount = Number(countEl && countEl.value ? countEl.value : ST.profile.childrenCount || 0);
+  ST.profile.childrenAges = [];
+  document.querySelectorAll('#pChildAgeFields input[name^="childAge"]').forEach(function(el){
+    var v = el.value;
+    if(v !== '') ST.profile.childrenAges.push(v);
+  });
+  if(privateEl) ST.profile.hasPrivateMedicalInsurance = privateEl.checked;
+  if(lifeEl) ST.profile.hasLifeInsurance = lifeEl.checked;
   if(!ST.profile.targetType || ST.profile.targetType === 'Balanced') {
     ST.profile.targetType = getSuggestedRiskProfile(ST.profile.age, ST.profile.lifestyle);
   }
   persist();
   renderHomeStats();
+  updateInsuranceWarning();
 }
 function selectHomeMode(mode) {
   var panel=document.getElementById('homeModePanel');
@@ -1414,7 +1676,7 @@ function selectHomeMode(mode) {
   if(mode==='existing'){
     panel.innerHTML = '<div class="home-mode-card"><span class="eyebrow">Resume</span><h3>Import your saved file</h3><p class="note mt8">Upload a previously exported JSON file to continue editing your investment and income details.</p><label class="btn bp mt8" style="cursor:pointer;width:max-content">⬆ Import JSON<input type="file" id="importFileHome" accept=".json" style="display:none" onchange="doImport(event)"></label></div>';
   } else if(mode==='new'){
-    panel.innerHTML = '<div class="home-mode-card"><span class="eyebrow">Profile</span><h3>Investor basics</h3><div class="fgrid mt12"><div class="field"><span>Full name</span><input id="pName" type="text" placeholder="e.g. Alex Smith" oninput="saveProfile()"></div><div class="field"><span>Age</span><input id="pAge" type="number" min="1" max="100" placeholder="e.g. 35" oninput="saveProfile()"></div><div class="field"><span>Planned Retirement Age</span><input id="pRetireAge" type="number" min="1" max="100" placeholder="e.g. 67" oninput="saveProfile()"></div><div class="field"><span>Retirement lifestyle <span title="What Each Category Means\n1. Basic Lifestyle\nCovers essentials only\nHeavy reliance on the Age Pension\nNo travel, no dining out, no new car\nVery limited discretionary spending\n\n2. Modest Lifestyle\nSlightly better than basic\nOccasional meals out\nLimited domestic travel\nOlder car, minimal upgrades\nStill relies partly on Age Pension\n\n3. Comfortable Lifestyle (ASFA’s main benchmark)\nRegular dining out\nDomestic + some international travel\nPrivate health insurance\nNew car every 5–7 years\nGood technology, hobbies, entertainment\n\n4. Luxury Lifestyle (above ASFA Comfortable)\nMultiple international trips\nPremium dining, entertainment\nHigh-end car every 5 years\nNo financial stress\nAbility to help children, donate, upgrade home">ⓘ</span></span><select id="pLifestyle" onchange="saveProfile()"><option value="Basic">Basic</option><option value="Modest">Modest</option><option value="Comfortable">Comfortable</option><option value="Luxury">Luxury</option></select></div></div><p class="note mt12">Age and lifestyle are used to shape the recommended allocation shown in Summary.</p><div class="brow mt16"><button id="homeTrackBtn" class="btn bp" onclick="trackInvestments()">Track Investments</button></div></div>';
+    panel.innerHTML = '<div class="home-mode-card"><span class="eyebrow">Profile</span><h3>Investor basics</h3><div class="fgrid mt12"><div class="field"><span>Full name</span><input id="pName" type="text" placeholder="e.g. Alex Smith" oninput="saveProfile()"></div><div class="field"><span>Age</span><input id="pAge" type="number" min="1" max="100" placeholder="e.g. 35" oninput="saveProfile()"></div><div class="field"><span>Planned Retirement Age</span><input id="pRetireAge" type="number" min="1" max="100" placeholder="e.g. 67" oninput="saveProfile()"></div><div class="field"><span>Retirement lifestyle <span title="What Each Category Means\n1. Basic Lifestyle\nCovers essentials only\nHeavy reliance on the Age Pension\nNo travel, no dining out, no new car\nVery limited discretionary spending\n\n2. Modest Lifestyle\nSlightly better than basic\nOccasional meals out\nLimited domestic travel\nOlder car, minimal upgrades\nStill relies partly on Age Pension\n\n3. Comfortable Lifestyle (ASFA’s main benchmark)\nRegular dining out\nDomestic + some international travel\nPrivate health insurance\nNew car every 5–7 years\nGood technology, hobbies, entertainment\n\n4. Luxury Lifestyle (above ASFA Comfortable)\nMultiple international trips\nPremium dining, entertainment\nHigh-end car every 5 years\nNo financial stress\nAbility to help children, donate, upgrade home">ⓘ</span></span><select id="pLifestyle" onchange="saveProfile()"><option value="Basic">Basic</option><option value="Modest">Modest</option><option value="Comfortable">Comfortable</option><option value="Luxury">Luxury</option></select></div></div><div class="fgrid mt12"><div class="field"><span>Number of children</span><select id="pChildrenCount" onchange="saveProfile(); renderChildAgeFields()"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="field"><span>Private medical insurance</span><label class="note mt8" style="display:flex;align-items:center;gap:8px"><input id="pPrivateMedicalInsurance" type="checkbox" onchange="saveProfile()"> Yes, I have it</label></div><div class="field"><span>Life insurance</span><label class="note mt8" style="display:flex;align-items:center;gap:8px"><input id="pLifeInsurance" type="checkbox" onchange="saveProfile()"> Yes, I have it</label></div></div><div id="pChildAgeFields" class="mt12"></div><div id="insuranceWarning" class="note mt12" style="display:none"></div><p class="note mt12">Age and lifestyle are used to shape the recommended allocation shown in Summary.</p><div class="brow mt16"><button id="homeTrackBtn" class="btn bp" onclick="trackInvestments()">Track Investments</button></div></div>';
     hydrateProfileFields();
   } else {
     panel.innerHTML = '<div class="home-mode-card"><span class="eyebrow">Start</span><h3>Select a path</h3><p class="note mt8">Choose New User to create a fresh profile or Existing User to import a saved JSON file.</p></div>';
@@ -1443,6 +1705,1005 @@ function renderHomeStats(){
   renderNavButtons();
 }
 function totalAnnualIncomeDisplay(){ return totalIncome(); }
+
+function getGoalFutureCost(goal) {
+  var currentCost = Number(goal.currentCost)||0;
+  var inflationRate = Number(goal.inflationRate)||0;
+  var years = Math.max(0, Number(goal.yearsUntilEvent)||0);
+  var recurringCost = Number(goal.recurringCost)||0;
+  var baseFutureCost = currentCost * Math.pow(1 + inflationRate/100, years);
+  if(!recurringCost) return baseFutureCost;
+  var annuityFactor = years > 0 ? ((Math.pow(1 + inflationRate/100, years) - 1) / (inflationRate/100 || 1)) : years;
+  return baseFutureCost + recurringCost * annuityFactor;
+}
+function getGoalFundingSnapshot(goal, annualSavingsCapacity, totalGoalCost) {
+  var futureCost = getGoalFutureCost(goal);
+  var years = Math.max(0, Number(goal.yearsUntilEvent)||0);
+  var normalizedGoalCost = Math.max(1, totalGoalCost || 1);
+  var goalShare = totalGoalCost > 0 ? futureCost / normalizedGoalCost : 1 / Math.max(1, (Array.isArray(ST.goals) ? ST.goals.filter(Boolean).length : 1));
+  var baseAnnualGoalBudget = Math.max(0, annualSavingsCapacity * goalShare);
+  var urgencyMultiplier = years <= 3 ? 1.2 : (years <= 7 ? 1.05 : 0.9);
+  var bucketAnnualBudget = Math.max(0, baseAnnualGoalBudget * urgencyMultiplier);
+  var projectedFundingByDeadline = Math.min(futureCost, Math.max(0, bucketAnnualBudget * Math.max(1, years)));
+  var remainingGap = Math.max(0, futureCost - projectedFundingByDeadline);
+  var monthlyGap = years > 0 ? remainingGap / (years * 12) : remainingGap;
+  var progressPct = futureCost > 0 ? Math.max(0, Math.min(100, Math.round((projectedFundingByDeadline / futureCost) * 100))) : 0;
+  var statusLabel = progressPct >= 80 ? 'On track' : (progressPct >= 50 ? 'Needs a push' : 'Needs more');
+  var statusClass = progressPct >= 80 ? 'success' : (progressPct >= 50 ? 'warn' : 'danger');
+  var viabilityLabel = remainingGap <= 0 ? 'Achievable' : (monthlyGap <= Math.max(0, annualSavingsCapacity / 12) ? 'Needs changes' : 'Not achievable');
+  var viabilityClass = remainingGap <= 0 ? 'success' : (monthlyGap <= Math.max(0, annualSavingsCapacity / 12) ? 'warn' : 'danger');
+  var viabilityDescription = remainingGap <= 0
+    ? 'The current plan can cover this goal by the preferred retirement age.'
+    : (monthlyGap <= Math.max(0, annualSavingsCapacity / 12)
+      ? 'Close, but it needs a higher savings contribution or a better investment return.'
+      : 'Even with current investment changes, this goal cannot be reached on time.');
+  return {
+    futureCost: futureCost,
+    years: years,
+    annualSavingsCapacity: annualSavingsCapacity,
+    goalShare: goalShare,
+    bucketAnnualBudget: bucketAnnualBudget,
+    projectedFundingByDeadline: projectedFundingByDeadline,
+    remainingGap: remainingGap,
+    monthlyGap: monthlyGap,
+    progressPct: progressPct,
+    statusLabel: statusLabel,
+    statusClass: statusClass,
+    viabilityLabel: viabilityLabel,
+    viabilityClass: viabilityClass,
+    viabilityDescription: viabilityDescription
+  };
+}
+function getGoalRecordFingerprint(goal) {
+  var name = String(goal && goal.name || 'Custom goal');
+  var currentCost = Number(goal && goal.currentCost || 0);
+  var inflationRate = Number(goal && goal.inflationRate || 0);
+  var yearsUntilEvent = Number(goal && goal.yearsUntilEvent || 0);
+  var recurringCost = Number(goal && goal.recurringCost || 0);
+  var householdType = String(goal && goal.householdType || 'single');
+  var bankBalance = Number(goal && goal.bankBalance || 0);
+  var estimatedAgePension = Number(goal && goal.estimatedAgePension || 0);
+  var annualDrawdown = Number(goal && goal.annualDrawdown || 0);
+  var projectedSuperAt67 = Number(goal && goal.projectedSuperAt67 || 0);
+  return [name, currentCost, inflationRate, yearsUntilEvent, recurringCost, householdType, bankBalance, estimatedAgePension, annualDrawdown, projectedSuperAt67].join('|');
+}
+function getGoalContributionGuidance(goal) {
+  var futureCost = getGoalFutureCost(goal);
+  var years = Math.max(0, Number(goal.yearsUntilEvent)||0);
+  var annualSavings = Math.max(0, totalIncome() - totalOutflow()) * 0.25;
+  var annualContribution = years > 0 ? Math.max(0, futureCost / Math.max(1, years)) : futureCost;
+  var monthlyContribution = annualContribution / 12;
+  var monthlySavingsCapacity = Math.max(0, annualSavings / 12);
+  var ratio = monthlyContribution > 0 ? Math.min(100, Math.round((monthlySavingsCapacity / Math.max(1, monthlyContribution)) * 100)) : 0;
+  var age = Number(ST.profile.age)||40;
+  var retireAge = Number(ST.profile.retireAge)||67;
+  var yearsToRetire = Math.max(0, retireAge - age);
+  var annualContributionByRetirement = yearsToRetire > 0 ? Math.max(0, futureCost / Math.max(1, yearsToRetire)) : futureCost;
+  var monthlyContributionByRetirement = annualContributionByRetirement / 12;
+  var feasibleByRetirement = yearsToRetire > 0 ? monthlyContributionByRetirement <= Math.max(0, annualSavings / 12) : monthlyContribution <= Math.max(0, annualSavings / 12);
+  var feasibilityText = feasibleByRetirement
+    ? 'Likely feasible by your planned retirement age and the goal deadline.'
+    : 'Would require a higher contribution rate than your current savings capacity before the goal deadline and planned retirement age.';
+  return {
+    futureCost: futureCost,
+    annualContribution: annualContribution,
+    monthlyContribution: monthlyContribution,
+    monthlySavingsCapacity: monthlySavingsCapacity,
+    targetSavings: annualSavings,
+    ratio: ratio,
+    years: years,
+    yearsToRetire: yearsToRetire,
+    annualContributionByRetirement: annualContributionByRetirement,
+    monthlyContributionByRetirement: monthlyContributionByRetirement,
+    feasibleByRetirement: feasibleByRetirement,
+    feasibilityText: feasibilityText
+  };
+}
+function getGoalPlanningSnapshot() {
+  var goals = Array.isArray(ST.goals) ? ST.goals : [];
+  var age = Number(ST.profile.age)||40;
+  var retireAge = Number(ST.profile.retireAge)||67;
+  var yearsToRetire = Math.max(0, retireAge - age);
+  var lifestyle = ST.profile.lifestyle || 'Comfortable';
+  var preferred = getPreferredPortfolioType();
+  var rate = safeProjectionRate(preferred);
+  var startBalance = totalPf() + (ST.super && ST.super.enabled && ST.super.type !== 'smsf' ? getSuperBalance() : 0);
+  var annualSavings = Math.max(0, totalIncome() - totalOutflow()) * 0.25;
+  var monthlySavings = annualSavings / 12;
+  var superContrib = getSuperAnnualContrib();
+  var currentProjection = projectWealth(startBalance, annualSavings, superContrib, yearsToRetire, rate);
+  var totalGoalCost = goals.reduce(function(sum, goal){ return sum + getGoalFutureCost(goal); }, 0);
+  var retirementTarget = getRetirementBenchmark(lifestyle) * 20;
+  var combinedTarget = retirementTarget + totalGoalCost;
+  var gap = Math.max(0, combinedTarget - currentProjection);
+  var monthlyGap = gap / Math.max(1, yearsToRetire * 12);
+  var improvedProjection = projectWealth(startBalance, annualSavings + (monthlyGap * 12), superContrib, yearsToRetire, Math.min(0.09, rate + 0.01));
+  var superBoostProjection = projectWealth(startBalance, annualSavings + (Math.max(0, Math.min(annualSavings * 0.15, monthlyGap * 12)) || 0), superContrib + Math.max(0, Math.min(10000, retirementTarget * 0.01 / Math.max(1, yearsToRetire))), yearsToRetire, rate);
+  var rebalanceProjection = projectWealth(startBalance, annualSavings, superContrib, yearsToRetire, Math.min(0.09, rate + 0.02));
+  var expenseTrimProjection = projectWealth(startBalance, annualSavings + Math.max(0, Math.min(annualSavings * 0.1, monthlyGap * 6)), superContrib, yearsToRetire, rate);
+  return {
+    startBalance: startBalance,
+    annualSavings: annualSavings,
+    monthlySavings: monthlySavings,
+    yearsToRetire: yearsToRetire,
+    preferred: preferred,
+    retirementTarget: retirementTarget,
+    totalGoalCost: totalGoalCost,
+    combinedTarget: combinedTarget,
+    currentProjection: currentProjection,
+    gap: gap,
+    monthlyGap: monthlyGap,
+    improvedProjection: improvedProjection,
+    superBoostProjection: superBoostProjection,
+    rebalanceProjection: rebalanceProjection,
+    expenseTrimProjection: expenseTrimProjection,
+    portfolioValue: totalPf()
+  };
+}
+function annualizedExpenseValue(exp) {
+  if(!exp) return 0;
+  var amount = Number(exp.amount)||0;
+  var freq = exp.freq || 'monthly';
+  if(freq === 'annual') return amount;
+  if(freq === 'monthly') return amount * 12;
+  if(freq === 'quarterly') return amount * 4;
+  if(freq === 'fortnightly') return amount * 26;
+  if(freq === 'weekly') return amount * 52;
+  return amount;
+}
+function getActualPlanAssets() {
+  var list = [];
+  if(Array.isArray(ST.investments)) list = list.concat(ST.investments.filter(Boolean));
+  if(ST.super && ST.super.enabled && ST.super.type === 'smsf' && Array.isArray(ST.super.smsfAssets)) {
+    list = list.concat((ST.super.smsfAssets || []).filter(Boolean));
+  }
+  return list.map(function(iv){
+    var value = invValue(iv);
+    var irr = getIRR(iv);
+    return {iv: iv, value: value, irr: irr, benchmark: getBenchmarkIRR(iv && iv.type)};
+  });
+}
+function getTopExpense() {
+  var expenses = Array.isArray(ST.expenses) ? ST.expenses.filter(Boolean) : [];
+  return expenses.map(function(ex){ return {ex: ex, annual: annualizedExpenseValue(ex)}; }).sort(function(a,b){ return b.annual - a.annual; })[0] || null;
+}
+function buildGoalPlanningInsights() {
+  var snapshot = getGoalPlanningSnapshot();
+  var goals = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+  var firstGoal = goals[0] || null;
+  var goalName = firstGoal && firstGoal.name ? firstGoal.name : 'your next goal';
+  var insights = [];
+  var assets = getActualPlanAssets();
+  var expenseCandidates = Array.isArray(ST.expenses) ? ST.expenses.filter(Boolean).map(function(expense){
+    return { ex: expense, annual: annualizedExpenseValue(expense) };
+  }).sort(function(a, b){ return b.annual - a.annual; }).slice(0, 3) : [];
+
+  expenseCandidates.forEach(function(candidate){
+    if(!candidate || !candidate.ex || candidate.annual <= 0) return;
+    var expenseName = candidate.ex.name || 'this recurring expense';
+    var expenseLower = String(expenseName).toLowerCase();
+    var isProtectedExpense = expenseLower.indexOf('loan') >= 0 || expenseLower.indexOf('rates') >= 0 || expenseLower.indexOf('water') >= 0 || expenseLower.indexOf('health') >= 0 || expenseLower.indexOf('insurance') >= 0;
+    if(isProtectedExpense) return;
+    var annualCost = candidate.annual;
+    var monthlyCost = annualCost / 12;
+    var redirectAmount = annualCost * 0.1;
+    var monthlyRedirect = redirectAmount / 12;
+    insights.push({
+      title: 'Reduce ' + expenseName + ' by 10%',
+      text: 'Your current plan spends about <strong>' + money(annualCost) + '</strong> a year on ' + expenseName + '. If you cap it by 10%, you free about <strong>' + money(redirectAmount) + '</strong> a year, or about <strong>' + money(monthlyRedirect) + '</strong> a month to support ' + goalName + '.',
+      action: 'Lower the billed amount or pause one discretionary cycle, then move the freed cash into a dedicated ' + goalName + ' bucket each month.'
+    });
+  });
+
+  var cashAsset = assets.find(function(item){ return item && item.iv && item.iv.type === 'cash'; });
+  if(cashAsset && cashAsset.value > 0){
+    var redirect = Math.min(cashAsset.value * 0.15, Math.max(10000, snapshot.monthlyGap * 12));
+    insights.push({
+      title: 'Move part of ' + (cashAsset.iv.name || 'cash') + ' into a growth sleeve',
+      text: 'Instead of leaving <strong>' + money(cashAsset.value) + '</strong> sitting in ' + (cashAsset.iv.name || 'cash') + ', take about <strong>' + money(redirect) + '</strong> and move it into a growth investment such as shares, ETF, or your next strongest growth holding.',
+      action: 'Open a separate investment bucket for ' + goalName + ', transfer the money there on payday, and keep it separate from everyday spending so it is not spent again.'
+    });
+  }
+
+  var weakAsset = assets.filter(function(item){ return item && item.irr != null && isFinite(item.irr) && item.benchmark != null && item.irr < item.benchmark; }).sort(function(a,b){ return a.irr - b.irr; })[0];
+  if(weakAsset){
+    var replacementTarget = weakAsset.iv.type === 'property' ? 'a broad ETF sleeve' : 'a broader shares/ETF sleeve';
+    insights.push({
+      title: 'Replace ' + (weakAsset.iv.name || 'this holding') + ' with a stronger-producing sleeve',
+      text: 'Instead of holding ' + (weakAsset.iv.name || 'this investment') + ' at <strong>' + pct(weakAsset.irr) + '</strong> while the benchmark is <strong>' + pct(weakAsset.benchmark) + '</strong>, try trimming around 10% of that holding and redirecting it into ' + replacementTarget + '.',
+      action: 'Sell or reduce that holding gradually, then buy the replacement sleeve in small chunks over the next few months so you do not make one big market timing decision.'
+    });
+  }
+
+  var propertySaleScenarios = getPropertySaleScenarioList();
+  propertySaleScenarios.forEach(function(propertySaleScenario){
+    if(propertySaleScenario.netSaleProceeds <= 0 && propertySaleScenario.annualHoldingCostSavings <= 0) return;
+    insights.push({
+      title: 'Use the sale proceeds from ' + propertySaleScenario.name + ' to support your goals',
+      text: 'If ' + propertySaleScenario.name + ' sells in about <strong>' + propertySaleScenario.saleInMonths + '</strong> months, it could free up about <strong>' + money(propertySaleScenario.netSaleProceeds) + '</strong> in net sale proceeds after paying off the remaining loan balance. This sale would also remove about <strong>' + money(propertySaleScenario.annualHoldingCostSavings) + '</strong> a year of holding costs, which is roughly <strong>' + money(propertySaleScenario.monthlySavingsReclaimed) + '</strong> a month that can be redirected into ' + goalName + ' rather than being absorbed by the property.',
+      action: 'Treat that sale as a dedicated cash injection for ' + goalName + '. Set the first tranche aside in a separate goal bucket, then redirect the monthly holding-cost savings into the next priority goal once the property settles.'
+    });
+  });
+
+  var superAnnual = 0;
+  if(ST.super && ST.super.enabled){
+    if(ST.super.type === 'smsf') {
+      superAnnual = (Number(ST.super.smsfContrib)||0) + (Number(ST.super.smsfSpouseContrib)||0);
+    } else {
+      superAnnual = (Number(ST.super.contrib)||0) + (Number(ST.super.spouseContrib)||0);
+    }
+  }
+  if(ST.super && ST.super.enabled && superAnnual > 0){
+    var superStep = Math.min(6000, Math.max(1000, snapshot.monthlyGap * 12 / 2));
+    insights.push({
+      title: 'Increase super rather than leaving the extra cash idle',
+      text: 'Instead of keeping your current super contribution level at <strong>' + money(superAnnual) + '</strong> per year, try increasing it by about <strong>' + money(superStep) + '</strong> annually and use the extra cash from your surplus to support retirement and goals at the same time.',
+      action: 'Increase the contribution amount in the current super settings, keep the extra contribution recurring, and let the contribution run automatically each pay cycle.'
+    });
+  }
+
+  var incomeStream = Array.isArray(ST.income) ? ST.income.find(function(item){ return item && (item.name||'').toLowerCase().indexOf('salary') >= 0; }) : null;
+  if(incomeStream && snapshot.monthlyGap > 0){
+    var incomeRedirect = Math.min(snapshot.monthlyGap * 12, Math.max(1000, totalIncome() * 0.02));
+    insights.push({
+      title: 'Route part of ' + (incomeStream.name || 'salary income') + ' into a goal sinking fund',
+      text: 'Instead of leaving the full ' + (incomeStream.name || 'salary income') + ' surplus untouched, try sending about <strong>' + money(incomeRedirect) + '</strong> a year straight into a dedicated goal account each payday.',
+      action: 'Set an automatic transfer for a fixed amount from pay day to the goal bucket so the money is removed from spending before it can be used elsewhere.'
+    });
+  }
+
+  if(firstGoal){
+    insights.push({
+      title: 'Fund the nearest deadline first',
+      text: 'Your earliest goal is <strong>' + firstGoal.name + '</strong> and it is due in about <strong>' + (firstGoal.yearsUntilEvent || 0) + '</strong> years. Instead of spreading your money evenly across every goal, send the first transfers to this one until the bucket is funded and only then move to the next goal.',
+      action: 'Earmark the next 3–6 months of extra cash for this goal, then review whether the contribution size still fits your retirement plan.'
+    });
+  }
+
+  if(insights.length < 5){
+    insights.push({
+      title: 'Review one big recurring expense and cut it in stages',
+      text: 'If the plan is still tight, lower one of your biggest recurring outflows by 5–10% rather than trying to change every budget line at once.',
+      action: 'Pick one expense, reduce it by a small fixed percentage, and redirect that amount into the same goal-investment bucket each month.'
+    });
+  }
+
+  return insights;
+}
+function getGoalRetirementReadinessSummary() {
+  var snapshot = getGoalPlanningSnapshot();
+  var currentAge = Number(ST.profile.age)||40;
+  var selectedRetireAge = Number(ST.profile.retireAge)||67;
+  var yearsToRetire = Math.max(0, selectedRetireAge - currentAge);
+  var annualSavings = Math.max(0, snapshot.annualSavings);
+  var superContrib = getSuperAnnualContrib();
+  var rate = safeProjectionRate(getPreferredPortfolioType());
+  var projectedWealth = projectWealth(snapshot.startBalance, annualSavings, superContrib, yearsToRetire, rate);
+  var goals = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+  var annualSavingsCapacity = Math.max(0, annualSavings);
+  var goalSnapshots = goals.map(function(goal){
+    var probeSnapshot = getGoalFundingSnapshot(goal, annualSavingsCapacity, snapshot.totalGoalCost);
+    probeSnapshot.name = goal.name || 'this goal';
+    return probeSnapshot;
+  });
+  var allGoalsAchievable = goalSnapshots.length > 0 ? goalSnapshots.every(function(goalSnapshot){ return goalSnapshot.remainingGap <= 0; }) : true;
+  var hasAnyUnachievableGoal = goalSnapshots.some(function(goalSnapshot){ return goalSnapshot.viabilityClass === 'danger'; });
+  var hasAnyNeedsChangesGoal = goalSnapshots.some(function(goalSnapshot){ return goalSnapshot.viabilityClass === 'warn'; });
+  var canReachBySelectedAge = projectedWealth >= snapshot.combinedTarget && allGoalsAchievable;
+  var realisticAge = null;
+  var searchLimit = 90;
+  var trialTarget = null;
+  for(var age = selectedRetireAge; age <= searchLimit; age++){
+    var ageOffset = Math.max(0, age - currentAge);
+    var ageGoals = goals.map(function(goal){
+      var ageGoal = Object.assign({}, goal);
+      ageGoal.yearsUntilEvent = Math.max(1, Math.max(0, Number(goal.yearsUntilEvent)||0) - ageOffset);
+      return ageGoal;
+    });
+    var ageTotalGoalCost = ageGoals.reduce(function(sum, goal){ return sum + getGoalFutureCost(goal); }, 0);
+    var ageTarget = getRetirementBenchmark(ST.profile.lifestyle || 'Comfortable') * 20 + ageTotalGoalCost;
+    var trialProjection = projectWealth(snapshot.startBalance, annualSavings, superContrib, ageOffset, rate);
+    if(trialProjection >= ageTarget) {
+      var ageGoalSnapshots = ageGoals.map(function(goal){ return getGoalFundingSnapshot(goal, annualSavingsCapacity, ageTotalGoalCost); });
+      var ageAllGoalsAchievable = ageGoalSnapshots.length > 0 ? ageGoalSnapshots.every(function(goalSnapshot){ return goalSnapshot.remainingGap <= 0; }) : true;
+      if(ageAllGoalsAchievable) {
+        realisticAge = age;
+        trialTarget = ageTarget;
+        break;
+      }
+    }
+  }
+  if(canReachBySelectedAge && realisticAge === null) {
+    realisticAge = selectedRetireAge;
+  }
+  var blockerSummary = goalSnapshots.filter(function(goalSnapshot){ return goalSnapshot.remainingGap > 0; }).map(function(goalSnapshot){
+    var goalName = goalSnapshot && goalSnapshot.name ? goalSnapshot.name : 'this goal';
+    return goalName + ' still needs about ' + money(goalSnapshot.remainingGap) + ' and about ' + money(goalSnapshot.monthlyGap) + ' per month more.';
+  }).join(' ');
+  var shortfall = Math.max(0, snapshot.combinedTarget - projectedWealth);
+  var text = canReachBySelectedAge
+    ? 'Yes. Based on your current savings and investment assumptions, this plan can reach your goals and still support the retirement benchmark by age ' + selectedRetireAge + '. If you want more margin for market swings or lifestyle changes, a more realistic retirement age may be later than ' + selectedRetireAge + '.'
+    : (realisticAge
+      ? 'No. The plan is not on track by your selected retirement age of ' + selectedRetireAge + ', but the first age where the full goal stack becomes reachable is about <strong>' + realisticAge + '</strong>. This is the more realistic retirement age under your current savings and investment assumptions.'
+      : 'No. The current plan is not on track to retire at age ' + selectedRetireAge + '. ' + blockerSummary + ' In plain terms, the plan still needs more savings, lower spending, a better return profile, or retirement later than your current target.');
+  var status = canReachBySelectedAge ? 'success' : (hasAnyUnachievableGoal ? 'danger' : (hasAnyNeedsChangesGoal ? 'warn' : 'danger'));
+  var headline = status === 'success'
+    ? 'Green — You can likely reach all goals and still sustain a comfortable retirement.'
+    : (status === 'warn'
+      ? 'Yellow — The plan is close, but at least one goal still needs more savings or a better investment return before retirement.'
+      : 'Red — The current setup is not yet feasible to retire at age ' + selectedRetireAge + '. The plan is still short of the goals and the retirement benchmark unless you save more or retire later.');
+  var realisticAgeText = realisticAge
+    ? (realisticAge === selectedRetireAge
+      ? 'The current assumptions suggest your selected retirement age of about ' + selectedRetireAge + ' is still a realistic target for this plan. This is a projection, not a promise, and the result should still be tested against debt, cash flow, and lifestyle changes.'
+      : 'The current assumptions suggest a more realistic retirement age of about ' + realisticAge + '. This is a projection, not a promise, and the result should still be tested against debt, cash flow, and lifestyle changes.')
+    : 'The current assumptions do not produce a fully feasible retirement age in this model. A more realistic retirement age is later than your selected target. ' + blockerSummary + ' In plain terms, the plan still needs more savings, lower spending, a better return profile, or retirement later than your current target. This is a projection, not a promise, and the result should still be tested against debt, cash flow, and lifestyle changes.';
+  return {
+    text: text,
+    canReach: canReachBySelectedAge,
+    realisticAge: realisticAge,
+    status: status,
+    headline: headline,
+    realisticAgeText: realisticAgeText
+  };
+}
+function calculateGoalImpact(profileType, yearsToRetire) {
+  var years = Math.max(0, Number(yearsToRetire)||0);
+  var rate = safeProjectionRate(profileType || getPreferredPortfolioType());
+  var startBalance = totalPf() + (ST.super && ST.super.enabled && ST.super.type !== 'smsf' ? getSuperBalance() : 0);
+  var annualSavings = Math.max(0, totalIncome() - totalOutflow()) * 0.25;
+  var superContrib = getSuperAnnualContrib();
+  var projection = projectWealth(startBalance, annualSavings, superContrib, years, rate);
+  var goals = Array.isArray(ST.goals) ? ST.goals : [];
+  var totalGoalCost = goals.reduce(function(sum, goal){ return sum + getGoalFutureCost(goal); }, 0);
+  return {projectedWealth: projection, totalGoalCost: totalGoalCost, netWealth: Math.max(0, projection - totalGoalCost)};
+}
+function normalizeGoalName(name) {
+  var normalized = String(name || '').trim();
+  if(normalized === 'Higher Education') return 'Children\'s education';
+  if(normalized === 'Child\'s marriage') return 'Wedding';
+  return normalized;
+}
+function getGoalTemplateOptions() {
+  var childrenCount = Number((ST.profile && ST.profile.childrenCount) || 0);
+  var retirementAge = Number((ST.profile && ST.profile.retireAge) || 67);
+  var options = [
+    {value:'Home purchase', label:'Home purchase'},
+    {value:'Vehicle purchase', label:'Vehicle purchase'},
+    {value:'Emergency fund', label:'Emergency fund'},
+    {value:'Retirement funding', label:'Retirement funding'},
+    {value:'New Business', label:'New Business'},
+    {value:'Vacation Planning', label:'Vacation Planning'},
+    {value:'Medical / dental / private health costs', label:'Medical / dental / private health costs'},
+    {value:'Home renovation / investment property', label:'Home renovation / investment property'},
+    {value:'Custom goal', label:'Custom goal'}
+  ];
+  if(childrenCount > 0) {
+    options.unshift({value:'Children\'s education', label:'Children\'s education (recommended)'});
+    options.push({value:'Higher Education', label:'Higher Education'});
+    options.push({value:'Child\'s marriage', label:'Child\'s marriage'});
+    options.push({value:'Wedding', label:'Wedding'});
+  }
+  if(retirementAge < 60) {
+    options.unshift({value:'Early retirement', label:'Early retirement (recommended)'});
+  }
+  return options;
+}
+function getChildAgeSummary() {
+  var childrenAges = Array.isArray(ST.profile && ST.profile.childrenAges) ? ST.profile.childrenAges : [];
+  var selectedCount = Math.max(0, Number(ST.profile && ST.profile.childrenCount) || 0);
+  var ages = [];
+  var limit = Math.max(selectedCount, childrenAges.length);
+  for(var i = 0; i < limit; i++) {
+    var age = Number(childrenAges[i]);
+    ages.push(isFinite(age) ? age : 0);
+  }
+  if(!ages.length) ages.push(0);
+  var averageAge = ages.reduce(function(sum, age){ return sum + age; }, 0) / ages.length;
+  return {ages: ages, averageAge: averageAge, count: Math.max(selectedCount, ages.length)};
+}
+function getCashInvestmentBalance() {
+  var cashAssets = Array.isArray(ST.investments) ? ST.investments.filter(function(iv){ return iv && iv.type === 'cash'; }) : [];
+  var total = cashAssets.reduce(function(sum, iv){ return sum + (Number(iv.cash) || 0); }, 0);
+  return Math.round(total);
+}
+function annualizeIncomeAmount(item) {
+  var amount = Number(item && item.amount) || 0;
+  if(!item || !isFinite(amount)) return 0;
+  var freq = item.freq || 'monthly';
+  if(freq === 'weekly') return amount * 52;
+  if(freq === 'fortnightly') return amount * 26;
+  if(freq === 'monthly') return amount * 12;
+  if(freq === 'annual') return amount;
+  return amount;
+}
+function applyInflationToValue(baseValue, yearsToTarget, annualInflationRate) {
+  var value = Math.round(Number(baseValue) || 0);
+  var years = Math.max(0, Number(yearsToTarget) || 0);
+  var rate = Math.max(0, Number(annualInflationRate) || 0) / 100;
+  if(!value || !isFinite(value)) return 0;
+  if(!years || !rate) return Math.round(value);
+  return Math.round(value * Math.pow(1 + rate, years));
+}
+function getEstimatedOtherIncomeAnnual(yearsToTarget, annualInflationRate) {
+  var total = 0;
+  var investments = Array.isArray(ST.investments) ? ST.investments : [];
+  investments.forEach(function(iv){
+    if(!iv) return;
+    var name = String(iv.name || '').toLowerCase();
+    if(iv.type === 'property' && Number(iv.monthlyRent) > 0) {
+      total += Number(iv.monthlyRent) * 12;
+    }
+    if((iv.type === 'shares' || iv.type === 'etf' || iv.type === 'crypto' || iv.type === 'gold' || iv.type === 'goldbonds' || iv.type === 'bonds') && Number(iv.annualDistributions) > 0) {
+      total += Number(iv.annualDistributions);
+    }
+    if(name.indexOf('rent') > -1 || name.indexOf('dividend') > -1 || name.indexOf('interest') > -1 || name.indexOf('distribution') > -1 || name.indexOf('yield') > -1) {
+      total += Number(iv.annualDistributions || iv.cash || 0);
+    }
+  });
+  if(Array.isArray(ST.income)) {
+    ST.income.forEach(function(item){
+      var name = String(item && item.name || '').toLowerCase();
+      if(name.indexOf('rent') > -1 || name.indexOf('dividend') > -1 || name.indexOf('interest') > -1 || name.indexOf('distribution') > -1 || name.indexOf('yield') > -1) {
+        total += annualizeIncomeAmount(item);
+      }
+    });
+  }
+  return applyInflationToValue(total, yearsToTarget, annualInflationRate);
+}
+function getEstimatedAgePensionAnnual(householdType, yearsToTarget, annualInflationRate) {
+  var normalized = (householdType || 'single').toString().toLowerCase();
+  var baseValue = normalized === 'couple' ? 1810.40 * 26 : 1200.90 * 26;
+  return applyInflationToValue(baseValue, yearsToTarget, annualInflationRate);
+}
+function getGoalHouseholdType() {
+  var selected = document.querySelector('input[name="goalHouseholdType"]:checked');
+  if(selected && selected.value) return selected.value;
+  return (ST.profile && ST.profile.householdType) || 'single';
+}
+function syncEarlyRetirementFieldsFromHousehold() {
+  var select = document.getElementById('goalTemplateSelect');
+  var name = select ? select.value : 'Custom goal';
+  if(name !== 'Early retirement') return;
+  var costEl = document.getElementById('goalCurrentCost');
+  var inflEl = document.getElementById('goalInflationRate');
+  var yearsEl = document.getElementById('goalYearsUntilEvent');
+  var agePensionEl = document.getElementById('goalEstimatedAgePension');
+  var annualDrawdownEl = document.getElementById('goalAnnualDrawdown');
+  var householdType = getGoalHouseholdType();
+  var inflationRateValue = Number(inflEl && inflEl.value ? inflEl.value : 4);
+  var projectedYears = Math.max(1, Number(ST.profile && ST.profile.retireAge || 67) - Number(ST.profile && ST.profile.age || 40));
+  if(agePensionEl) agePensionEl.value = getEstimatedAgePensionAnnual(householdType, projectedYears, inflationRateValue);
+  if(annualDrawdownEl) annualDrawdownEl.value = getEstimatedOtherIncomeAnnual(projectedYears, inflationRateValue);
+  if(costEl) {
+    var lifestyleValue = (ST.profile && ST.profile.lifestyle) || 'Comfortable';
+    var annualBenchmark = getRetirementBenchmark(lifestyleValue);
+    var coupleMultiplier = 1.45;
+    costEl.value = Math.round(annualBenchmark * (householdType === 'couple' ? coupleMultiplier : 1));
+  }
+  if(yearsEl) yearsEl.value = projectedYears;
+  if(ST.profile) ST.profile.householdType = householdType;
+}
+function getEarlyRetirementAssessment(goal) {
+  var currentAge = Number(ST.profile && ST.profile.age) || 40;
+  var retireAge = Number(ST.profile && ST.profile.retireAge) || 67;
+  var yearsToRetire = Math.max(0, retireAge - currentAge);
+  var yearsTo67 = Math.max(0, 67 - currentAge);
+  var householdType = goal && goal.householdType ? goal.householdType : getGoalHouseholdType();
+  var lifestyleValue = (ST.profile && ST.profile.lifestyle) || 'Comfortable';
+  var annualTarget = Number(goal && goal.currentCost) || Math.round(getRetirementBenchmark(lifestyleValue) * (householdType === 'couple' ? 1.45 : 1));
+  var bankBalance = Number((goal && goal.bankBalance != null) ? goal.bankBalance : ((goal && goal.currentBankBalance != null) ? goal.currentBankBalance : 0)) || 0;
+  var projectedSuperAt67 = Number((goal && goal.projectedSuperAt67 != null) ? goal.projectedSuperAt67 : 0) || 0;
+  var agePension = Number((goal && goal.estimatedAgePension != null) ? goal.estimatedAgePension : 0) || 0;
+  var annualDrawdown = Number((goal && goal.annualDrawdown != null) ? goal.annualDrawdown : 0) || 0;
+  var currentSuper = getSuperBalance();
+  var annualSuperContrib = getSuperAnnualContrib();
+  var rate = safeProjectionRate(getPreferredPortfolioType());
+  var projectedSuperAtRetire = Math.round(projectWealth(currentSuper, 0, annualSuperContrib, yearsToRetire, rate));
+  var projectedSuperAt67Fallback = Math.round(projectWealth(currentSuper, 0, annualSuperContrib, yearsTo67, rate));
+  var projectedAtRetire = projectedSuperAtRetire + bankBalance + (agePension * Math.max(0, retireAge - currentAge));
+  var projectedAt67 = (projectedSuperAt67 > 0 ? projectedSuperAt67 : projectedSuperAt67Fallback) + bankBalance + (agePension * Math.max(0, 67 - currentAge));
+  var spendTo67 = Math.max(0, annualTarget * Math.max(0, 67 - retireAge));
+  var yearsToLife = householdType === 'couple' ? 87 - 67 : 85 - 67;
+  var spendToLifeExpectancy = Math.max(0, annualTarget * Math.max(0, yearsToLife));
+  var canCoverTo67 = projectedAtRetire + annualDrawdown >= spendTo67;
+  var canCoverToLife = projectedAt67 + annualDrawdown >= spendToLifeExpectancy;
+  var shortfallTo67 = Math.max(0, spendTo67 - (projectedAtRetire + annualDrawdown));
+  var shortfallToLife = Math.max(0, spendToLifeExpectancy - (projectedAt67 + annualDrawdown));
+  var lifeExpectancyAge = householdType === 'couple' ? 87 : 85;
+  var summary = (canCoverTo67
+    ? 'This looks feasible from age ' + retireAge + ' to 67 with the current super balance, spouse super, bank balance, Age Pension, and drawdown income available.'
+    : 'This still leaves a gap of about ' + money(shortfallTo67) + ' for the period from age ' + retireAge + ' to 67.') + ' ' + (canCoverToLife
+    ? 'It also looks feasible through age ' + lifeExpectancyAge + ' if the projected super at 67 is maintained.'
+    : 'The same lifestyle would likely need about ' + money(shortfallToLife) + ' more by age ' + lifeExpectancyAge + '.');
+  return {
+    annualTarget: annualTarget,
+    projectedAtRetire: projectedAtRetire,
+    projectedAt67: projectedAt67,
+    spendTo67: spendTo67,
+    spendToLifeExpectancy: spendToLifeExpectancy,
+    canCoverTo67: canCoverTo67,
+    canCoverToLife: canCoverToLife,
+    shortfallTo67: shortfallTo67,
+    shortfallToLife: shortfallToLife,
+    summary: summary
+  };
+}
+function getGoalTemplateDefaults(name) {
+  var normalizedName = normalizeGoalName(name);
+  var childSummary = getChildAgeSummary();
+  var avgHigherEducationCostAus = 95000;
+  var avgMarriageCostAus = 35000;
+  var avgMarriageAgeAus = 32;
+  var ageValues = Array.isArray(childSummary.ages) ? childSummary.ages : [];
+  var childCount = Math.max(1, Number(childSummary.count) || ageValues.length || 1);
+  var yearsToHigherEducation = ageValues.length > 0
+    ? Math.max(1, Math.round(ageValues.reduce(function(minYears, age){ return Math.min(minYears, Math.max(0, 18 - Number(age))); }, 9999)))
+    : 13;
+  var yearsToMarriage = ageValues.length > 0
+    ? Math.max(1, Math.round(ageValues.reduce(function(minYears, age){ return Math.min(minYears, Math.max(0, avgMarriageAgeAus - Number(age))); }, 9999)))
+    : 27;
+  var retirementAge = Number((ST.profile && ST.profile.retireAge) || 67);
+  var currentAge = Number((ST.profile && ST.profile.age) || 40);
+  var lifestyleValue = (ST.profile && ST.profile.lifestyle) || 'Comfortable';
+  var annualLifestyleBenchmark = getRetirementBenchmark(lifestyleValue);
+  var yearsToRetirement = Math.max(1, Math.max(0, retirementAge - currentAge));
+  var householdType = getGoalHouseholdType();
+  var coupleMultiplier = 1.45;
+  var earlyRetirementAnnualTarget = Math.round(annualLifestyleBenchmark * (householdType === 'couple' ? coupleMultiplier : 1));
+  var earlyRetirementYears = Math.max(1, yearsToRetirement);
+  var rate = safeProjectionRate(getPreferredPortfolioType());
+  var currentSuper = getSuperBalance();
+  var annualSuperContrib = getSuperAnnualContrib();
+  var projectedSuperAt67 = Math.round(projectWealth(currentSuper, 0, annualSuperContrib, Math.max(0, 67 - currentAge), rate));
+  var inflationRate = 4;
+  var inflatedAgePension = getEstimatedAgePensionAnnual(householdType, earlyRetirementYears, inflationRate);
+  var inflatedOtherIncome = getEstimatedOtherIncomeAnnual(earlyRetirementYears, inflationRate);
+  var defaults = {
+    'Children\'s education': {
+      currentCost: Math.round(childCount * avgHigherEducationCostAus),
+      inflationRate: 5,
+      yearsUntilEvent: yearsToHigherEducation,
+      recurringCost: 0
+    },
+    'Higher education': {
+      currentCost: Math.round(childCount * avgHigherEducationCostAus),
+      inflationRate: 5,
+      yearsUntilEvent: yearsToHigherEducation,
+      recurringCost: 0
+    },
+    'Wedding': {
+      currentCost: Math.round(childCount * avgMarriageCostAus),
+      inflationRate: 4,
+      yearsUntilEvent: yearsToMarriage,
+      recurringCost: 0
+    },
+    'Early retirement': {
+      currentCost: earlyRetirementAnnualTarget,
+      inflationRate: 4,
+      yearsUntilEvent: earlyRetirementYears,
+      recurringCost: 0,
+      householdType: householdType,
+      bankBalance: getCashInvestmentBalance(),
+      estimatedAgePension: inflatedAgePension,
+      annualDrawdown: inflatedOtherIncome,
+      projectedSuperAt67: projectedSuperAt67
+    },
+    'Home purchase': {currentCost:200000, inflationRate:4, yearsUntilEvent:7, recurringCost:0},
+    'Vehicle purchase': {currentCost:40000, inflationRate:3, yearsUntilEvent:4, recurringCost:0},
+    'Emergency fund': {currentCost:30000, inflationRate:3, yearsUntilEvent:3, recurringCost:0},
+    'Retirement funding': {currentCost:1500000, inflationRate:4, yearsUntilEvent:25, recurringCost:0},
+    'New Business': {currentCost:150000, inflationRate:4, yearsUntilEvent:5, recurringCost:0},
+    'Vacation Planning': {currentCost:35000, inflationRate:4, yearsUntilEvent:2, recurringCost:0},
+    'Medical / dental / private health costs': {currentCost:12000, inflationRate:4, yearsUntilEvent:3, recurringCost:0},
+    'Home renovation / investment property': {currentCost:60000, inflationRate:4, yearsUntilEvent:4, recurringCost:0},
+    'Custom goal': {currentCost:100000, inflationRate:4, yearsUntilEvent:10, recurringCost:0}
+  };
+  return defaults[normalizedName] || defaults[name] || defaults['Custom goal'];
+}
+function populateGoalTemplateOptions() {
+  var select = document.getElementById('goalTemplateSelect');
+  if(!select) return;
+  select.innerHTML = '';
+  var options = getGoalTemplateOptions();
+  var firstEnabledOption = null;
+  options.forEach(function(option){
+    var opt = document.createElement('option');
+    opt.value = option.value;
+    opt.textContent = option.label;
+    if(!firstEnabledOption) {
+      firstEnabledOption = option.value;
+    }
+    select.appendChild(opt);
+  });
+  if(select.options.length) {
+    select.value = firstEnabledOption || options[0].value;
+  }
+  applyGoalTemplateDefaults();
+}
+function applyGoalTemplateDefaults() {
+  var select = document.getElementById('goalTemplateSelect');
+  var name = select ? select.value : 'Custom goal';
+  var normalizedName = normalizeGoalName(name);
+  var defaults = getGoalTemplateDefaults(name);
+  var costEl = document.getElementById('goalCurrentCost');
+  var inflEl = document.getElementById('goalInflationRate');
+  var yearsEl = document.getElementById('goalYearsUntilEvent');
+  var recurringEl = document.getElementById('goalRecurringCost');
+  var labelEl = document.getElementById('goalCurrentCostLabel');
+  var noteEl = document.getElementById('goalYearsNote');
+  var earlyFieldsEl = document.getElementById('goalEarlyRetirementFields');
+  var bankBalanceEl = document.getElementById('goalCurrentBankBalance');
+  var agePensionEl = document.getElementById('goalEstimatedAgePension');
+  var annualDrawdownEl = document.getElementById('goalAnnualDrawdown');
+  var projectedSuperEl = document.getElementById('goalProjectedSuperAt67');
+  var householdCoupleEl = document.querySelector('input[name="goalHouseholdType"][value="couple"]');
+  var householdSingleEl = document.querySelector('input[name="goalHouseholdType"][value="single"]');
+  var householdType = defaults.householdType || 'single';
+  if(householdCoupleEl) householdCoupleEl.checked = householdType === 'couple';
+  if(householdSingleEl) householdSingleEl.checked = householdType !== 'couple';
+  if(householdCoupleEl) householdCoupleEl.addEventListener('change', syncEarlyRetirementFieldsFromHousehold);
+  if(householdSingleEl) householdSingleEl.addEventListener('change', syncEarlyRetirementFieldsFromHousehold);
+  if(costEl) costEl.value = defaults.currentCost || 0;
+  if(inflEl) inflEl.value = defaults.inflationRate || 0;
+  if(yearsEl) yearsEl.value = defaults.yearsUntilEvent || 0;
+  if(recurringEl) recurringEl.value = defaults.recurringCost || 0;
+  if(bankBalanceEl) bankBalanceEl.value = defaults.bankBalance || 0;
+  if(agePensionEl) agePensionEl.value = defaults.estimatedAgePension || 0;
+  if(annualDrawdownEl) annualDrawdownEl.value = defaults.annualDrawdown || 0;
+  if(projectedSuperEl) projectedSuperEl.value = defaults.projectedSuperAt67 || 0;
+  if(labelEl) {
+    labelEl.textContent = normalizedName === 'Early retirement'
+      ? 'Starting annual spending target (AUD)'
+      : normalizedName === 'Children\'s education' || normalizedName === 'Higher education' || normalizedName === 'Wedding'
+        ? 'Current cost (AUD)'
+        : name === 'Home purchase'
+          ? 'Target purchase budget (AUD)'
+          : name === 'Vehicle purchase'
+            ? 'Target vehicle budget (AUD)'
+            : name === 'Emergency fund'
+              ? 'Target emergency buffer (AUD)'
+              : name === 'Retirement funding'
+                ? 'Target retirement balance (AUD)'
+                : name === 'New Business'
+                  ? 'Startup capital target (AUD)'
+                  : name === 'Vacation Planning'
+                    ? 'Vacation budget target (AUD)'
+                    : name === 'Medical / dental / private health costs'
+                      ? 'Target medical budget (AUD)'
+                      : name === 'Home renovation / investment property'
+                        ? 'Target property improvement budget (AUD)'
+                        : 'Target amount (AUD)';
+  }
+  if(noteEl) {
+    noteEl.style.display = ['Children\'s education', 'Higher education', 'Wedding', 'Home purchase', 'Vehicle purchase', 'Emergency fund', 'Retirement funding', 'New Business', 'Vacation Planning', 'Medical / dental / private health costs', 'Home renovation / investment property', 'Custom goal'].indexOf(normalizedName) >= 0 ? 'block' : 'none';
+    noteEl.textContent = normalizedName === 'Children\'s education' || normalizedName === 'Higher education' || normalizedName === 'Wedding'
+      ? 'We use the oldest child’s age to estimate the earliest deadline.'
+      : name === 'Home purchase'
+        ? 'We use the expected purchase year to estimate the deadline.'
+        : name === 'Vehicle purchase'
+          ? 'We use the expected vehicle purchase year to estimate the deadline.'
+          : name === 'Emergency fund'
+            ? 'We use your selected timeline to estimate the emergency buffer deadline.'
+            : name === 'Retirement funding'
+              ? 'We use the retirement timeline to estimate the savings horizon.'
+              : name === 'New Business'
+                ? 'We use the selected timeline to estimate the startup funding deadline.'
+                : name === 'Vacation Planning'
+                  ? 'We use your selected timeline to estimate the travel funding deadline.'
+                  : name === 'Medical / dental / private health costs'
+                    ? 'We use your selected timeline to estimate the healthcare funding deadline.'
+                    : name === 'Home renovation / investment property'
+                      ? 'We use your selected timeline to estimate the property improvement funding deadline.'
+                      : 'Set a target date to decide how much to save each year.';
+  }
+  if(earlyFieldsEl) {
+    earlyFieldsEl.style.display = normalizedName === 'Early retirement' ? 'block' : 'none';
+  }
+  if(normalizedName === 'Early retirement') {
+    var lifestyleValue = (ST.profile && ST.profile.lifestyle) || 'Comfortable';
+    var annualBenchmark = getRetirementBenchmark(lifestyleValue);
+    var coupleMultiplier = 1.45;
+    var target = Math.round(annualBenchmark * (householdType === 'couple' ? coupleMultiplier : 1));
+    var inflationRateValue = Number(inflEl && inflEl.value ? inflEl.value : defaults.inflationRate || 0);
+    var projectedYears = Math.max(1, Number(ST.profile && ST.profile.retireAge || 67) - Number(ST.profile && ST.profile.age || 40));
+    if(costEl) costEl.value = target;
+    if(yearsEl) yearsEl.value = projectedYears;
+    if(agePensionEl) agePensionEl.value = getEstimatedAgePensionAnnual(householdType, projectedYears, inflationRateValue);
+    if(annualDrawdownEl) annualDrawdownEl.value = getEstimatedOtherIncomeAnnual(projectedYears, inflationRateValue);
+    if(labelEl) labelEl.textContent = 'Starting annual spending target (AUD)';
+  }
+  if(ST.profile) ST.profile.householdType = householdType;
+  persist();
+}
+function openGoalModal() {
+  var modal = document.getElementById('goalModal');
+  if(!modal) return;
+  populateGoalTemplateOptions();
+  var heading = document.querySelector('#goalModal h3');
+  if(heading) heading.textContent = 'Add a future goal';
+  window.__editingGoalId = null;
+  modal.style.display = 'flex';
+  setTimeout(syncEarlyRetirementFieldsFromHousehold, 0);
+}
+function closeGoalModal() {
+  var modal = document.getElementById('goalModal');
+  if(modal) modal.style.display = 'none';
+}
+function renderGoalsSection() {
+  closeGoalModal();
+  var el = document.getElementById('goalsPageContent');
+  if(!el) return;
+  var goals = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+  var sortedGoals = goals.slice().sort(function(a, b){
+    var nameRank = {
+      'Early retirement': 0,
+      'Emergency fund': 1,
+      'Children\'s education': 2,
+      'Higher education': 3,
+      'Home purchase': 4,
+      'Vehicle purchase': 5,
+      'Retirement funding': 6,
+      'New Business': 7,
+      'Vacation Planning': 8,
+      'Medical / dental / private health costs': 9,
+      'Home renovation / investment property': 10,
+      'Custom goal': 11,
+      'Wedding': 12
+    };
+    var rankA = nameRank[String(a && a.name || '')] || 99;
+    var rankB = nameRank[String(b && b.name || '')] || 99;
+    if(rankA !== rankB) return rankA - rankB;
+    return Math.max(0, Number(a && a.yearsUntilEvent || 0)) - Math.max(0, Number(b && b.yearsUntilEvent || 0));
+  });
+  var impact = calculateGoalImpact(getPreferredPortfolioType(), Math.max(0, (Number(ST.profile.retireAge)||67) - (Number(ST.profile.age)||40)));
+  var insightCards = buildGoalPlanningInsights();
+  var readiness = getGoalRetirementReadinessSummary();
+  var annualSavingsCapacity = Math.max(0, (totalIncome() - totalOutflow()) * 0.25);
+  var totalGoalCost = sortedGoals.reduce(function(sum, goal){ return sum + getGoalFutureCost(goal); }, 0);
+  var goalMatrixRows = '';
+  var html = '<div class="note mt8">Use the planner below to add goals you want to fund and stress-test their impact on your retirement path.</div><div class="ilist mt12">';
+  if(!sortedGoals.length){ html += '<div class="empty">No goals added yet.</div>'; }
+  sortedGoals.forEach(function(goal){
+    var goalId = goal.id || '';
+    var snapshot = getGoalFundingSnapshot(goal, annualSavingsCapacity, totalGoalCost);
+    var futureCost = snapshot.futureCost;
+    var years = snapshot.years;
+    var projectedFundingByDeadline = snapshot.projectedFundingByDeadline;
+    var remainingGap = snapshot.remainingGap;
+    var monthlyGap = snapshot.monthlyGap;
+    var progressPct = snapshot.progressPct;
+    var bucketAnnualBudget = snapshot.bucketAnnualBudget;
+    var bucketTimingNote = years <= 3 ? 'the speed needed to protect this short deadline' : (years <= 7 ? 'a moderate pace for this medium-term target' : 'a slower ramp for this longer-term target');
+    var bucketBasisText = 'based on about ' + money(bucketAnnualBudget) + ' a year of savings capacity allocated to this goal and ' + bucketTimingNote + '.';
+    var pieColor = snapshot.statusClass === 'success' ? 'var(--success)' : (snapshot.statusClass === 'warn' ? 'var(--warn)' : 'var(--danger)');
+    var statusLabel = snapshot.statusLabel;
+    var milestoneText = years > 0 ? 'Around ' + years + ' years to the deadline' : 'Immediate deadline';
+    var targetLabel = goal.name === 'Early retirement' ? 'Starting annual spending target' : 'Goal target';
+    var retireAge = Number(ST.profile.retireAge) || 67;
+    var bridgeYears = Math.max(0, Math.max(0, 67 - retireAge));
+    var bridgeFundingNeeded = goal.name === 'Early retirement' && futureCost > 0 && bridgeYears > 0 ? Math.round(futureCost * bridgeYears) : 0;
+    var projectedBridgeCoverage = goal.name === 'Early retirement' ? Math.max(0, Math.min(futureCost, projectedFundingByDeadline)) : 0;
+    var bridgeFundingText = goal.name === 'Early retirement' && bridgeFundingNeeded > 0 ? '<div class="mt12" style="border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px;background:rgba(255,255,255,.03)"><div class="ititle">Bridge funding before Age Pension</div><div class="goal-bullets mt8"><div class="goal-bullet"><span class="goal-bullet-dot warn"></span><strong>Goal target:</strong> about ' + money(bridgeFundingNeeded) + ' needed from retirement age ' + retireAge + ' to age 67.</div><div class="goal-bullet"><span class="goal-bullet-dot green"></span><strong>Current allocation:</strong> about ' + money(projectedBridgeCoverage) + ' is currently covered by the plan for this bridge bucket.</div><div class="goal-bullet"><span class="goal-bullet-dot ' + (bridgeFundingNeeded > projectedBridgeCoverage ? 'warn' : 'green') + '"></span><strong>Extra needed:</strong> about ' + money(Math.max(0, bridgeFundingNeeded - projectedBridgeCoverage)) + ' more to close the bridge gap before age 67.</div></div></div>' : '';
+    var post67Target = goal.name === 'Early retirement' ? Math.max(0, futureCost) : 0;
+    var post67Coverage = goal.name === 'Early retirement' ? Math.max(0, Math.min(post67Target, projectedFundingByDeadline)) : 0;
+    var post67Extra = goal.name === 'Early retirement' ? Math.max(0, post67Target - post67Coverage) : 0;
+    var post67FundingText = goal.name === 'Early retirement' ? '<div class="mt12" style="border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px;background:rgba(255,255,255,.03)"><div class="ititle">Age Pension support after 67</div><div class="goal-bullets mt8"><div class="goal-bullet"><span class="goal-bullet-dot warn"></span><strong>Starting annual spending target:</strong> about ' + money(post67Target) + ' per year.</div><div class="goal-bullet"><span class="goal-bullet-dot green"></span><strong>Current allocation:</strong> about ' + money(post67Coverage) + ' is currently covered by the plan for this post-67 bucket.</div><div class="goal-bullet"><span class="goal-bullet-dot ' + (post67Extra > 0 ? 'warn' : 'green') + '"></span><strong>Extra needed:</strong> about ' + money(post67Extra) + ' more to fully fund this post-67 spending target.</div></div></div>' : '';
+    var retirementFeasibilityText = '<div class="imeta mt8"><strong>Retirement-age feasibility:</strong> ' + (remainingGap > 0 ? 'This goal still needs more funding before you retire at age ' + retireAge + ', and the target is still at risk.' : 'This goal is currently funded strongly enough to be in reach by your planned retirement age.') + '</div>';
+    var earlyRetirementInsight = '';
+    if(goal.name === 'Early retirement') {
+      var earlyAssessment = getEarlyRetirementAssessment(goal);
+      earlyRetirementInsight = '<div class="imeta mt8" style="color:' + (earlyAssessment.canCoverTo67 && earlyAssessment.canCoverToLife ? 'var(--success)' : 'var(--danger)') + '"><strong>Retirement cash-flow check:</strong> ' + earlyAssessment.summary + '</div>';
+    }
+    goalMatrixRows += '<div class="goal-status-row"><div class="goal-status-name">' + (goal.name || 'Goal') + '</div><div class="goal-status-pill ' + snapshot.viabilityClass + '">' + snapshot.viabilityLabel + '</div><div class="goal-status-meta">' + snapshot.viabilityDescription + '</div></div>';
+    html += '<div class="icard goal-card-shell"><div class="goal-visual-wrap"><div class="goal-pie" style="background:conic-gradient(' + pieColor + ' ' + progressPct + '%, rgba(255,255,255,.08) 0);"><div class="goal-pie-value">' + progressPct + '%<small>covered</small></div></div><div class="goal-verdict-pill ' + snapshot.statusClass + '">' + statusLabel + '</div></div><div><div class="ititle">'+(goal.name||'Goal')+'</div><div class="imeta">'+targetLabel+': '+money(futureCost)+' · Deadline: '+years+' yrs · Suggested annual contribution: '+money(Math.max(0, futureCost / Math.max(1, years)))+'</div><div class="goal-bullets"><div class="goal-bullet"><span class="goal-bullet-dot green"></span><strong>Current allocation:</strong> about '+money(projectedFundingByDeadline)+' is already covered by your current plan for this bucket, '+bucketBasisText+'</div><div class="goal-bullet"><span class="goal-bullet-dot ' + (remainingGap > 0 ? 'warn' : 'green') + '"></span><strong>Extra needed:</strong> '+(remainingGap > 0 ? 'about '+money(remainingGap)+' before you retire at age ' + retireAge + ', or about '+money(monthlyGap)+' per month on top of your current bucket plan until your '+years+' year target.' : 'your current plan already covers the target by your planned retirement age.')+'</div></div>'+retirementFeasibilityText+(goal.name === 'Early retirement' ? bridgeFundingText + post67FundingText : '')+'<div class="goal-progress mt8"><div class="goal-progress-bar" style="width:'+progressPct+'%"></div></div><div class="imeta mt8">'+milestoneText+' · '+(remainingGap > 0 ? 'Keep adding '+money(monthlyGap)+' per month to stay on track.' : 'You are already on track for this goal.')+'</div>'+earlyRetirementInsight+'<div class="iactions"><button class="btn bsm bo" onclick="editGoal(\''+goalId+'\')">Edit</button><button class="btn bsm bdn" onclick="deleteGoal(\''+goalId+'\')">Delete</button></div></div></div>';
+  });
+  var verdictClass = readiness && readiness.status === 'success' ? 'success' : (readiness && readiness.status === 'warn' ? 'warn' : 'danger');
+  var verdictLabel = readiness && readiness.status === 'success' ? 'Green' : (readiness && readiness.status === 'warn' ? 'Yellow' : 'Red');
+  var verdictText = readiness && readiness.headline ? readiness.headline : 'Retirement readiness will appear here once the plan is built.';
+  var verdictDot = readiness && readiness.status === 'success' ? 'green' : (readiness && readiness.status === 'warn' ? 'warn' : 'danger');
+  var realisticRetirementText = readiness && readiness.realisticAgeText ? readiness.realisticAgeText : 'The plan suggests a more realistic retirement age later than your current target. This is a projection, not a promise, and should still be tested against debt, cash flow, and lifestyle changes.';
+  html += '<div class="card mt16" style="background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.25)"><div class="eyebrow">Can your current plan hit these goals by your preferred retirement age?</div><div id="goalsReadinessVerdict" class="goal-verdict '+verdictClass+' mt12"><div class="goal-verdict-head"><div class="goal-verdict-title">Early Retirement feasibility</div><div class="goal-verdict-pill '+verdictClass+'">'+verdictLabel+'</div></div><div class="goal-verdict-copy"><div class="goal-bullet"><span class="goal-bullet-dot ' + verdictDot + '"></span>' + verdictText + '</div><div class="goal-bullet"><span class="goal-bullet-dot ' + verdictDot + '"></span>' + realisticRetirementText + '</div></div></div></div>';
+  if(goals.length){
+    html += '<div class="card mt16"><div class="eyebrow">Goal feasibility dashboard</div><div class="goal-status-grid mt12">' + goalMatrixRows + '</div></div>';
+    if(readiness && readiness.status !== 'success') {
+      html += '<div class="card mt16"><div class="eyebrow">Action plan to stay on track</div><h3 class="mt8">How to close the gap between goals, retirement, and your current portfolio</h3><div class="ilist mt12">';
+      insightCards.forEach(function(insight, idx){
+        html += '<div class="icard"><div class="ititle">'+(idx+1)+'. '+insight.title+'</div><div class="imeta mt8">'+insight.text+'</div><div class="imeta mt8" style="color:var(--muted)">'+insight.action+'</div></div>';
+      });
+      html += '</div></div>';
+    }
+  }
+  html += '<div class="icard" style="background:rgba(34,211,163,.06);border-color:rgba(34,211,163,.3)"><div class="ititle" style="color:var(--success)">Projected net wealth after goals</div><div class="imeta" style="font-weight:800;color:var(--text)">'+money(impact.netWealth)+' (projected wealth '+money(impact.projectedWealth)+' minus '+money(impact.totalGoalCost)+')</div></div></div>';
+  el.innerHTML = html;
+  renderSensPanel();
+}
+function editGoal(goalId) {
+  var goal = (ST.goals || []).find(function(item){ return String(item.id) === String(goalId); });
+  if(!goal) return;
+  var modal = document.getElementById('goalModal');
+  if(!modal) return;
+  window.__editingGoalId = goalId;
+  populateGoalTemplateOptions();
+  var select = document.getElementById('goalTemplateSelect');
+  var costEl = document.getElementById('goalCurrentCost');
+  var inflEl = document.getElementById('goalInflationRate');
+  var yearsEl = document.getElementById('goalYearsUntilEvent');
+  var recurringEl = document.getElementById('goalRecurringCost');
+  var bankBalanceEl = document.getElementById('goalCurrentBankBalance');
+  var agePensionEl = document.getElementById('goalEstimatedAgePension');
+  var annualDrawdownEl = document.getElementById('goalAnnualDrawdown');
+  var projectedSuperEl = document.getElementById('goalProjectedSuperAt67');
+  var householdCoupleEl = document.querySelector('input[name="goalHouseholdType"][value="couple"]');
+  var householdSingleEl = document.querySelector('input[name="goalHouseholdType"][value="single"]');
+  if(select) { select.value = goal.name || 'Custom goal'; }
+  if(costEl) costEl.value = goal.currentCost || 0;
+  if(inflEl) inflEl.value = goal.inflationRate || 0;
+  if(yearsEl) yearsEl.value = goal.yearsUntilEvent || 0;
+  if(recurringEl) recurringEl.value = goal.recurringCost || 0;
+  if(bankBalanceEl) bankBalanceEl.value = goal.bankBalance || 0;
+  if(agePensionEl) agePensionEl.value = goal.estimatedAgePension || 0;
+  if(annualDrawdownEl) annualDrawdownEl.value = goal.annualDrawdown || 0;
+  if(projectedSuperEl) projectedSuperEl.value = goal.projectedSuperAt67 || 0;
+  if(householdCoupleEl) householdCoupleEl.checked = (goal.householdType || 'single') === 'couple';
+  if(householdSingleEl) householdSingleEl.checked = (goal.householdType || 'single') !== 'couple';
+  applyGoalTemplateDefaults();
+  var heading = document.querySelector('#goalModal h3');
+  if(heading) heading.textContent = 'Edit a goal';
+  modal.style.display = 'flex';
+}
+function deleteGoal(goalId) {
+  if(!goalId) return;
+  if(!window.confirm('Delete this goal?')) return;
+  ST.goals = (ST.goals || []).filter(function(item){ return String(item.id) !== String(goalId); });
+  persist();
+  renderGoalsSection();
+  if(document.getElementById('pg-summary') && document.getElementById('pg-summary').classList.contains('on')) renderSummary();
+}
+function saveGoalFromModal() {
+  var select = document.getElementById('goalTemplateSelect');
+  var costEl = document.getElementById('goalCurrentCost');
+  var inflEl = document.getElementById('goalInflationRate');
+  var yearsEl = document.getElementById('goalYearsUntilEvent');
+  var recurringEl = document.getElementById('goalRecurringCost');
+  var bankBalanceEl = document.getElementById('goalCurrentBankBalance');
+  var agePensionEl = document.getElementById('goalEstimatedAgePension');
+  var annualDrawdownEl = document.getElementById('goalAnnualDrawdown');
+  var projectedSuperEl = document.getElementById('goalProjectedSuperAt67');
+  var householdTypeEl = document.querySelector('input[name="goalHouseholdType"]:checked');
+  var name = select ? select.value : 'Custom goal';
+  var currentCost = Number(costEl && costEl.value ? costEl.value : 0);
+  var inflationRate = Number(inflEl && inflEl.value ? inflEl.value : 0);
+  var yearsUntilEvent = Number(yearsEl && yearsEl.value ? yearsEl.value : 0);
+  var recurringCost = Number(recurringEl && recurringEl.value ? recurringEl.value : 0);
+  var bankBalance = Number(bankBalanceEl && bankBalanceEl.value ? bankBalanceEl.value : 0);
+  var estimatedAgePension = Number(agePensionEl && agePensionEl.value ? agePensionEl.value : 0);
+  var annualDrawdown = Number(annualDrawdownEl && annualDrawdownEl.value ? annualDrawdownEl.value : 0);
+  var projectedSuperAt67 = Number(projectedSuperEl && projectedSuperEl.value ? projectedSuperEl.value : 0);
+  var householdType = householdTypeEl ? householdTypeEl.value : 'single';
+  if(!name) return;
+  if(ST.profile) ST.profile.householdType = householdType;
+  ST.goals = Array.isArray(ST.goals) ? ST.goals : [];
+  var goalRecord = {id:uid(), name:name, currentCost:currentCost, inflationRate:inflationRate, yearsUntilEvent:yearsUntilEvent, recurringCost:recurringCost, householdType:householdType, bankBalance:bankBalance, estimatedAgePension:estimatedAgePension, annualDrawdown:annualDrawdown, projectedSuperAt67:projectedSuperAt67, custom:true};
+  var protectedGoalNames = {'Early retirement': true, 'Children\'s education': true, 'Higher education': true, 'Wedding': true, 'Medical / dental / private health costs': true, 'Home renovation / investment property': true};
+  var existingDuplicate = ST.goals.find(function(goal){ return goal && goal.name === name; });
+  if(!window.__editingGoalId && protectedGoalNames[name]) {
+    if(existingDuplicate) {
+      alert('You can only add one "' + name + '" goal. Edit the existing goal instead.');
+      return;
+    }
+  }
+  if(window.__editingGoalId) {
+    ST.goals = ST.goals.map(function(goal){
+      if(String(goal.id) === String(window.__editingGoalId)) {
+        goal.name = name;
+        goal.currentCost = currentCost;
+        goal.inflationRate = inflationRate;
+        goal.yearsUntilEvent = yearsUntilEvent;
+        goal.recurringCost = recurringCost;
+        goal.householdType = householdType;
+        goal.bankBalance = bankBalance;
+        goal.estimatedAgePension = estimatedAgePension;
+        goal.annualDrawdown = annualDrawdown;
+        goal.projectedSuperAt67 = projectedSuperAt67;
+      }
+      return goal;
+    });
+  } else {
+    var existingGoalIndex = ST.goals.findIndex(function(goal){ return getGoalRecordFingerprint(goal) === getGoalRecordFingerprint(goalRecord); });
+    if(existingGoalIndex >= 0) {
+      ST.goals[existingGoalIndex] = goalRecord;
+    } else {
+      ST.goals.push(goalRecord);
+    }
+  }
+  window.__editingGoalId = null;
+  var heading = document.querySelector('#goalModal h3');
+  if(heading) heading.textContent = 'Add a future goal';
+  persist();
+  closeGoalModal();
+  renderGoalsSection();
+  if(document.getElementById('pg-summary') && document.getElementById('pg-summary').classList.contains('on')) renderSummary();
+}
+function getDefaultScenario() {
+  return {propertyDrop:0, interestRateRise:0, dividendIncomeChange:0, newInvestment:0};
+}
+function getScenarioState() {
+  ST.scenario = ST.scenario || getDefaultScenario();
+  return ST.scenario;
+}
+function updateScenarioPlanner() {
+  var scenario = getScenarioState();
+  var propertyDropEl = document.getElementById('scenarioPropertyDrop');
+  var interestRiseEl = document.getElementById('scenarioInterestRise');
+  var dividendChangeEl = document.getElementById('scenarioDividendChange');
+  var newInvestmentEl = document.getElementById('scenarioNewInvestment');
+  if(propertyDropEl) scenario.propertyDrop = Number(propertyDropEl.value) || 0;
+  if(interestRiseEl) scenario.interestRateRise = Number(interestRiseEl.value) || 0;
+  if(dividendChangeEl) scenario.dividendIncomeChange = Number(dividendChangeEl.value) || 0;
+  if(newInvestmentEl) scenario.newInvestment = Number(newInvestmentEl.value) || 0;
+  persist();
+  renderScenarioPlanner();
+}
+function estimateRetirementAgeRange(targetWealth, startBalanceValue, annualSavingValue, superContribValue, baseRateValue, ageValue, downsideRateDelta, upsideRateDelta) {
+  var age = Math.max(0, Number(ageValue) || 40);
+  var startBalance = Math.max(0, Number(startBalanceValue) || 0);
+  var annualSaving = Math.max(0, Number(annualSavingValue) || 0);
+  var superContrib = Math.max(0, Number(superContribValue) || 0);
+  var baseRate = Math.max(0.01, Number(baseRateValue) || 0.065);
+  var downRate = Math.max(0.01, baseRate - (Number(downsideRateDelta) || 0.015));
+  var upRate = Math.max(0.01, baseRate + (Number(upsideRateDelta) || 0.01));
+  function estimate(rate, savingsMultiplier, superMultiplier) {
+    var balance = startBalance;
+    var years = 0;
+    while(balance < targetWealth && years < 80){
+      balance = (balance + (annualSaving * savingsMultiplier) + (superContrib * superMultiplier)) * (1 + rate);
+      years++;
+    }
+    return age + years;
+  }
+  return {
+    conservative: estimate(downRate, 0.9, 0.9),
+    base: estimate(baseRate, 1, 1),
+    optimistic: estimate(upRate, 1.05, 1.02)
+  };
+}
+function formatRetirementAgeRange(range) {
+  var minValue = Math.min(range.conservative, range.base, range.optimistic);
+  var maxValue = Math.max(range.conservative, range.base, range.optimistic);
+  return 'about ' + Math.round(minValue) + '–' + Math.round(maxValue) + ' (conservative to optimistic)';
+}
+function renderScenarioPlanner() {
+  var el = document.getElementById('scenarioPlanner');
+  if(!el) return;
+  var scenario = getScenarioState();
+  var currentAge = Number(ST.profile.age)||40;
+  var retireAge = Number(ST.profile.retireAge)||67;
+  var yearsToRetire = Math.max(0, retireAge - currentAge);
+  var baseRate = safeProjectionRate(getPreferredPortfolioType());
+  var interestShock = Math.max(0, Number(scenario.interestRateRise)||0);
+  var rateShockPct = Math.min(0.95, Math.max(0, interestShock / 100));
+  var adjustedRate = Math.max(0.01, baseRate * (1 - rateShockPct));
+  var propertyValue = allAssets().filter(function(iv){ return iv.type === 'property'; }).reduce(function(sum, iv){ return sum + propertyEquityValue(iv); }, 0);
+  var propertyDropPct = Math.max(0, Number(scenario.propertyDrop)||0);
+  var propertyLoss = propertyValue * propertyDropPct / 100;
+  var dividendChangePct = Number(scenario.dividendIncomeChange)||0;
+  var annualIncome = Math.max(0, totalIncome() * (1 + dividendChangePct/100));
+  var startBalance = totalPf() + Number(scenario.newInvestment||0) + (ST.super && ST.super.enabled && ST.super.type !== 'smsf' ? getSuperBalance() : 0);
+  var annualSavings = Math.max(0, totalIncome() - totalOutflow()) * 0.25;
+  var annualSavingsWithChange = annualSavings + Math.max(0, Number(scenario.newInvestment||0) / Math.max(1, (retireAge - currentAge)||1));
+  var projectedWealth = projectWealth(startBalance, annualIncome * 0.25, getSuperAnnualContrib(), yearsToRetire, baseRate);
+  var propertySaleScenarios = getPropertySaleScenarioList();
+  var totalPropertySaleProceeds = propertySaleScenarios.reduce(function(sum, item){ return sum + item.netSaleProceeds; }, 0);
+  var totalAnnualHoldingDragSaved = propertySaleScenarios.reduce(function(sum, item){ return sum + item.annualHoldingCostSavings; }, 0);
+  var scenarioWealth = Math.max(0, projectedWealth - propertyLoss + totalPropertySaleProceeds);
+  var scenarioWealthWithRateShock = Math.max(0, projectWealth(startBalance, annualIncome * 0.25, getSuperAnnualContrib(), yearsToRetire, adjustedRate) - propertyLoss + totalPropertySaleProceeds);
+  var householdFactor = ST.profile && ST.profile.householdType === 'couple' ? 1.45 : 1;
+  var lifestyleTarget = Math.max(0, getRetirementBenchmark(ST.profile.lifestyle || 'Comfortable') * 20 * householdFactor);
+  var retirementAgeBeforeChange = estimateRetirementAgeRange(lifestyleTarget, startBalance, annualSavings, getSuperAnnualContrib(), baseRate, currentAge, 0.015, 0.01);
+  var retirementAgeAfterChange = estimateRetirementAgeRange(lifestyleTarget, startBalance + Number(scenario.newInvestment||0), annualSavingsWithChange, getSuperAnnualContrib(), Math.max(0.01, baseRate + 0.005), currentAge, 0.015, 0.01);
+  var impactText = 'If you apply a ' + propertyDropPct + '% property value drop and a ' + interestShock + '% lower assumed growth, the portfolio is projected to land at <strong>' + money(scenarioWealthWithRateShock) + '</strong> by your planned retirement age. This shows the portfolio-level impact of those downside assumptions, rather than a goal-by-goal verdict.';
+  el.innerHTML = '<div class="card"><span class="eyebrow">What if?</span><h3>Scenario planner</h3><p class="note mt8">Stress test your assumptions with simple downside and upside scenarios.</p><div class="fgrid mt12"><div class="field"><span>Property value drop (%)</span><input id="scenarioPropertyDrop" type="number" value="'+(scenario.propertyDrop||0)+'" onchange="updateScenarioPlanner()"></div><div class="field"><span>Lower assumed growth by (%)</span><input id="scenarioInterestRise" type="number" value="'+(scenario.interestRateRise||0)+'" onchange="updateScenarioPlanner()"></div><div class="field"><span>Dividend income change (%)</span><input id="scenarioDividendChange" type="number" value="'+(scenario.dividendIncomeChange||0)+'" onchange="updateScenarioPlanner()"></div><div class="field"><span>Extra investment added today (AUD)</span><input id="scenarioNewInvestment" type="number" value="'+(scenario.newInvestment||0)+'" onchange="updateScenarioPlanner()"></div></div><div class="iitem mt12"><strong>Baseline projection:</strong> based on your current plan and your planned retirement age of <strong>'+(retireAge || 67)+'</strong>, the portfolio is projected to reach <strong>'+money(projectedWealth)+'</strong>.<br><br><strong>Stress-test result:</strong> '+impactText+'</div></div>';
+}
 
 var _editInvId = null;
 function renderInvFields(data) {
@@ -2406,7 +3667,7 @@ function renderProjectionPage() {
   }).filter(function(item){ return item.irr != null; });
 
   var nextBtn = document.getElementById('performanceNextBtn');
-  if(nextBtn) nextBtn.textContent = hasRecommendedInsightsCandidates() ? 'Next: Recommended Insights' : 'Next: Summary';
+  if(nextBtn) nextBtn.textContent = 'Next: Goals';
 
   if(!items.length){
     document.getElementById('projectionComboChart').innerHTML = '<div class="empty">Add investments with cost and value data to compare them with market benchmarks.</div>';
@@ -2580,6 +3841,7 @@ function renderSummary(){
   grouped('chCash',['Current year'],[inc],[out],'Annual income','Annual outflows');
   barV('chAssets',lbs,avs,'Asset value','#6c63ff',false);
 
+  renderGoalsSection();
   renderSummaryInsights(_summaryActiveTab || 'current');
   renderSmsfSummaryCards();
   switchSummaryTab(_summaryActiveTab || 'current');
@@ -2829,6 +4091,7 @@ function doImport(evt) {
       ST.investments = Array.isArray(d.investments) ? d.investments : [];
       ST.income      = Array.isArray(d.income)      ? d.income      : [];
       ST.expenses    = Array.isArray(d.expenses)    ? d.expenses    : [];
+      ST.goals       = Array.isArray(d.goals) ? d.goals : [];
       var importedSuper = d.super || {};
       ST.super = {
         enabled: !!importedSuper.enabled,
@@ -2932,6 +4195,356 @@ renderSuperFields();
 selectHomeMode(ST.meta && ST.meta.importedFromJson ? 'existing' : 'new');
 showPage('home');
 
+
+
+// ── SENSITIVITY SLIDER ENGINE ─────────────────────────────────────────────────
+var _sensDefaults = {
+  irr:        0,    // delta % added to base IRR  (-4 to +4)
+  inflation:  4,    // absolute %  (2–8), default 4
+  savings:    0,    // delta monthly savings  (-1000 to +2000)
+  retire:     0     // delta years on retirement age  (-5 to +10)
+};
+var _sensState = Object.assign({}, _sensDefaults);
+
+function sensProjectWealth(overrideIRRDelta, overrideInflation, overrideSavingsDelta, overrideRetireDelta) {
+  var age       = Number(ST.profile.age) || 40;
+  var baseRetire = Number(ST.profile.retireAge) || 67;
+  var retireAge  = baseRetire + (overrideRetireDelta || 0);
+  var years      = Math.max(1, retireAge - age);
+  var preferred  = getPreferredPortfolioType();
+  var baseRate   = safeProjectionRate(preferred);
+  var rate       = Math.max(0.01, Math.min(0.18, baseRate + (overrideIRRDelta || 0) / 100));
+  var startBal   = totalPf() + (ST.super && ST.super.enabled && ST.super.type !== 'smsf' ? getSuperBalance() : 0);
+  var baseSurplus = Math.max(0, totalIncome() - totalOutflow());
+  var annualSav  = Math.max(0, baseSurplus * 0.25 + (overrideSavingsDelta || 0) * 12);
+  var superC     = getSuperAnnualContrib();
+  return projectWealth(startBal, annualSav, superC, years, rate);
+}
+
+function sensGoalFutureCost(goal, overrideInflation) {
+  var currentCost   = Number(goal.currentCost) || 0;
+  var baseInfl      = overrideInflation != null ? overrideInflation : (Number(goal.inflationRate) || 4);
+  var years         = Math.max(0, Number(goal.yearsUntilEvent) || 0);
+  var recurringCost = Number(goal.recurringCost) || 0;
+  var baseFuture    = currentCost * Math.pow(1 + baseInfl / 100, years);
+  if (!recurringCost) return baseFuture;
+  var annuityF = years > 0 ? ((Math.pow(1 + baseInfl / 100, years) - 1) / (baseInfl / 100 || 0.04)) : years;
+  return baseFuture + recurringCost * annuityF;
+}
+
+function getScenarioGoalFundingSnapshot(goal, annualSavingsCapacity, totalGoalCost, futureCost) {
+  var years = Math.max(0, Number(goal && goal.yearsUntilEvent) || 0);
+  var normalizedGoalCost = Math.max(1, Number(totalGoalCost) || 1);
+  var goalShare = totalGoalCost > 0 ? Math.max(0, Math.min(1, futureCost / normalizedGoalCost)) : 1 / Math.max(1, (Array.isArray(ST.goals) ? ST.goals.filter(Boolean).length : 1));
+  var urgencyMultiplier = years <= 3 ? 1.2 : (years <= 7 ? 1.05 : 0.9);
+  var bucketAnnualBudget = Math.max(0, annualSavingsCapacity * goalShare);
+  var projectedFundingByDeadline = Math.min(futureCost, Math.max(0, bucketAnnualBudget * Math.max(1, years) * urgencyMultiplier));
+  var remainingGap = Math.max(0, futureCost - projectedFundingByDeadline);
+  return {
+    goalShare: goalShare,
+    bucketAnnualBudget: bucketAnnualBudget,
+    projectedFundingByDeadline: projectedFundingByDeadline,
+    remainingGap: remainingGap
+  };
+}
+
+function sensGetRetirementTarget(lifestyle, overrideInflation, years) {
+  var annual = getRetirementBenchmark(lifestyle || 'Comfortable');
+  // inflate the ASFA benchmark to future dollars
+  var infl = (overrideInflation != null ? overrideInflation : 4) / 100;
+  var futureAnnual = annual * Math.pow(1 + infl, years || 0);
+  return futureAnnual * 20; // 4% withdrawal rule = 25x; we use 20x (5%) as conservative
+}
+
+function sensCalcAll(state) {
+  var s = state || _sensState;
+  var age        = Number(ST.profile.age) || 40;
+  var baseRetire = Number(ST.profile.retireAge) || 67;
+  var retireAge  = baseRetire + (s.retire || 0);
+  var years      = Math.max(1, retireAge - age);
+  var lifestyle  = ST.profile.lifestyle || 'Comfortable';
+  var goals      = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+
+  // Projected wealth under scenario
+  var projWealth = sensProjectWealth(s.irr, s.inflation, s.savings, s.retire);
+
+  // Retirement target under scenario (inflation-adjusted)
+  var retTarget  = sensGetRetirementTarget(lifestyle, s.inflation, years);
+  var annualSavingsCapacity = Math.max(0, (totalIncome() - totalOutflow()) * 0.25 + (s.savings || 0) * 12);
+  var fundingHorizonYears = Math.max(1, years);
+  var totalGoalCost = goals.reduce(function(sum, goal){ return sum + getGoalFutureCost(goal); }, 0);
+  var totalScenarioGoalCost = goals.reduce(function(sum, goal){ return sum + sensGoalFutureCost(goal, s.inflation); }, 0);
+  var scenarioFundingPool = Math.max(0, Math.min(projWealth - retTarget, annualSavingsCapacity * fundingHorizonYears));
+
+  // Baseline (no slider adjustments)
+  var baseWealth = sensProjectWealth(0, 4, 0, 0);
+  var baseRetTarget = sensGetRetirementTarget(lifestyle, 4, Math.max(1, baseRetire - age));
+  var baseGoalCost  = goals.reduce(function(sum, goal) { return sum + getGoalFutureCost(goal); }, 0);
+  var baseCombined  = baseRetTarget + baseGoalCost;
+  var baseGap       = baseWealth - baseCombined;
+  var baseScenarioFundingPool = Math.max(0, Math.min(baseWealth - baseRetTarget, Math.max(0, (totalIncome() - totalOutflow()) * 0.25) * Math.max(1, baseRetire - age)));
+
+  // Per-goal future costs under scenario inflation
+  var goalResults = goals.map(function(goal) {
+    var baseCost  = getGoalFutureCost(goal);
+    var scenCost  = sensGoalFutureCost(goal, s.inflation);
+    var baseGoalShare = totalGoalCost > 0 ? baseCost / totalGoalCost : 0;
+    var scenarioGoalShare = totalScenarioGoalCost > 0 ? scenCost / Math.max(1, totalScenarioGoalCost) : 0;
+    var scenarioSnapshot = getScenarioGoalFundingSnapshot(goal, annualSavingsCapacity, totalScenarioGoalCost, scenCost);
+    var baseSnapshot = getScenarioGoalFundingSnapshot(goal, Math.max(0, (totalIncome() - totalOutflow()) * 0.25), baseGoalCost, baseCost);
+    var projectedFunding = Math.max(0, Math.min(scenCost, Math.min(scenarioFundingPool * scenarioGoalShare, scenarioSnapshot.projectedFundingByDeadline)));
+    var baseProjectedFunding = Math.max(0, Math.min(baseCost, Math.min(baseScenarioFundingPool * baseGoalShare, baseSnapshot.projectedFundingByDeadline)));
+    var remainingGap = Math.max(0, scenCost - projectedFunding);
+    var status = remainingGap <= 0 ? 'success' : (remainingGap <= scenCost * 0.3 ? 'warn' : 'danger');
+    var statusLabel = remainingGap <= 0 ? 'Achievable' : (remainingGap <= scenCost * 0.3 ? 'Close' : 'At risk');
+    var coveragePct = scenCost > 0 ? Math.max(0, Math.min(100, Math.round((projectedFunding / scenCost) * 100))) : 0;
+    return {
+      name:        goal.name || 'Goal',
+      baseCost:    baseCost,
+      scenCost:    scenCost,
+      costDelta:   scenCost - baseCost,
+      projectedFunding: projectedFunding,
+      baseProjectedFunding: baseProjectedFunding,
+      remainingGap: remainingGap,
+      surplus:     projectedFunding - scenCost,
+      status:      status,
+      statusLabel: statusLabel,
+      coveragePct: coveragePct,
+      goalShare:   scenarioGoalShare
+    };
+  });
+
+  // Combined target
+  var totalGoalCost   = goalResults.reduce(function(sum, g) { return sum + g.scenCost; }, 0);
+  var combinedTarget  = retTarget + totalGoalCost;
+  var gap             = projWealth - combinedTarget;
+  var overallStatus   = gap >= 0 ? 'success' : (gap >= -combinedTarget * 0.2 ? 'warn' : 'danger');
+
+  return {
+    projWealth:    projWealth,
+    retTarget:     retTarget,
+    totalGoalCost: totalGoalCost,
+    combinedTarget:combinedTarget,
+    gap:           gap,
+    overallStatus: overallStatus,
+    goalResults:   goalResults,
+    baseWealth:    baseWealth,
+    baseGap:       baseGap,
+    retireAge:     retireAge,
+    years:         years,
+    annualSavingsCapacity: annualSavingsCapacity
+  };
+}
+
+function sensNarrative(calc, state) {
+  var s        = state || _sensState;
+  var parts    = [];
+  var irrText  = s.irr !== 0 ? (s.irr > 0 ? 'boosting your portfolio return by <strong>+' + s.irr + '%</strong>' : 'reducing your portfolio return by <strong>' + s.irr + '%</strong>') : null;
+  var inflText = s.inflation !== 4 ? 'running inflation at <strong>' + s.inflation + '%</strong> (default 4%)' : null;
+  var savText  = s.savings !== 0 ? (s.savings > 0 ? 'adding <strong>+' + s.savings.toLocaleString() + '/month</strong> extra to savings' : 'cutting savings by <strong>-' + Math.abs(s.savings).toLocaleString() + '/month</strong>') : null;
+  var retText  = s.retire !== 0 ? (s.retire > 0 ? 'retiring <strong>' + s.retire + ' years later</strong> (age ' + calc.retireAge + ')' : 'retiring <strong>' + Math.abs(s.retire) + ' years earlier</strong> (age ' + calc.retireAge + ')') : null;
+  [irrText, inflText, savText, retText].forEach(function(t) { if(t) parts.push(t); });
+
+  if (!parts.length) {
+    return 'This is an <strong>aggregate balance check</strong> for your current plan — no slider changes applied. The per-goal rows above still show the real blockers, so use this panel to test what lifts the whole portfolio toward target, not to override the goal-level feasibility verdicts.';
+  }
+
+  var changeStr = parts.join(', ');
+  var gapStr    = calc.gap >= 0
+    ? 'your aggregate portfolio balance is projected to be <strong style="color:var(--success)">' + money(calc.gap) + ' ahead</strong> of the combined retirement and goal target'
+    : 'your aggregate portfolio balance is projected to be <strong style="color:var(--danger)">' + money(Math.abs(calc.gap)) + ' short</strong> of the combined retirement and goal target';
+
+  return 'This is an <strong>aggregate balance check</strong> under this scenario (' + changeStr + '). ' + gapStr + ' by age ' + calc.retireAge + '. The per-goal rows above still show the real blockers, so this panel should be read as a portfolio-wide pressure test rather than a full “all goals are solved” verdict.';
+}
+
+function renderSensGoalRows(calc) {
+  var goals = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+  if (!goals.length || !calc || !Array.isArray(calc.goalResults)) return '';
+  var rows = calc.goalResults.map(function(result){
+    var pillClass = result.status === 'success' ? 'success' : (result.status === 'warn' ? 'warn' : 'danger');
+    var gapLabel = result.remainingGap > 0 ? 'Gap ' + money(result.remainingGap) : 'Gap cleared';
+    return '<div class="sens-goal-row"><div class="sg-name">' + (result.name || 'Goal') + '</div><div class="sg-base">Projected funding<br><span style="color:var(--muted)">' + money(result.projectedFunding) + '</span></div><div class="sg-new">Gap<br><span style="color:var(--muted)">' + money(result.remainingGap) + '</span></div><div class="sg-pill ' + pillClass + '">' + gapLabel + '</div></div>';
+  }).join('');
+  return '<div class="sens-goal-rows">' + rows + '</div>';
+}
+
+function renderSensPanel() {
+  var el = document.getElementById('sensPanelRoot');
+  if (!el) return;
+
+  var s    = _sensState;
+  var calc = sensCalcAll(s);
+  var goals = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+
+  // ── KPI cards ──────────────────────────────────────────────
+  var wealthDelta = calc.projWealth - calc.baseWealth;
+  var gapClass    = calc.gap >= 0 ? 'green-kpi' : (calc.gap >= -calc.combinedTarget * 0.2 ? 'warn-kpi' : 'danger-kpi');
+  var wealthClass = wealthDelta >= 0 ? 'green-kpi' : 'danger-kpi';
+  var wealthDeltaStr = (wealthDelta >= 0 ? '+' : '') + money(wealthDelta);
+
+  var kpiHTML = `
+    <div class="sens-kpi ${wealthClass}">
+      <div class="sk-lbl">Aggregate portfolio balance</div>
+      <div class="sk-val">${money(calc.projWealth)}</div>
+      <div class="sk-delta" style="color:${wealthDelta >= 0 ? 'var(--success)' : 'var(--danger)'}">${wealthDeltaStr} vs baseline</div>
+    </div>
+    <div class="sens-kpi">
+      <div class="sk-lbl">Retirement + Goal Target Benchmark</div>
+      <div class="sk-val">${money(calc.combinedTarget)}</div>
+      <div class="sk-delta" style="color:var(--muted)">Retire age ${calc.retireAge} · Inflation ${s.inflation}%</div>
+    </div>
+    <div class="sens-kpi ${gapClass}">
+      <div class="sk-lbl">Surplus / Shortfall</div>
+      <div class="sk-val" style="color:${calc.gap >= 0 ? 'var(--success)' : 'var(--danger)'}">${(calc.gap >= 0 ? '+' : '') + money(calc.gap)}</div>
+      <div class="sk-delta" style="color:${calc.gap >= 0 ? 'var(--success)' : 'var(--danger)'}">${calc.gap >= 0 ? 'Ahead of target' : 'Short of target'}</div>
+    </div>
+  `;
+
+  // ── Narrative ───────────────────────────────────────────────
+  var narrativeHTML = '<div class="sens-narrative">' + sensNarrative(calc, s) + '</div>';
+  var goalRowsHTML = renderSensGoalRows(calc);
+
+  // ── Slider value display helpers ────────────────────────────
+  var irrVal    = (s.irr >= 0 ? '+' : '') + s.irr + '%';
+  var irrClass  = s.irr > 0 ? 'up' : (s.irr < 0 ? 'down' : '');
+  var inflVal   = s.inflation + '%';
+  var inflClass = s.inflation > 4 ? 'down' : (s.inflation < 4 ? 'up' : '');
+  var savVal    = (s.savings >= 0 ? '+' : '-') + Math.abs(s.savings).toLocaleString() + '/mo';
+  var savClass  = s.savings > 0 ? 'up' : (s.savings < 0 ? 'down' : '');
+  var retVal    = s.retire === 0 ? 'No change' : (s.retire > 0 ? '+' + s.retire + ' yrs (age ' + calc.retireAge + ')' : s.retire + ' yrs (age ' + calc.retireAge + ')');
+  var retClass  = s.retire < 0 ? 'down' : (s.retire > 0 ? 'up' : '');
+
+  el.innerHTML = `
+    <div class="sens-panel">
+      <div class="sens-panel-header">
+        <div>
+          <div class="sens-panel-title">🎛 Scenario Planner — What changes move you to target?</div>
+          <div class="sens-panel-subtitle">Adjust the sliders to see how changes to returns, inflation, savings, or retirement age could move your goals from risky to achievable. Inflation default: 4% p.a.</div>
+        </div>
+        <button class="sens-reset-btn" onclick="sensReset()">↺ Reset</button>
+      </div>
+
+      <div class="sens-sliders">
+        <div class="sens-slider-row">
+          <div class="sens-slider-label">
+            <span>Portfolio Return (IRR delta)</span>
+            <span class="sens-val ${irrClass}" id="sensIRRVal">${irrVal}</span>
+          </div>
+          <input type="range" class="sens-range" id="sensIRR" min="-4" max="4" step="0.5" value="${s.irr}"
+            oninput="sensUpdate('irr', parseFloat(this.value))">
+          <div class="sens-hint">Shift the blended portfolio IRR up or down from its current calculated level.</div>
+        </div>
+
+        <div class="sens-slider-row">
+          <div class="sens-slider-label">
+            <span>Inflation Rate</span>
+            <span class="sens-val ${inflClass}" id="sensInflVal">${inflVal}</span>
+          </div>
+          <input type="range" class="sens-range" id="sensInflation" min="2" max="8" step="0.5" value="${s.inflation}"
+            oninput="sensUpdate('inflation', parseFloat(this.value))">
+          <div class="sens-hint">Higher inflation increases future goal costs and shrinks the real value of your portfolio.</div>
+        </div>
+
+        <div class="sens-slider-row">
+          <div class="sens-slider-label">
+            <span>Extra Monthly Savings</span>
+            <span class="sens-val ${savClass}" id="sensSavVal">${savVal}</span>
+          </div>
+          <input type="range" class="sens-range" id="sensSavings" min="-1000" max="2000" step="100" value="${s.savings}"
+            oninput="sensUpdate('savings', parseFloat(this.value))">
+          <div class="sens-hint">Increase or reduce the monthly amount you redirect to investments, on top of your current surplus.</div>
+        </div>
+
+        <div class="sens-slider-row">
+          <div class="sens-slider-label">
+            <span>Retirement Age Shift</span>
+            <span class="sens-val ${retClass}" id="sensRetVal">${retVal}</span>
+          </div>
+          <input type="range" class="sens-range" id="sensRetire" min="-5" max="10" step="1" value="${s.retire}"
+            oninput="sensUpdate('retire', parseFloat(this.value))">
+          <div class="sens-hint">Retire earlier or later — more years in the workforce means more compounding and contributions.</div>
+        </div>
+      </div>
+
+      <div class="sens-results" id="sensKPIs">${kpiHTML}</div>
+      ${narrativeHTML}
+      ${goalRowsHTML}
+    </div>
+  `;
+}
+
+function sensUpdate(key, val) {
+  _sensState[key] = val;
+  // Update the display value label immediately (fast, no full re-render)
+  var s = _sensState;
+  var calc = sensCalcAll(s);
+  var goals = Array.isArray(ST.goals) ? ST.goals.filter(Boolean) : [];
+
+  // Update individual label
+  if (key === 'irr') {
+    var el = document.getElementById('sensIRRVal');
+    if(el){ el.textContent = (val >= 0 ? '+' : '') + val + '%'; el.className = 'sens-val ' + (val > 0 ? 'up' : val < 0 ? 'down' : ''); }
+  }
+  if (key === 'inflation') {
+    var el = document.getElementById('sensInflVal');
+    if(el){ el.textContent = val + '%'; el.className = 'sens-val ' + (val > 4 ? 'down' : val < 4 ? 'up' : ''); }
+  }
+  if (key === 'savings') {
+    var el = document.getElementById('sensSavVal');
+    if(el){ el.textContent = (val >= 0 ? '+' : '-') + Math.abs(val).toLocaleString() + '/mo'; el.className = 'sens-val ' + (val > 0 ? 'up' : val < 0 ? 'down' : ''); }
+  }
+  if (key === 'retire') {
+    var el = document.getElementById('sensRetVal');
+    var retireAge = (Number(ST.profile.retireAge)||67) + val;
+    if(el){ el.textContent = val === 0 ? 'No change' : (val > 0 ? '+' + val + ' yrs (age ' + retireAge + ')' : val + ' yrs (age ' + retireAge + ')'); el.className = 'sens-val ' + (val < 0 ? 'down' : val > 0 ? 'up' : ''); }
+  }
+
+  // Update KPI cards
+  var wealthDelta = calc.projWealth - calc.baseWealth;
+  var gapClass    = calc.gap >= 0 ? 'green-kpi' : (calc.gap >= -calc.combinedTarget * 0.2 ? 'warn-kpi' : 'danger-kpi');
+  var wealthClass = wealthDelta >= 0 ? 'green-kpi' : 'danger-kpi';
+  var wealthDeltaStr = (wealthDelta >= 0 ? '+' : '') + money(wealthDelta);
+  var kpiEl = document.getElementById('sensKPIs');
+  if(kpiEl) kpiEl.innerHTML = `
+    <div class="sens-kpi ${wealthClass}">
+      <div class="sk-lbl">Aggregate portfolio balance</div>
+      <div class="sk-val">${money(calc.projWealth)}</div>
+      <div class="sk-delta" style="color:${wealthDelta >= 0 ? 'var(--success)' : 'var(--danger)'}">${wealthDeltaStr} vs baseline</div>
+    </div>
+    <div class="sens-kpi">
+      <div class="sk-lbl">Retirement + Goal Target Benchmark</div>
+      <div class="sk-val">${money(calc.combinedTarget)}</div>
+      <div class="sk-delta" style="color:var(--muted)">Retire age ${calc.retireAge} · Inflation ${s.inflation}%</div>
+    </div>
+    <div class="sens-kpi ${gapClass}">
+      <div class="sk-lbl">Surplus / Shortfall</div>
+      <div class="sk-val" style="color:${calc.gap >= 0 ? 'var(--success)' : 'var(--danger)'}">${(calc.gap >= 0 ? '+' : '') + money(calc.gap)}</div>
+      <div class="sk-delta" style="color:${calc.gap >= 0 ? 'var(--success)' : 'var(--danger)'}">${calc.gap >= 0 ? 'Ahead of target' : 'Short of target'}</div>
+    </div>
+  `;
+
+  // Update narrative
+  var panel = document.getElementById('sensPanelRoot');
+  if(panel){
+    var narEl = panel.querySelector('.sens-narrative');
+    if(narEl) narEl.innerHTML = sensNarrative(calc, s);
+    var rowWrap = panel.querySelector('.sens-goal-rows');
+    if(rowWrap) rowWrap.innerHTML = renderSensGoalRows(calc).replace(/^<div class="sens-goal-rows">|<\/div>$/g, '');
+  }
+
+}
+
+function sensReset() {
+  _sensState = { irr: 0, inflation: 4, savings: 0, retire: 0 };
+  ['sensIRR','sensInflation','sensSavings','sensRetire'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(id === 'sensInflation') el.value = 4;
+    else el.value = 0;
+  });
+  renderSensPanel();
+}
+// ── END SENSITIVITY ENGINE ────────────────────────────────────────────────────
 
 </script>
 </body>
